@@ -1,2 +1,4 @@
 git init
 git remote add origin https://github.com/avsido/RishPoker.git (after creatin git repo)
+git add .
+git commit -m "some commit message"

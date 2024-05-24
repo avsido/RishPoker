@@ -34,3 +34,4 @@ TODO missions:
 2. see to correct gui represenation of winChecks info.
 3. animation for flipping of cards.
 4 add optional sounds
+added for adding
