@@ -125,7 +125,7 @@ function render() {
   drawnCard.id = "drawnCard";
   if (data.playerTurn) {
     if (data.cardsLeft >= 1) {
-      drawnCard.src = "images/" + data.drawnCard.name + ".png";
+      drawnCard.src = "images/" + data.drawnCard.name.toLowerCase() + ".png";
     }
   } else {
     drawnCard.id = "waitGif";
@@ -158,14 +158,14 @@ function render() {
     for (let j = 0; j < data.computerCards[i].length; j++) {
       let imgCard = document.createElement("img");
       imgCard.style.zIndex += 1;
-      imgCard.src = "images/" + data.computerCards[i][j].name + ".png";
+      imgCard.src = "images/" + data.computerCards[i][j].name.toLowerCase() + ".png";
       if (j > 3) {
         if (data.cardIndex == i) {
           if (data.computerCards[i][j].name != "anon_card") {
             imgCard.src = "images/anon_card.png";
             setTimeout(() => {
               imgCard.classList.add("imgCardAnimated");
-              imgCard.src = "images/" + data.computerCards[i][j].name + ".png";
+              imgCard.src = "images/" + data.computerCards[i][j].name.toLowerCase() + ".png";
             }, 2);
             if (winArr[i] == -1) {
               setTimeout(() => {
@@ -219,7 +219,7 @@ function render() {
           let hLeft = document.createElement("h1");
           hLeft.innerHTML = "wild card:";
           let cardImgWildCard = document.createElement("img");
-          cardImgWildCard.src = "images/" + data.drawnCard.name + ".png";
+          cardImgWildCard.src = "images/" + data.drawnCard.name.toLowerCase() + ".png";
           divPopLeft.append(hLeft, cardImgWildCard);
           let divPopRight = document.createElement("div");
           divPopRight.id = "divcPopRight";
@@ -233,7 +233,7 @@ function render() {
           for (let k = 0; k < data.playerCards[i].length; k++) {
             let img = document.createElement("img");
 
-            img.src = "images/" + data.playerCards[i][k].name + ".png";
+            img.src = "images/" + data.playerCards[i][k].name.toLowerCase() + ".png";
             if (k == 4) {
               console.log(data.playerCards[i][k].name);
               img.id = "innerDivPopFifth";
@@ -274,7 +274,7 @@ function render() {
           };
         };
       }
-      imgCard.src = "images/" + data.playerCards[i][j].name + ".png";
+      imgCard.src = "images/" + data.playerCards[i][j].name.toLowerCase() + ".png";
       cardDiv.appendChild(imgCard);
     }
 
