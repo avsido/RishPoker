@@ -152,6 +152,7 @@ function render() {
   hPlayer.innerHTML = "Your cards";
 
   //cards computer
+  // i is current hand
   for (let i = 0; i < data.computerCards.length; i++) {
     let cardDiv = document.createElement("div");
     cardDiv.classList.add("cardDiv", "cardDivComputer");
@@ -171,9 +172,18 @@ function render() {
               setTimeout(() => {
                 cardDiv.classList.add("cardDivComputerLostAnimated");
               }, 500);
+
+              // This will only happen for the last hand should the computer loose
+              // This is a special case because we usually draw this _after_ 
+              if (i == 4) {
+                setTimeout(() => {
+                    console.log("I would have now created the last deck's static class"); 
+                    cardDiv.classList.add("cardDivComputerLostFinal");         
+                  }, 2000);
+               }
             }
           }
-        } else {
+        } else { // This will happen in the NEXT iteration of i
           if (winArr[i] == -1) {
             cardDiv.classList.add("cardDivComputerLostFinal"); // Consultttttt
           }
