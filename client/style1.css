@@ -1,0 +1,180 @@
+body{
+    background-color: #35654d;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+#mainTitle{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-family: Stencil, sans-serif;
+    position: fixed;
+    width: 100%;
+    top: 0;
+}
+#divMain{
+    border: 15px solid rgb(132, 5, 5);
+    border-radius: 50px;
+    width: 1125px;
+    height: 525px;
+    margin-top: 100px;
+    margin-bottom: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 25px;
+}
+#flush{
+    filter: grayscale(50%);
+    transition: transform 0.3s ease-in-out;
+    width: 300px;
+}
+#buttPlay{
+    width: 75px;
+    transition: all 0.3s ease;
+    
+}
+#buttPlay:hover{
+    transform: scale(1.15);
+}
+#buttReset{
+    border: 1px solid rgb(132, 5, 5);
+    width: 75px;
+    border-radius: 25px;
+}
+#buttReset:hover{
+    background-color: darkkhaki;
+}
+
+#divDeck{
+    border: 2px solid rgba(219, 216, 216, 0.33);
+    border-radius: 25px;
+    width: 300px;
+    height: auto;
+    display: flex;
+    top: 100px;
+    right: 390px;
+    position: relative;
+    align-items: center;
+    padding: 5px;
+}
+#divDeck img#imgDeck{
+    width: 132px;
+    height: 160px;
+    position: relative;
+    left: 20px
+}
+#divDeck h3{
+    color: black;
+    position: absolute;
+    top: -10px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+h2{
+    position: absolute;
+    left: 24px;
+    color: gold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: lighter;
+}
+#divHeaders{
+    /* border: 1px solid black; */
+    padding: 10px;
+    width: 350px;
+    min-height: 250px;
+    position: fixed;
+    bottom: 50px;
+    left: 200px;
+}
+
+#hStatus{
+    top: 0px;
+}
+#hCardsleft{ 
+    top: 40px;
+}
+#drawnCard{
+    width: 110px;
+    height: auto;
+    position: absolute;
+    left: 180px;
+    animation: zoomOut 0.3s ease-in-out forwards;
+    animation-delay: 0.3s;
+}
+@keyframes zoomOut {
+    50% {
+        transform: scale(1.1);
+        width: 120px;
+    }
+    100% {
+        transform: scale(1);
+        width: 100px;
+    }
+}
+.divPlayers{
+    border: 2px solid rgb(132, 5, 5);
+    border-radius: 25px;
+    width: 650px;
+    min-height: 165px;
+    position: relative;
+    left: 180px;
+    bottom: 90px;
+    padding:30px;
+    margin: 50px 10px; 
+    
+}
+.divPlayers h3{
+    color: black;
+    position: absolute;
+    top: -15px;
+    left: 10px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.cardsComputer{
+    border: 1px solid rgba(219, 216, 216, 0.33);
+    border-radius: 12px;
+    width: 75px;
+    height: 200px;
+    display: inline-block;
+    margin: 5px 10px;
+    right: -100px;
+    top: -25px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.cardsComputer img{
+    width: 50px;
+    height: auto;
+    position: relative;
+    top: 128px;
+}
+.cardsPlayer{
+    border: 1px solid rgba(219, 216, 216, 0.33);
+    border-radius: 12px;
+    width: 75px;
+    height: 200px;
+    display: inline-block;
+    margin: 5px 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    right: -100px;
+    top: -25px;
+    position: relative;
+}
+.cardsPlayer img{
+    width: 50px;
+    height: auto;
+    position: relative;
+}
+#waitGif{
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    left: 150px;
+}

@@ -1,0 +1,371 @@
+body{
+    background-color: #35654d;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+.title{
+    width: 100%;
+    min-height: 10vh;
+    display: flex;
+    flex-direction: row;
+}
+#mainTitle{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5vh;
+    color: rgb(132, 5, 5);
+    width: 100%;
+    min-height: 10vh;
+}
+#mainTitle h1{
+    text-shadow: 5px 5px 4px rgba(250, 209, 3, 0.5);
+    font-family: Stencil, sans-serif;
+    font-weight: bolder;
+}
+.buttNav{
+    margin: 100px;
+    margin-left: -200px;
+    padding: 15px;
+    border-radius: 15px;
+    background-color: rgba(22, 21, 21, 0.473);
+}
+.buttNav:hover{
+    background-color: rgba(15, 15, 15, 0.71);
+}
+#divMain{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 50px solid rgb(132, 5, 5);
+    border-radius: 150px;
+    width: 125vh;
+    height: 75vh;
+    margin: 20px;
+    padding: 25px;
+}
+#flush{
+    height: 30vh;
+}
+h1, h2, h3, h4{
+    font-family: 'Abril Fatface';
+    font-weight: lighter;
+}
+#buttPlay{
+    height: 275px;
+    width: auto;
+    transition: all 0.3s ease;
+}
+#buttPlay:hover{
+    transform: scale(1.15);
+}
+.buttReset{
+    width: 9vh;
+    height: 3vh;
+    border:none;
+    border-radius: 4vh;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 65px;
+    margin: 0.85vh;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+.buttReset:hover{
+    background-color: rgb(149, 139, 9);
+    color: white;
+}
+#divInfo{
+    border-right: 15px solid rgb(132, 5, 5);
+    padding-right: 75px;
+    margin: 50px;
+    width: 40%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5vh;
+}
+#divInfoEnd{
+    border-right: 15px solid rgb(132, 5, 5);
+    width: 40%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-right: 80px;
+    padding-right: 80px;
+    font-size: 1.5vh;
+}
+#divInfoEnd h1{
+    background-color: rgb(62, 60, 60);
+    color: white;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    margin-bottom: 50px;
+}
+#divInfoEnd h1:nth-child(3){
+    animation: sizeDownHeader 0.5s ease-in-out forwards;
+    color: gold;
+    font-family: 'Abril Fatface';
+    font-weight: lighter;
+    background-color: transparent;
+}
+@keyframes sizeDownHeader {
+    0%{
+        margin-top: 12px;
+        transform: scale(0);
+        font-size: 2.5vh;
+    }
+    100% {
+        transform: scale(1);
+        margin-top: 120px;
+        font-size: 5vh;
+        margin: 0;
+    }
+}
+#divDeck{
+    background-color: #21523a;
+    border: 15px solid rgb(132, 5, 5);
+    border-radius: 35px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px;
+    min-height: 550px;
+    max-height: 550px;
+}
+#drawnCard{
+    height: auto;
+    animation: drawFromLeft 0.5s ease-in-out forwards;
+}
+@keyframes drawFromLeft {
+    0%{
+        transform: scale(0);
+        width: 0;
+        margin-right: 550px;
+    }
+    100% {
+        transform: scale(1);
+        margin-right: 0;
+        width: 30%;
+    }
+}
+#waitGif{
+    margin-right: 75px;
+    width: 525px;
+    height: 525px;
+}
+#imgDeck{
+    width: 25%;
+    height: auto;
+    margin-left: 75px;
+}
+#divPlayers{
+    color: gold;
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5vh;
+    justify-content: center;
+    align-items: center;
+}
+#divPlayers > div{
+    border: 12px solid grey;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: row;
+    min-height: 40%;
+}
+.cardDiv{
+    background-color: #21523a;
+    border: 1px solid rgba(219, 216, 216, 0.33);
+    border-radius: 20px;
+    height: 90%;
+    margin:25px;
+    padding: 5px;
+}
+.cardDiv img{
+    width: 225px;
+}
+.imgCardPlayerWild:hover{
+    box-shadow: 2px 25px 100px gold!important;
+}
+.cardDivComputer{
+    display: flex;
+    flex-direction: column-reverse;
+}
+.cardDivComputer > *:nth-child(n+2){
+    margin-bottom: -225px;
+    box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5);
+}
+.cardDivPlayer{
+    display: flex;
+    flex-direction: column;
+}
+.cardDivPlayerReg:hover{
+    box-shadow: 0 0 0 0 transparent;
+}
+.cardDivPlayerPlay:hover{
+    box-shadow: 2px 10px 25px silver;
+}
+.cardDivPlayer > *:nth-child(n+2){
+    margin-top: -225px;
+    box-shadow: 0 -25px 35px rgba(0, 0, 0, 0.5);
+}
+#buttCheckWin{
+    width: 350px;
+    height: 350px;
+    border-radius: 175px;
+    color: rgb(132, 5, 5);
+    border: 15px solid rgb(132, 5, 5);
+    font-size: 150px;
+    margin-left: 450px;
+    margin-top: 80px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    background-color: rgb(236, 217, 112);
+    transition: background-color 0.5s ease, transform 0.5s ease;
+}
+#buttCheckWin:hover{
+    transform: scale(1.2);
+    background-color: gold;
+}
+#buttFlip:hover {
+    transform: scale(1.15);
+}
+#divPop{
+    box-shadow: 0 75px 100px rgba(0, 0, 0, 0.5);
+    background-color: #35654d;
+    border: 15px solid rgb(132, 5, 5);
+    border-radius: 35px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    overflow: auto; 
+    z-index: 15;
+    overflow: visible;
+    position: absolute;
+    font-size: 1.5vh;
+    padding: 15px;
+    margin: 15px;
+    min-height: 40vh;
+    max-height: 40vh;
+    min-width: 85vh;
+    max-width: 85vh;
+    z-index: 1000;
+}
+#divPopLeft{
+    display: flex;
+    flex-direction: column;
+    margin:auto;
+    padding:50px;
+    padding-bottom:275px;
+    border-left: 15px solid rgb(132, 5, 5);;
+}
+#divPopLeft img{
+    max-height:575px;
+    height: auto;
+    box-shadow: 25px 25px 35px #000000;
+
+}
+#divPopRight{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding:50px;
+    padding-left: 100px;
+    align-items:center;
+}
+#innerDivPop{
+    display: flex;
+    flex-direction: row;
+    margin:auto;
+    margin-left:10px;
+    justify-content:center;
+}
+#innerDivPop img{
+    align-items: center;
+    width: 17.5%;
+    height: 25.4%;
+    margin: 2px 5px;
+    box-shadow: 25px 25px 35px #000000; 
+    filter: brightness(50%);
+    
+}
+#innerDivPop img:nth-child(5) {
+    box-shadow: 25px 25px 35px #000000;
+    width:23%;
+    height: 29.04%;
+    filter: brightness(100%);
+    
+}
+.divDeckFinal {
+    background-image: url('images/bet1.gif'); 
+    background-position: center;               
+    background-size: cover;                   
+    background-repeat: no-repeat;                   
+}
+#divOverlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+.divScore{
+    border: 1px solid grey;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    height: 50%;
+    width: 100%;
+    margin: 5px;
+}
+#hHandTaker{
+    height: 20%;
+}
+.divCancel{
+    display: flex;
+    align-items: center;
+    margin: 50px 400px;
+    padding: 15px;
+}
+.imgCardAnimated{
+    width: 225px;
+    animation: flipToReveal 1s ease-in-out;
+    backface-visibility: hidden;
+}
+@keyframes flipToReveal {
+    from {
+        transform: rotateY(285deg);
+    }
+    to {
+        transform: rotateY(360deg);
+    }
+}
+.cardDivComputerLostAnimated  > *:nth-child(n+2){
+    animation: foldLosingHandComputer 1.5s ease-in-out;
+    box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5);
+}
+@keyframes foldLosingHandComputer{
+    from{
+        transform: translateY(0);
+        /* margin-bottom: -225px; */
+        
+    }
+    to{
+        transform: translateY(1);
+        margin-bottom: -300px;
+    }
+}
+.cardDivComputerLostFinal > *:nth-child(n+2){
+    margin-bottom: -300px!important;
+}
+
