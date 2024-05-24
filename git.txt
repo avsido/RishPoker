@@ -2,3 +2,6 @@ git init
 git remote add origin https://github.com/avsido/RishPoker.git (after creatin git repo)
 git add .
 git commit -m "some commit message"
+
+unstage opposite of add
+git checkout +key of stage > got to some version
