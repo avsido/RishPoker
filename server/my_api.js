@@ -254,7 +254,7 @@ function comparePokerHands(hand1, hand2) {
     }
     return {
       rank: 0,
-      name: `${highCard}`,
+      name: `High Card ${highCard}`,
       highCard: highCard,
       values: sortedValues,
     };

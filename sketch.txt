@@ -30,8 +30,10 @@ checking each opposing couple of hands will happen on the serverSide with a requ
     }
 
 TODO missions: 
-1. make only last card glow when wild card is up. and only the THIS card can be replaced with wild card. place 'donkey ear' on it.
-2. see to correct gui represenation of winChecks info.
-3. animation for flipping of cards.
-4 add optional sounds
-added for adding
+1. make only last card glow when wild card is up. and only the THIS card can be replaced with wild card.~~V
+2. see to correct gui represenation of winChecks info: a div to each player and appending hand messages..
+3. animation for flipping of cards.~~V
+4. add optional sounds
+5. animation for player side cards.
+6. navbar and pop up info window.
+7. find friendlier fonts.

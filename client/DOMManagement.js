@@ -147,9 +147,9 @@ function render() {
   divPlayers.append(divComputer, divPlayer);
   divMain.appendChild(divPlayers);
   let hComputer = document.createElement("h2");
-  hComputer.innerHTML = "Opponent cards";
+  hComputer.innerHTML = "Opponent";
   let hPlayer = document.createElement("h2");
-  hPlayer.innerHTML = "Your cards";
+  hPlayer.innerHTML = "You";
 
   //cards computer
   // i is current hand
@@ -159,14 +159,18 @@ function render() {
     for (let j = 0; j < data.computerCards[i].length; j++) {
       let imgCard = document.createElement("img");
       imgCard.style.zIndex += 1;
-      imgCard.src = "images/" + data.computerCards[i][j].name.toLowerCase() + ".png";
+      imgCard.src =
+        "images/" + data.computerCards[i][j].name.toLowerCase() + ".png";
       if (j > 3) {
         if (data.cardIndex == i) {
           if (data.computerCards[i][j].name != "anon_card") {
             imgCard.src = "images/anon_card.png";
             setTimeout(() => {
               imgCard.classList.add("imgCardAnimated");
-              imgCard.src = "images/" + data.computerCards[i][j].name.toLowerCase() + ".png";
+              imgCard.src =
+                "images/" +
+                data.computerCards[i][j].name.toLowerCase() +
+                ".png";
             }, 2);
             if (winArr[i] == -1) {
               setTimeout(() => {
@@ -174,18 +178,18 @@ function render() {
               }, 500);
 
               // This will only happen for the last hand should the computer loose
-              // This is a special case because we usually draw this _after_ 
+              // This is a special case because we usually draw this _after_
               if (i == 4) {
                 setTimeout(() => {
-                    console.log("I would have now created the last deck's static class"); 
-                    cardDiv.classList.add("cardDivComputerLostFinal");         
-                  }, 2000);
-               }
+                  cardDiv.classList.add("cardDivComputerLostFinal");
+                }, 2000);
+              }
             }
           }
-        } else { // This will happen in the NEXT iteration of i
+        } else {
+          // This will happen in the NEXT iteration of i
           if (winArr[i] == -1) {
-            cardDiv.classList.add("cardDivComputerLostFinal"); // Consultttttt
+            cardDiv.classList.add("cardDivComputerLostFinal");
           }
         }
       }
@@ -219,6 +223,26 @@ function render() {
 
     for (let j = 0; j < data.playerCards[i].length; j++) {
       let imgCard = document.createElement("img");
+      if (j > 3) {
+        if (data.cardIndex == i) {
+          if (winArr[i] == 1) {
+            setTimeout(() => {
+              cardDiv.classList.add("cardDivPlayerLostAnimated");
+            }, 500);
+            if (i == 4) {
+              setTimeout(() => {
+                cardDiv.classList.add("cardDivPlayerLostFinal");
+              }, 2000);
+            }
+          }
+        } else {
+          // This will happen in the NEXT iteration of i
+          if (winArr[i] == 1) {
+            cardDiv.classList.add("cardDivPlayerLostFinal");
+          }
+        }
+      }
+
       if (data.cardsLeft == 1 && data.playerTurn && j == 4) {
         imgCard.classList.add("imgCardPlayerWild");
         imgCard.onclick = (ev) => {
@@ -229,7 +253,8 @@ function render() {
           let hLeft = document.createElement("h1");
           hLeft.innerHTML = "wild card:";
           let cardImgWildCard = document.createElement("img");
-          cardImgWildCard.src = "images/" + data.drawnCard.name.toLowerCase() + ".png";
+          cardImgWildCard.src =
+            "images/" + data.drawnCard.name.toLowerCase() + ".png";
           divPopLeft.append(hLeft, cardImgWildCard);
           let divPopRight = document.createElement("div");
           divPopRight.id = "divcPopRight";
@@ -243,7 +268,8 @@ function render() {
           for (let k = 0; k < data.playerCards[i].length; k++) {
             let img = document.createElement("img");
 
-            img.src = "images/" + data.playerCards[i][k].name.toLowerCase() + ".png";
+            img.src =
+              "images/" + data.playerCards[i][k].name.toLowerCase() + ".png";
             if (k == 4) {
               console.log(data.playerCards[i][k].name);
               img.id = "innerDivPopFifth";
@@ -284,7 +310,8 @@ function render() {
           };
         };
       }
-      imgCard.src = "images/" + data.playerCards[i][j].name.toLowerCase() + ".png";
+      imgCard.src =
+        "images/" + data.playerCards[i][j].name.toLowerCase() + ".png";
       cardDiv.appendChild(imgCard);
     }
 
@@ -312,6 +339,7 @@ function render() {
   }
   divPlayers.append(hComputer, divComputer, hPlayer, divPlayer);
 }
+let arrWinMessages = [];
 function renderInfoScore() {
   cleanElement(divInfo);
   let hand1Name = data.results.hand1Name;
@@ -326,21 +354,55 @@ function renderInfoScore() {
   } else {
     hand2Name = hand2Name.replace(/_/g, " ");
   }
-  divInfo.id = "divInfoEnd";
+  arrWinMessages.push(hand1Name);
+  arrWinMessages.push(hand2Name);
+  let divInfoComputer = document.createElement("div");
+  divInfoComputer.className = "divInfoPlayers";
   let hHandComputer = document.createElement("h1");
-  hHandComputer.innerHTML = "Opponent got: " + hand1Name;
-
+  hHandComputer.innerHTML = "Opponent:";
+  divInfoComputer.appendChild(hHandComputer);
+  let divInfoPlayer = document.createElement("div");
+  divInfoPlayer.className = "divInfoPlayers";
   let hHandPlayer = document.createElement("h1");
-  hHandPlayer.innerHTML = "You got: " + hand2Name;
+  hHandPlayer.innerHTML = "You:";
+  divInfoPlayer.appendChild(hHandPlayer);
+  for (let i = 0; i < arrWinMessages.length; i++) {
+    let h2 = document.createElement("h2");
+    h2.innerHTML = "&middot;" + arrWinMessages[i];
+    if (i % 2 == 0) {
+      if (winArr[i] == -1) {
+        h2.style.color = "red";
+      }
+      if (winArr[i] == 1) {
+        h2.style.color = "#031561";
+      }
+      divInfoComputer.appendChild(h2);
+    } else {
+      if (winArr[i] == -1) {
+        h2.style.color = "red";
+      }
+      if (winArr[i] == 1) {
+        h2.style.color = "#031561";
+      }
+      divInfoPlayer.appendChild(h2);
+    }
+  }
 
-  let hAnounce = document.createElement("h1");
-  hAnounce.innerHTML =
-    data.results.winner == 1
-      ? "Opponent takes."
-      : data.results.winner == -1
-      ? "You take."
-      : "a tie.";
-  divInfo.append(hHandComputer, hHandPlayer, hAnounce);
+  let divBottomLine = document.createElement("div");
+  divBottomLine.className = "divBottomLine";
+  divInfo.append(divInfoComputer, divInfoPlayer, divBottomLine);
+  // for hands use h2
+
+  // divInfo.id = "divInfoEnd";
+
+  // let hAnounce = document.createElement("h1");
+  // hAnounce.innerHTML =
+  //   data.results.winner == 1
+  //     ? "Opponent takes."
+  //     : data.results.winner == -1
+  //     ? "You take."
+  //     : "a tie.";
+  // divInfo.append(hHandComputer, hHandPlayer, hAnounce);
 }
 
 function formatCardPairs(description) {
