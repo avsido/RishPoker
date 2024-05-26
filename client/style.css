@@ -7,9 +7,10 @@ body{
 }
 .title{
     width: 100%;
-    min-height: 10vh;
+    max-height: 8vh;
     display: flex;
     flex-direction: row;
+    margin-top: 5px;
 }
 #mainTitle{
     display: flex;
@@ -17,57 +18,111 @@ body{
     text-align: center;
     align-items: center;
     justify-content: center;
+    margin-left: -350px;
     font-size: 2.5vh;
-    
     width: 100%;
-    min-height: 10vh;
 }
 #mainTitle h1{
-    text-shadow: 5px 5px 4px rgba(250, 209, 3, 0.5);
+    text-shadow: 5px 5px 4px gold;
     font-family: Stencil, sans-serif;
     font-weight: bolder;
     color: rgb(112, 22, 22);
 }
 .buttNav{
-    margin: 100px;
-    margin-left: -200px;
+    margin: 50px;
+    margin-right: 20px;
     padding: 15px;
+    border: 15px solid rgb(113 59 59);
     border-radius: 15px;
-    background-color: rgba(22, 21, 21, 0.473);
+    width: 100px;
+    height: 100px;
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    z-index: 1;
 }
+.buttNav img{
+    width:100%;
+}
+
 .buttNav:hover{
-    background-color: rgba(15, 15, 15, 0.71);
+    box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.divMenu{
+    z-index: 999;
+    background-color: rgba(22, 21, 21, 0.473);
+    box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    border: 15px solid rgb(113 59 59);
+    min-width: 17.5%;
+    height: 80%;
+    position: fixed;
+    top: 275px;
+    left: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
 #divMain{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     border: 50px solid rgb(113 59 59);
-    border-radius: 150px;
-    width: 125vh;
+    border-radius: 60px;
+    min-width: 55%;
+    max-width: 55%;
     height: 75vh;
     margin: 20px;
     padding: 25px;
 }
 #flush{
     height: 30vh;
+    margin-bottom: 100px;
 }
 h1, h2, h3, h4{
     font-family: 'Abril Fatface';
     font-weight: lighter;
     color: white;
 }
-#buttPlay{
-    height: 275px;
-    width: auto;
+.buttPlay{
+    height: 150px;
+    width: 450px;
+    margin-top:75px;
+    background-color: rgba(0, 0, 0, 0.805);
+    color: white;
+    font-size: 50px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    border-radius: 150px;
+    border: none;
     transition: all 0.3s ease;
 }
-#buttPlay:hover{
+.buttPlay:hover{
     transform: scale(1.15);
+    color: rgb(206, 206, 35);
+}
+.aSignIn{
+    text-decoration: underline;
+    margin-top: 75px;
+    font-size: 75px;
 }
 .buttReset{
-    width: 9vh;
+    width: 6vw;
     height: 3vh;
     border:none;
     border-radius: 4vh;
@@ -92,17 +147,6 @@ h1, h2, h3, h4{
     flex-direction: column;
     font-size: 1.5vh;
 }
-#divInfoEnd{
-    border-right: 15px solid rgb(113 59 59);
-    width: 40%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    margin-right: 80px;
-    padding-right: 80px;
-    font-size: 1.5vh;
-}
-
 
 #divDeck{
     background-color: #21523a;
@@ -357,7 +401,6 @@ h1, h2, h3, h4{
 @keyframes foldLosingHandPlayer{
     from{
         transform: translateY(0);
-        /* margin-bottom: -225px; */
         
     }
     to{
@@ -371,7 +414,6 @@ h1, h2, h3, h4{
 
 
 .divInfoPlayers{
-    /* border: 1px solid black; */
     margin: 5px;
     width: 100%;
     height: 40%;
@@ -379,10 +421,30 @@ h1, h2, h3, h4{
     flex-direction: column;
 }
 .divInfoPlayers h1{
-    background-color: rgb(62, 60, 60);
+    background-color: rgb(29, 26, 26);
   
 }
 .divInfoPlayers h2{
-    margin: 2px;
+    font-size: 75px;
+    margin: 15px 25px;
+    /* -webkit-text-stroke: 0.5px rgb(255, 255, 255); */
+}
+.hBottomLine{
+    color: gold;
+    margin: 15px;
+    animation: sizeDownHeader 0.5s ease-in-out forwards;
+}
+@keyframes sizeDownHeader {
+    0%{
+        margin-top: 25px;
+        transform: scale(0);
+        font-size: 2.5vh;
+    }
+    100% {
+        transform: scale(1);
+        margin-top: 120px;
+        font-size: 5vh;
+        
+    }
 }
 

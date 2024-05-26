@@ -5,10 +5,23 @@ let cp;
 let computerPlay = 3;
 let computerFinalCards = ["", "", "", "", ""];
 
+exports.sendMenuItems = () => {
+  data.menuItems = [
+    { name: "about Rishpon poker" },
+    { name: "game rules" },
+    { name: "about us" },
+    { name: "contact" },
+    { name: "contribute" },
+    { name: "log in" },
+  ];
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.end(JSON.stringify(data));
+};
+
 //func to start game:
 // creates instance of game, and sends the player their starting hand and starting card
 // also sends computer's opening cards for presentation
-exports.startGame = (req, res, q) => {
+exports.startGameVSComputer = (req, res, q) => {
   cp = new Game();
   ///
   data.computerCards = cp.computerCards;
@@ -19,6 +32,12 @@ exports.startGame = (req, res, q) => {
   data.results = {};
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
+};
+
+exports.getInfo = (req, res, q) => {
+  let gameInfoForClient = fs.readFileSync("gameInfoForClient.txt", "utf-8");
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.end(JSON.stringify(gameInfoForClient));
 };
 
 //// func to place player card on chosen hand.
@@ -136,6 +155,7 @@ exports.buttReplaceWildCard = (req, res, q) => {
 };
 
 exports.reset = (req, res, q) => {
+  // think over whole reset button
   startGame();
 };
 

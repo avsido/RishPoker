@@ -27,6 +27,9 @@ function startServer(actions) {
           ".js": "text/javascript",
           ".png": "image/png",
           ".gif": "image/gif",
+          ".ogg": "audio/ogg",
+          ".wav": "audio/wav",
+          ".mp3": "audio/mp3",
         };
 
         // Construct the path to the file

@@ -1,5 +1,8 @@
 // initializing variables
-let divMain,
+let buttNav,
+  buttSound,
+  divMenu,
+  divMain,
   divHeaders,
   divDeck,
   divPlayers,
@@ -8,27 +11,69 @@ let divMain,
   divInfo,
   divPlayerPickupCard,
   buttCheckWin;
+let soundOn = true;
 let data = {};
 let winArr = [];
 
+//initiating sounds:
+let placeCardSound = new Howl({
+  src: ["sounds/card_place.ogg"],
+});
+let flipOpponentCardSound = new Howl({
+  src: ["sounds/card_flip.wav"],
+});
+let foldSound = new Howl({
+  src: ["images/fold.wav"],
+});
+let winSound = new Howl({
+  src: ["sounds/win.wav"],
+});
+let loseSound = new Howl({
+  src: ["sounds/lose.wav"],
+});
+let tieSound = new Howl({
+  src: ["sounds/tie.wav"],
+});
+let invalidMoveSound = new Howl({
+  src: ["sounds/invalid_move.mp3"],
+});
+
 //greet screen func
 function greet() {
+  buttMenu = document.getElementById("buttMenu");
+  // buttSound = document.getElementById("buttSound");
   divMain = document.getElementById("divMain");
   let img = document.createElement("img");
   img.src = "images/flush.png";
   img.id = "flush";
   divMain.appendChild(img);
-  let play = document.createElement("img");
-  play.src = "images/spades.png";
-  play.id = "buttPlay";
-  divMain.appendChild(play);
-  play.onclick = () => {
-    sendHttpGETReq("api/start_game", (res) => {
+  let buttPlayVSComputer = document.createElement("button");
+  buttPlayVSComputer.className = "buttPlay";
+  buttPlayVSComputer.innerHTML = "Play vs AI";
+  divMain.appendChild(buttPlayVSComputer);
+  buttPlayVSComputer.onclick = () => {
+    sendHttpGETReq("api/start_game_vs_computer", (res) => {
       data = JSON.parse(res);
       init();
       render();
     });
   };
+  let buttPlayVSRemotePlayer = document.createElement("button");
+  // buttPlayVSComputer.src = "images/spades.png";
+  buttPlayVSRemotePlayer.className = "buttPlay";
+  buttPlayVSRemotePlayer.innerHTML = "Play vs friend";
+  divMain.appendChild(buttPlayVSRemotePlayer);
+  buttPlayVSRemotePlayer.onclick = () => {
+    // sendHttpGETReq("api/start_game_vs_remote_player", (res) => {
+    //   data = JSON.parse(res);
+    //   init();
+    //   render();
+    // });
+  };
+  let aSignIn = document.createElement("a");
+  aSignIn.className = "aSignIn";
+  aSignIn.innerHTML = "sign in";
+  divMain.appendChild(aSignIn);
 }
 // init func
 function init() {
@@ -38,11 +83,11 @@ function init() {
   reset.className = "buttReset";
   document.body.appendChild(reset);
   reset.onclick = () => {
-    sendHttpGETReq("api/start_game", (res) => {
-      data = JSON.parse(res);
-      init();
-      render();
-    });
+    // sendHttpGETReq("api/start_game", (res) => {
+    //   data = JSON.parse(res);        // rework this
+    //   init();
+    //   render();
+    // });
   };
   divDeck = document.createElement("div");
   divDeck.id = "divDeck";
@@ -89,7 +134,6 @@ function render() {
             render();
             renderInfoScore();
           });
-          console.log(i);
         }, 2000 * i); //1750
       }
     };
@@ -152,7 +196,6 @@ function render() {
   hPlayer.innerHTML = "You";
 
   //cards computer
-  // i is current hand
   for (let i = 0; i < data.computerCards.length; i++) {
     let cardDiv = document.createElement("div");
     cardDiv.classList.add("cardDiv", "cardDivComputer");
@@ -167,6 +210,7 @@ function render() {
             imgCard.src = "images/anon_card.png";
             setTimeout(() => {
               imgCard.classList.add("imgCardAnimated");
+              if (soundOn) flipOpponentCardSound.play();
               imgCard.src =
                 "images/" +
                 data.computerCards[i][j].name.toLowerCase() +
@@ -228,6 +272,7 @@ function render() {
           if (winArr[i] == 1) {
             setTimeout(() => {
               cardDiv.classList.add("cardDivPlayerLostAnimated");
+              if (soundOn) foldSound.play();
             }, 500);
             if (i == 4) {
               setTimeout(() => {
@@ -316,30 +361,39 @@ function render() {
     }
 
     cardDiv.onclick = (ev) => {
-      if (!data.playerTurn) return;
+      if (!data.playerTurn) {
+        if (soundOn) invalidMoveSound.play();
+        return;
+      }
       if (data.cardsLeft == 1) {
         ev.target.onclick = () => {
+          if (soundOn) invalidMoveSound.play();
           return;
         };
-
+        if (soundOn) invalidMoveSound.play();
         return;
       }
       sendHttpGETReq("api/place_card?i=" + i, (res) => {
         data = JSON.parse(res);
+        if (soundOn) placeCardSound.play();
         render();
         setTimeout(() => {
           sendHttpGETReq("api/computer_go_on", (res) => {
             data = JSON.parse(res);
+
             render();
           });
-        }, 2);
+          if (soundOn) placeCardSound.play();
+        }, 25);
       });
     };
     divPlayer.appendChild(cardDiv);
   }
   divPlayers.append(hComputer, divComputer, hPlayer, divPlayer);
 }
-let arrWinMessages = [];
+let arrComputerHandMessages = [];
+let arrPlayerHandMessages = [];
+
 function renderInfoScore() {
   cleanElement(divInfo);
   let hand1Name = data.results.hand1Name;
@@ -354,8 +408,8 @@ function renderInfoScore() {
   } else {
     hand2Name = hand2Name.replace(/_/g, " ");
   }
-  arrWinMessages.push(hand1Name);
-  arrWinMessages.push(hand2Name);
+  arrComputerHandMessages.push(hand1Name);
+  arrPlayerHandMessages.push(hand2Name);
   let divInfoComputer = document.createElement("div");
   divInfoComputer.className = "divInfoPlayers";
   let hHandComputer = document.createElement("h1");
@@ -366,43 +420,75 @@ function renderInfoScore() {
   let hHandPlayer = document.createElement("h1");
   hHandPlayer.innerHTML = "You:";
   divInfoPlayer.appendChild(hHandPlayer);
-  for (let i = 0; i < arrWinMessages.length; i++) {
+  for (let i = 0; i < arrComputerHandMessages.length; i++) {
     let h2 = document.createElement("h2");
-    h2.innerHTML = "&middot;" + arrWinMessages[i];
-    if (i % 2 == 0) {
-      if (winArr[i] == -1) {
-        h2.style.color = "red";
-      }
-      if (winArr[i] == 1) {
-        h2.style.color = "#031561";
-      }
-      divInfoComputer.appendChild(h2);
-    } else {
-      if (winArr[i] == -1) {
-        h2.style.color = "red";
-      }
-      if (winArr[i] == 1) {
-        h2.style.color = "#031561";
-      }
-      divInfoPlayer.appendChild(h2);
+    h2.innerHTML = "&middot; " + arrComputerHandMessages[i];
+    if (winArr[i] == -1) {
+      h2.style.color = "rgb(112, 22, 22)";
     }
+    if (winArr[i] == 1) {
+      h2.style.color = "#031561";
+    }
+    divInfoComputer.appendChild(h2);
   }
 
-  let divBottomLine = document.createElement("div");
-  divBottomLine.className = "divBottomLine";
-  divInfo.append(divInfoComputer, divInfoPlayer, divBottomLine);
-  // for hands use h2
+  for (let i = 0; i < arrPlayerHandMessages.length; i++) {
+    let h2 = document.createElement("h2");
+    h2.innerHTML = "&middot; " + arrPlayerHandMessages[i];
+    if (winArr[i] == -1) {
+      h2.style.color = "#031561";
+    }
+    if (winArr[i] == 1) {
+      h2.style.color = "rgb(112, 22, 22)";
+    }
+    divInfoPlayer.appendChild(h2);
+  }
 
-  // divInfo.id = "divInfoEnd";
+  let hBottomLine = document.createElement("h1");
+  hBottomLine.className = "hBottomLine";
+  hBottomLine.innerHTML =
+    data.results.winner == 1
+      ? "hand lost."
+      : data.results.winner == -1
+      ? "hand won."
+      : "a tie.";
+  if (winArr.length >= 5) {
+    if (countOnesAndMinusOnes(winArr) == -1) {
+      hBottomLine.innerHTML = "You Lose..";
+      if (soundOn) loseSound.play();
+    } else if (countOnesAndMinusOnes(winArr) == 1) {
+      hBottomLine.innerHTML = "You Win!";
+      if (soundOn) winSound.play();
+    } else {
+      hBottomLine.innerHTML = "It's a tie.";
+      if (soundOn) tieSound.play();
+    }
+  }
+  divInfo.append(divInfoComputer, divInfoPlayer, hBottomLine);
+}
 
-  // let hAnounce = document.createElement("h1");
-  // hAnounce.innerHTML =
-  //   data.results.winner == 1
-  //     ? "Opponent takes."
-  //     : data.results.winner == -1
-  //     ? "You take."
-  //     : "a tie.";
-  // divInfo.append(hHandComputer, hHandPlayer, hAnounce);
+function openSideMenu() {
+  console.log("trying to change pic");
+  let menuAlreadyOpen = document.body.querySelector("#divMenu");
+  if (menuAlreadyOpen) {
+    document.body.removeChild(menuAlreadyOpen);
+  } else {
+    let divMenu = document.createElement("div");
+    divMenu.className = "divMenu";
+    divMenu.id = "divMenu";
+    document.body.appendChild(divMenu);
+    // sendHttpGETReq("api/send_menu_items", (res) => {
+    //   console.log("Not Working");
+    //   data = JSON.parse(res);
+    //   console.log(data);
+    // });
+    // for (let i = 0; i < data.menuItems.length; i++) {
+    //   let pMenu = document.createElement("p");
+    //   pMenu.className = "pMenu";
+    //   pMenu.innerHTML = data.menuItems[i].name + "";
+    //   divMenu.appendChild(pMenu);
+    // }
+  }
 }
 
 function formatCardPairs(description) {
@@ -427,4 +513,29 @@ function formatCardPairs(description) {
   });
 
   return formattedRanks.join(" & ");
+}
+
+function countOnesAndMinusOnes(winArr) {
+  let counter = 0;
+  let counterMinus = 0;
+  for (let i = 0; i < winArr.length; i++) {
+    if (winArr[i] == 1) counter += 1;
+    else if (winArr[i] == -1) counterMinus += 1;
+  }
+  if (counter > counterMinus) {
+    return -1;
+  } else if (counter < counterMinus) return 1;
+  return 0;
+}
+
+function toggleSound() {
+  let imgButtSound = document.getElementById("imgButtSound");
+  if (soundOn) {
+    soundOn = false;
+    imgButtSound.src = "images/sound_off.png";
+
+    return;
+  }
+  soundOn = true;
+  imgButtSound.src = "images/sound_on.png";
 }
