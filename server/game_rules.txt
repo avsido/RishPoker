@@ -1,0 +1,7 @@
+1) the game is played with a standard 52 cards deck.
+2) each player gets 5 cards. each card starts an eventual 5 cards hand.
+3) in their turn, the player takes a card from the deck, and decides on what hand to place it.
+4) a player can only place a card on an "available" hand, meaning that if all hands have an equal amount of cards, the player can put his card wherever he decides. but once a hand has more cards than the others, he must place the card on other hands until all hands have the same card amount again.
+5) when it is time for the last hands row to be filled, the players will replace their cards upside-down. 
+6) Wild Card: when all hands have 5 cards, two cards remain in the deck - one for each player. the player can decide to replace any one of his hiddn cards to form a better hand.
+7) the cards are revealed and according to poker hands hierarchy a winner is declared.

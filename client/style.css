@@ -44,38 +44,55 @@ body{
 .buttNav img{
     width:100%;
 }
-
 .buttNav:hover{
     box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .divMenu{
     z-index: 999;
     background-color: rgba(22, 21, 21, 0.473);
     box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5);
     border-radius: 15px;
     border: 15px solid rgb(113 59 59);
-    min-width: 17.5%;
-    height: 80%;
+    min-width: 15%;
+    max-width: 17.5%;
+    height: auto;
+    min-height: 35%;
     position: fixed;
+    padding: 50px;
     top: 275px;
     left: 50px;
     display: flex;
     flex-direction: column;
+}
+.divMenu p{
+    color: gold;
+    font-size: 2.5vh;
+    background-color: #35654d;
+    border-radius: 15px;
+    margin: 20px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.divMenu p:hover{
+    background-color: rgba(176, 166, 166, 0.473);
+}
+.divMenu h3{
+    color: gold;
+    font-size: 2.2vh;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.divMenu button{
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    font-size:80px;
+    border: none;
+    border-radius: 15px;
+    background-color: #21523a;
+}
+.divMenu button:hover{
+    background-color: #5d9f7f;
 }
 
 #divMain{
@@ -103,14 +120,16 @@ h1, h2, h3, h4{
 .buttPlay{
     height: 150px;
     width: 450px;
+    padding: 5px;
     margin-top:75px;
     background-color: rgba(0, 0, 0, 0.805);
     color: white;
-    font-size: 50px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 60px;
+    font-family:'Franklin Gothic Medium';
     border-radius: 150px;
     border: none;
-    transition: all 0.3s ease;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5);
 }
 .buttPlay:hover{
     transform: scale(1.15);
@@ -147,7 +166,6 @@ h1, h2, h3, h4{
     flex-direction: column;
     font-size: 1.5vh;
 }
-
 #divDeck{
     background-color: #21523a;
     border: 15px solid rgb(113 59 59);
@@ -217,7 +235,7 @@ h1, h2, h3, h4{
     width: 225px;
 }
 .imgCardPlayerWild:hover{
-    box-shadow: 2px 25px 100px gold!important;
+    box-shadow: 0 0 50px 25px gold!important;
 }
 .cardDivComputer{
     display: flex;
@@ -393,7 +411,6 @@ h1, h2, h3, h4{
 .cardDivComputerLostFinal > *:nth-child(n+2){
     margin-bottom: -300px!important;
 }
-
 .cardDivPlayerLostAnimated  > *:nth-child(n+2){
     animation: foldLosingHandPlayer 1.5s ease-in-out;
     box-shadow: 0 -25px 35px rgba(0, 0, 0, 0.5);
@@ -411,8 +428,6 @@ h1, h2, h3, h4{
 .cardDivPlayerLostFinal > *:nth-child(n+2){
     margin-top: -300px!important;
 }
-
-
 .divInfoPlayers{
     margin: 5px;
     width: 100%;

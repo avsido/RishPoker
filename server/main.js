@@ -9,9 +9,10 @@ let actions = {
   "/butt_replace_wild_card": myApi.buttReplaceWildCard,
   "/flip_computer_cards": myApi.flipComputerCards,
   "/check_win": myApi.checkWin,
-  "/send_menu_items": myApi.sendMenuItems,
-  "/get_info": myApi.getInfo, // TBC
-  "/get_rules": myApi.getRules, // TBC
+  "/get_menu_items": myApi.getMenuItems,
+  "/get_info": myApi.getInfo,
+  "/get_rules": myApi.getRules,
+  "/get_about_us_info": myApi.getAboutUsInfo,
   "/log_in": myApi.logIn, // TBC
   "/log_out": myApi.logOut, // TBC
   "/register": myApi.register, // TBC

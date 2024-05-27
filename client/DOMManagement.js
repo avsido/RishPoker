@@ -13,6 +13,7 @@ let buttNav,
   buttCheckWin;
 let soundOn = true;
 let data = {};
+let menuItems = {};
 let winArr = [];
 
 //initiating sounds:
@@ -23,7 +24,7 @@ let flipOpponentCardSound = new Howl({
   src: ["sounds/card_flip.wav"],
 });
 let foldSound = new Howl({
-  src: ["images/fold.wav"],
+  src: ["sounds/fold.wav"],
 });
 let winSound = new Howl({
   src: ["sounds/win.wav"],
@@ -78,17 +79,17 @@ function greet() {
 // init func
 function init() {
   cleanElement(divMain);
-  let reset = document.createElement("button");
-  reset.innerHTML = "reset";
-  reset.className = "buttReset";
-  document.body.appendChild(reset);
-  reset.onclick = () => {
-    // sendHttpGETReq("api/start_game", (res) => {
-    //   data = JSON.parse(res);        // rework this
-    //   init();
-    //   render();
-    // });
-  };
+  // let reset = document.createElement("button");
+  // reset.innerHTML = "reset";
+  // reset.className = "buttReset";
+  // document.body.appendChild(reset);   // will probably cancel this..
+  // reset.onclick = () => {
+  //   sendHttpGETReq("api/reset", (res) => {
+  //     data = JSON.parse(res);
+  //     init();
+  //     render();
+  //   });
+  // };
   divDeck = document.createElement("div");
   divDeck.id = "divDeck";
   divPlayers = document.createElement("div");
@@ -316,7 +317,6 @@ function render() {
             img.src =
               "images/" + data.playerCards[i][k].name.toLowerCase() + ".png";
             if (k == 4) {
-              console.log(data.playerCards[i][k].name);
               img.id = "innerDivPopFifth";
             }
             innerDivPop.appendChild(img);
@@ -359,7 +359,6 @@ function render() {
         "images/" + data.playerCards[i][j].name.toLowerCase() + ".png";
       cardDiv.appendChild(imgCard);
     }
-
     cardDiv.onclick = (ev) => {
       if (!data.playerTurn) {
         if (soundOn) invalidMoveSound.play();
@@ -468,26 +467,46 @@ function renderInfoScore() {
 }
 
 function openSideMenu() {
-  console.log("trying to change pic");
   let menuAlreadyOpen = document.body.querySelector("#divMenu");
+  let secondMenuAlreadyOpen = document.body.querySelector("#contentBox");
   if (menuAlreadyOpen) {
     document.body.removeChild(menuAlreadyOpen);
+  } else if (secondMenuAlreadyOpen) {
+    document.body.removeChild(secondMenuAlreadyOpen);
   } else {
     let divMenu = document.createElement("div");
     divMenu.className = "divMenu";
     divMenu.id = "divMenu";
     document.body.appendChild(divMenu);
-    // sendHttpGETReq("api/send_menu_items", (res) => {
-    //   console.log("Not Working");
-    //   data = JSON.parse(res);
-    //   console.log(data);
-    // });
-    // for (let i = 0; i < data.menuItems.length; i++) {
-    //   let pMenu = document.createElement("p");
-    //   pMenu.className = "pMenu";
-    //   pMenu.innerHTML = data.menuItems[i].name + "";
-    //   divMenu.appendChild(pMenu);
-    // }
+
+    sendHttpGETReq("api/get_menu_items", (res) => {
+      menuItems = JSON.parse(res);
+      for (let i = 0; i < menuItems.length; i++) {
+        let pMenu = document.createElement("p");
+        pMenu.className = "pMenu";
+        pMenu.innerHTML = "> " + menuItems[i].name + "";
+        pMenu.onclick = () => {
+          sendHttpGETReq("/api" + menuItems[i].HttpRequest, (res) => {
+            let content = JSON.parse(res);
+            document.body.removeChild(divMenu);
+            let contentBox = document.createElement("div");
+            contentBox.className = "divMenu";
+            contentBox.id = "contentBox";
+            let h3 = document.createElement("h3");
+            h3.innerHTML = content;
+            contentBox.appendChild(h3);
+            let buttEsc = document.createElement("button");
+            buttEsc.innerHTML = "X";
+            buttEsc.onclick = () => {
+              document.body.removeChild(contentBox);
+            };
+            contentBox.appendChild(buttEsc);
+            document.body.appendChild(contentBox);
+          });
+        };
+        divMenu.appendChild(pMenu);
+      }
+    });
   }
 }
 
@@ -514,7 +533,6 @@ function formatCardPairs(description) {
 
   return formattedRanks.join(" & ");
 }
-
 function countOnesAndMinusOnes(winArr) {
   let counter = 0;
   let counterMinus = 0;
@@ -527,7 +545,6 @@ function countOnesAndMinusOnes(winArr) {
   } else if (counter < counterMinus) return 1;
   return 0;
 }
-
 function toggleSound() {
   let imgButtSound = document.getElementById("imgButtSound");
   if (soundOn) {

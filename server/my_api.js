@@ -1,21 +1,38 @@
 const Game = require("./ChinPok");
+let fs = require("fs");
 
 let data = {};
-let cp;
+let cp = {};
 let computerPlay = 3;
 let computerFinalCards = ["", "", "", "", ""];
 
-exports.sendMenuItems = () => {
-  data.menuItems = [
-    { name: "about Rishpon poker" },
-    { name: "game rules" },
-    { name: "about us" },
-    { name: "contact" },
+exports.getMenuItems = (req, res, q) => {
+  menuItems = [
+    { name: "about Rishpon poker", HttpRequest: "/get_info" },
+    { name: "the rules", HttpRequest: "/get_rules" },
+    { name: "get coins" },
+    { name: "about us", HttpRequest: "/get_about_us_info" },
     { name: "contribute" },
     { name: "log in" },
   ];
   res.writeHead(200, { "Content-Type": "application/json" });
-  res.end(JSON.stringify(data));
+  res.end(JSON.stringify(menuItems));
+};
+
+exports.getInfo = (req, res, q) => {
+  let content = fs.readFileSync("game_info.txt", "utf-8");
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.end(JSON.stringify(content));
+};
+exports.getRules = (req, res, q) => {
+  let content = fs.readFileSync("game_rules.txt", "utf-8");
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.end(JSON.stringify(content));
+};
+exports.getAboutUsInfo = (req, res, q) => {
+  let content = fs.readFileSync("about_us.txt", "utf-8");
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.end(JSON.stringify(content));
 };
 
 //func to start game:
@@ -32,12 +49,6 @@ exports.startGameVSComputer = (req, res, q) => {
   data.results = {};
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
-};
-
-exports.getInfo = (req, res, q) => {
-  let gameInfoForClient = fs.readFileSync("gameInfoForClient.txt", "utf-8");
-  res.writeHead(200, { "Content-Type": "application/json" });
-  res.end(JSON.stringify(gameInfoForClient));
 };
 
 //// func to place player card on chosen hand.
@@ -86,7 +97,7 @@ exports.placeCard = (req, res, q) => {
 
 exports.computerGoOn = (req, res, q) => {
   data.playerTurn = true;
-  computerTurn();
+  computerTurn(data.playerCards, data.computerCards, cp.drawCard());
   if (cp.deck.length > 0) data.drawnCard = cp.drawCard();
   data.cardsLeft = cp.deck.length;
   res.writeHead(200, { "Content-Type": "application/json" });
@@ -154,10 +165,19 @@ exports.buttReplaceWildCard = (req, res, q) => {
   res.end(JSON.stringify(data));
 };
 
-exports.reset = (req, res, q) => {
-  // think over whole reset button
-  startGame();
-};
+// exports.reset = (req, res, q) => {
+//   // think over whole reset button
+//   cp = new Game();
+//   ///
+//   data.computerCards = cp.computerCards;  // will probably cancel
+//   data.playerCards = cp.playerCards;
+//   data.drawnCard = cp.drawCard();
+//   data.cardsLeft = cp.deck.length;
+//   data.playerTurn = true;
+//   data.results = {};
+//   res.writeHead(200, { "Content-Type": "application/json" });
+//   res.end(JSON.stringify(data));
+// };
 
 function comparePokerHands(hand1, hand2) {
   const pokerHands = [
@@ -396,16 +416,16 @@ function comparePokerHands(hand1, hand2) {
   }
 }
 
-function computerTurn() {
-  // this function may not see "straights" well. look into it.
-  // this function does not return hands cards names.  look into it.
-  if (computerPlay == 4) {
-    computerPlay = 0;
-  } else {
-    computerPlay += 1;
-  }
-  if (data.computerCards[computerPlay].length > 3) {
-    data.computerCards[computerPlay].push({ name: "anon_card" });
-    computerFinalCards[computerPlay] = cp.drawCard();
-  } else data.computerCards[computerPlay].push(cp.drawCard());
-}
+// function computerTurn() {
+//   // this function may not see "straights" well. look into it.
+//   // this function does not return hands cards names.  look into it.
+//   if (computerPlay == 4) {
+//     computerPlay = 0;
+//   } else {
+//     computerPlay += 1;
+//   }
+//   if (data.computerCards[computerPlay].length > 3) {
+//     data.computerCards[computerPlay].push({ name: "anon_card" });
+//     computerFinalCards[computerPlay] = cp.drawCard();
+//   } else data.computerCards[computerPlay].push(cp.drawCard());
+// }
