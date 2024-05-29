@@ -50,7 +50,7 @@ function greet() {
   divMain.appendChild(img);
   let buttPlayVSComputer = document.createElement("button");
   buttPlayVSComputer.className = "buttPlay";
-  buttPlayVSComputer.innerHTML = "Play vs AI";
+  buttPlayVSComputer.innerHTML = "Play vs machine";
   divMain.appendChild(buttPlayVSComputer);
   buttPlayVSComputer.onclick = () => {
     sendHttpGETReq("api/start_game_vs_computer", (res) => {
@@ -383,7 +383,7 @@ function render() {
             render();
           });
           if (soundOn) placeCardSound.play();
-        }, 25);
+        }, 2500);
       });
     };
     divPlayer.appendChild(cardDiv);

@@ -59,35 +59,47 @@ exports.startGameVSComputer = (req, res, q) => {
 // will activate local func computerTurn
 // will send next card for player to play
 exports.placeCard = (req, res, q) => {
-  let i = q.query.i;
-  if (isNaN(i)) {
+  let wantedHand = q.query.i;
+  if (isNaN(wantedHand)) {
     res.writeHead(400, { "Content-Type": "text/plain" });
     res.end("Bad Request 1 placeCard");
     return;
   }
 
-  i = parseInt(i);
+  wantedHand = parseInt(wantedHand);
 
-  if (!Number.isInteger(i)) {
+  if (!Number.isInteger(wantedHand)) {
     res.writeHead(400, { "Content-Type": "text/plain" });
     res.end("Bad Request 2 placeCard");
     return;
   }
-  if (i < 0 || i > 4) {
+  if (wantedHand < 0 || wantedHand > 4) {
     res.writeHead(400, { "Content-Type": "text/plain" });
     res.end("Bad Request 3 placeCard");
     return;
   }
 
-  let temp = data.playerCards[i].length;
+  let temp = data.playerCards[wantedHand].length; // gave rare weird following error:
+  //   C:\Users\97252\Desktop\chinesePoker\RishponPoker\server\my_api.js:82
+  //   let temp = data.playerCards[hand].length;
+  //                              ^
+
+  // TypeError: Cannot read properties of undefined (reading '3')
+  //     at exports.placeCard [as /place_card] (C:\Users\97252\Desktop\chinesePoker\RishponPoker\server\my_api.js:82:30)
+  //     at Server.<anonymous> (C:\Users\97252\Desktop\chinesePoker\RishponPoker\server\my_server.js:21:24)
+  //     at Server.emit (node:events:514:28)
+  //     at parserOnIncoming (node:_http_server:1143:12)
+  //     at HTTPParser.parserOnHeadersComplete (node:_http_common:119:17)
+  // Node.js v20.9.0
+  // probably has to do with this check:
   for (let i = 0; i < data.playerCards.length; i++) {
-    if (temp > data.playerCards[i].length) {
+    if (temp > data.playerCards[wantedHand].length) {
       res.writeHead(400, { "Content-Type": "text/plain" });
       res.end("Bad Request 4 placeCard");
       return;
     }
   }
-  data.playerCards[i].push(data.drawnCard);
+  data.playerCards[wantedHand].push(data.drawnCard);
   data.cardsLeft = cp.deck.length - 1;
   data.playerTurn = false;
 
@@ -97,7 +109,8 @@ exports.placeCard = (req, res, q) => {
 
 exports.computerGoOn = (req, res, q) => {
   data.playerTurn = true;
-  computerTurn(data.playerCards, data.computerCards, cp.drawCard());
+  // computerTurn();
+  computerTurnTrial();
   if (cp.deck.length > 0) data.drawnCard = cp.drawCard();
   data.cardsLeft = cp.deck.length;
   res.writeHead(200, { "Content-Type": "application/json" });
@@ -416,16 +429,165 @@ function comparePokerHands(hand1, hand2) {
   }
 }
 
-// function computerTurn() {
-//   // this function may not see "straights" well. look into it.
-//   // this function does not return hands cards names.  look into it.
-//   if (computerPlay == 4) {
-//     computerPlay = 0;
-//   } else {
-//     computerPlay += 1;
-//   }
-//   if (data.computerCards[computerPlay].length > 3) {
-//     data.computerCards[computerPlay].push({ name: "anon_card" });
-//     computerFinalCards[computerPlay] = cp.drawCard();
-//   } else data.computerCards[computerPlay].push(cp.drawCard());
-// }
+function computerTurn() {
+  if (computerPlay == 4) {
+    computerPlay = 0;
+  } else {
+    computerPlay += 1;
+  }
+  if (data.computerCards[computerPlay].length > 3) {
+    data.computerCards[computerPlay].push({ name: "anon_card" });
+    computerFinalCards[computerPlay] = cp.drawCard();
+  } else data.computerCards[computerPlay].push(cp.drawCard());
+}
+// FIX RECURRING push/givenCard bug
+function computerTurnTrial() {
+  let givenCard = cp.drawCard();
+  console.log(givenCard);
+  // define a function to check if optional straight
+  function isOptionalStraight(hand, card) {
+    let rankValueArr = [];
+    for (let i = 0; i < hand.length; i++) {
+      rankValueArr.push(hand[i].rankValue);
+    }
+    rankValueArr.push(card.rankValue);
+
+    let minNum = Math.min(...arr);
+    let maxNum = Math.max(...arr);
+    if (maxNum - minNum + 1 === arr.length) {
+      const uniqueNumbers = new Set(arr);
+      if (uniqueNumbers.size === arr.length) {
+        return true;
+      }
+    }
+    return false;
+  }
+  function is10OrHigher(card) {
+    if (card.rankValue > 9) return true;
+    return false;
+  }
+  // let humanCards = [];
+  // filling humanCards with all of the human player's cards. for comfortable iteration:
+  // for (let i = 0; i < data.playerCards.length; i++) {
+  //   for (let j = 0; j < data.playerCards[i].length; j++) {
+  //     if (j < 4) {
+  //       humanCards.push(data.playerCards[i][j]);
+  //     }
+  //   }
+  // }
+  let availableHands = [];
+  let temp = 1;
+  // setting temp value:
+  for (let i = 0; i < data.computerCards.length; i++) {
+    if (data.computerCards[i].length > temp) {
+      temp = data.computerCards[i].length;
+    }
+  }
+  // filling availableHands arr:
+  if (data.computerCards.every((hand) => hand.length == temp)) {
+    for (let i = 0; i < data.computerCards.length; i++) {
+      availableHands.push(data.computerCards[i]);
+    }
+  } else {
+    for (let i = 0; i < data.computerCards.length; i++) {
+      if (data.computerCards[i].length < temp) {
+        availableHands.push(data.computerCards[i]);
+      }
+    }
+  }
+  if (availableHands.length == 1) {
+    availableHands[0].push(givenCard);
+    return;
+  }
+  // deciding where to place card:
+  if (availableHands.every((hand) => hand.length == 1)) {
+    // 1
+
+    for (let i = 0; i < availableHands.length; i++) {
+      // for royalty cards:
+      if (is10OrHigher(givenCard)) {
+        if (
+          // look for high pair:
+          availableHands[i][0].rank == givenCard.rank &&
+          Math.random() < 0.95
+        ) {
+          availableHands[i].push(givenCard);
+          return;
+        }
+        // look for high flush:
+        else if (
+          is10OrHigher(availableHands[i][0]) &&
+          availableHands[i][0].suit == givenCard.suit &&
+          Math.random() < 0.9
+        ) {
+          availableHands[i].push(givenCard);
+          return;
+        } else if (
+          // look for high straight (consecutive):
+          is10OrHigher(availableHands[i][0]) &&
+          Math.abs(availableHands[i][0].rankValue - givenCard.rankValue) == 1 &&
+          Math.random() < 0.9
+        ) {
+          availableHands[i].push(givenCard);
+          return;
+        } else if (
+          availableHands[i][0].suit == givenCard.suit &&
+          Math.random() < 0.9
+        ) {
+          // look for any flush:
+          availableHands[i].push(givenCard);
+          return;
+        } else if (is10OrHigher(availableHands[i][0] && Math.random() < 0.9)) {
+          // look for high straight (any):
+          availableHands[i].push(givenCard);
+          return;
+        } else {
+          // just place it randomly:
+          availableHands[
+            Math.floor(Math.random() * (availableHands.length + 1))
+          ].push(givenCard);
+          return;
+        }
+      } else {
+        // givenCard not royal
+        // look for pair:
+        if (
+          availableHands[i][0].rank == givenCard.rank &&
+          Math.random() < 0.9
+        ) {
+          availableHands[i].push(givenCard);
+          return;
+        } else if (
+          // look for straight flush:
+          availableHands[i][0].suit == givenCard.suit &&
+          Math.abs(availableHands[i][0].rankValue - givenCard.rankValue) == 1
+        ) {
+          availableHands[i].push(givenCard);
+          return;
+        } else if (
+          // look for flush:
+          availableHands[i][0].suit == givenCard.suit &&
+          Math.random() < 0.9
+        ) {
+          availableHands[i].push(givenCard);
+          return;
+        } else if (
+          // look for straight:
+          Math.abs(availableHands[i][0].rankValue - givenCard.rankValue) == 1 &&
+          Math.random() < 0.9
+        ) {
+          availableHands[i].push(givenCard);
+          return;
+        } else {
+          // just place it randomly:
+          let randomIndex = Math.floor(
+            Math.random() * (availableHands.length - 1 + 1)
+          );
+          availableHands[randomIndex].push(givenCard);
+          return;
+        }
+      }
+    }
+  }
+}
+// WHAT TO DO WITH ACES???

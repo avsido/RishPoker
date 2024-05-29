@@ -102,8 +102,8 @@ body{
     justify-content: center;
     border: 50px solid rgb(113 59 59);
     border-radius: 60px;
-    min-width: 55%;
-    max-width: 55%;
+    min-width: 3500px;
+    max-width: 3500px;
     height: 75vh;
     margin: 20px;
     padding: 25px;
