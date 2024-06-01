@@ -4,38 +4,43 @@ body{
     justify-content: center;
     display: flex;
     flex-direction: column;
+    margin: 0px;
+    padding: 0px;
 }
 .title{
     width: 100%;
-    max-height: 8vh;
+    height: 8vh;
     display: flex;
     flex-direction: row;
     margin-top: 5px;
 }
 #mainTitle{
+    margin-left:-5vw;
     display: flex;
     flex-direction: row;
     text-align: center;
     align-items: center;
     justify-content: center;
-    margin-left: -350px;
     font-size: 2.5vh;
     width: 100%;
 }
+#mainTitle img{
+    height: 25px;
+}
 #mainTitle h1{
-    text-shadow: 5px 5px 4px gold;
+    text-shadow: 1px 0.5px 1px gold;
     font-family: Stencil, sans-serif;
     font-weight: bolder;
     color: rgb(112, 22, 22);
 }
 .buttNav{
-    margin: 50px;
-    margin-right: 20px;
-    padding: 15px;
-    border: 15px solid rgb(113 59 59);
-    border-radius: 15px;
-    width: 100px;
-    height: 100px;
+    margin: 5px;
+    margin-right: 0px;
+    padding: 5px;
+    border: 2.5px solid rgb(113 59 59);
+    border-radius: 7.5px;
+    width: 24px;
+    height: 24px;
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat;
@@ -45,35 +50,37 @@ body{
     width:100%;
 }
 .buttNav:hover{
-    box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
 }
 .divMenu{
     z-index: 999;
     background-color: rgba(22, 21, 21, 0.473);
-    box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5);
-    border-radius: 15px;
-    border: 15px solid rgb(113 59 59);
-    min-width: 15%;
-    max-width: 17.5%;
+    box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
+    border: 2.5px solid rgb(113 59 59);
+    border-radius: 7.5px;
+    min-width: 12.5%;
+    max-width: 15%;
     height: auto;
     min-height: 35%;
     position: fixed;
-    padding: 50px;
-    top: 275px;
-    left: 50px;
+    padding: 10px;
+    top: 55px;
+    left: 5px;
     display: flex;
     flex-direction: column;
 }
 .divMenu p{
     color: gold;
-    font-size: 2.5vh;
+    font-size: 2.2vh;
     background-color: #35654d;
-    border-radius: 15px;
-    margin: 20px;
+    border-radius: 2px;
+    margin: 8px;
+    padding:5px;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 .divMenu p:hover{
     background-color: rgba(176, 166, 166, 0.473);
+    
 }
 .divMenu h3{
     color: gold;
@@ -81,36 +88,37 @@ body{
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 .divMenu button{
-    width: 100px;
-    height: 100px;
-    position: absolute;
-    bottom: 25px;
-    right: 25px;
-    font-size:80px;
+    width: 20px;
+    height: 20px;
+    position:absolute;
+    bottom: 4px;
+    right: 4px;
+    font-size:auto;
+    color:darkgrey;
     border: none;
-    border-radius: 15px;
-    background-color: #21523a;
+    border-radius: 2px;
+    background-color: grey;
 }
 .divMenu button:hover{
-    background-color: #5d9f7f;
+    color: white;
 }
-
 #divMain{
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    border: 50px solid rgb(113 59 59);
-    border-radius: 60px;
-    min-width: 3500px;
-    max-width: 3500px;
-    height: 75vh;
-    margin: 20px;
-    padding: 25px;
+    border: 10px solid rgb(113 59 59);
+    border-radius: 25px;
+    min-width: 50vw;
+    max-width: 50vw;
+    max-height:80vh;
+    min-height: 80vh;
+    margin: 5px;
+    padding: 5px;
 }
 #flush{
     height: 30vh;
-    margin-bottom: 100px;
+    margin: 50px;
+
 }
 h1, h2, h3, h4{
     font-family: 'Abril Fatface';
@@ -118,27 +126,27 @@ h1, h2, h3, h4{
     color: white;
 }
 .buttPlay{
-    height: 150px;
-    width: 450px;
+    height: auto;
+    width: 150px;
     padding: 5px;
-    margin-top:75px;
+    margin-top:10px;
     background-color: rgba(0, 0, 0, 0.805);
     color: white;
-    font-size: 60px;
+    font-size: 15px;
     font-family:'Franklin Gothic Medium';
     border-radius: 150px;
     border: none;
     transition: 0.3s ease-in-out;
-    box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
 }
 .buttPlay:hover{
     transform: scale(1.15);
-    color: rgb(206, 206, 35);
+    box-shadow: 0 12px 15px rgba(0, 0, 0, 0.5);
 }
 .aSignIn{
     text-decoration: underline;
     margin-top: 75px;
-    font-size: 75px;
+    font-size: 20px;
 }
 .buttReset{
     width: 6vw;
@@ -146,8 +154,8 @@ h1, h2, h3, h4{
     border:none;
     border-radius: 4vh;
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-size: 65px;
-    margin: 0.85vh;
+    font-size: 15px;
+    margin:0px 15px;
     display: flex; 
     justify-content: center; 
     align-items: center;
@@ -157,35 +165,46 @@ h1, h2, h3, h4{
     color: white;
 }
 #divInfo{
-    border-right: 15px solid rgb(113 59 59);
-    padding-right: 75px;
-    margin: 50px;
-    width: 40%;
-    height: 100%;
+    border-right: 4px solid rgb(113 59 59);
+    padding: 5px;
+    padding-right:25px;
+    text-align:center;
+    margin: 2px;
+    width: 35%;
+    height: 75vh;
     display: flex;
     flex-direction: column;
     font-size: 1.5vh;
 }
 #divDeck{
     background-color: #21523a;
-    border: 15px solid rgb(113 59 59);
-    border-radius: 35px;
+    border: 4px solid rgb(113 59 59);
+    border-radius: 7.5px;
     display: flex;
     flex-direction: row;
+    align-items:center;
     justify-content: space-between;
-    padding: 15px;
-    min-height: 550px;
-    max-height: 550px;
+    padding: 10px;
+    min-height: 150px;
+    max-height: 150px;
+    max-width: 255px;
+    min-width: 255px;
+    
+}
+#divDeck img{
+    width:135px;
+    margin-left: -70px;
 }
 #drawnCard{
-    height: auto;
+    min-width:100px;
     animation: drawFromLeft 0.5s ease-in-out forwards;
+    box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
 }
 @keyframes drawFromLeft {
     0%{
         transform: scale(0);
-        width: 0;
-        margin-right: 550px;
+        width: 28%;
+        margin-right: 250px;
     }
     100% {
         transform: scale(1);
@@ -194,9 +213,9 @@ h1, h2, h3, h4{
     }
 }
 #waitGif{
-    margin-right: 75px;
-    width: 525px;
-    height: 525px;
+    margin-right: -25px;
+    width:25%;
+    height: auto;
 }
 #imgDeck{
     width: 25%;
@@ -206,144 +225,150 @@ h1, h2, h3, h4{
 #divPlayers{
     color: gold;
     width: 60%;
-    height: 100%;
+    height: 550px;
     display: flex;
     flex-direction: column;
     font-size: 1.5vh;
-    justify-content: center;
+    
     align-items: center;
 }
 #divPlayers h2{
     color: gold;
 }
 #divPlayers > div{
-    border: 12px solid grey;
-    border-radius: 25px;
+    border: 2px solid grey;
+    border-radius: 7.5px;
     display: flex;
     flex-direction: row;
-    min-height: 40%;
+    max-height: 38%;
+    min-height:38%;
+    width:80%;
+    padding:2px;
+    margin:0px;
+    justify-content: space-around;
 }
 .cardDiv{
     background-color: #21523a;
     border: 1px solid rgba(219, 216, 216, 0.33);
-    border-radius: 20px;
-    height: 90%;
-    margin:25px;
-    padding: 5px;
+    border-radius: 4px;
+    height: 95%;
+    margin:2px;
+    padding: 2px;
 }
 .cardDiv img{
-    width: 225px;
+    width: 60px;
 }
 .imgCardPlayerWild:hover{
-    box-shadow: 0 0 50px 25px gold!important;
+    box-shadow: 0 0 10px 5px gold!important;
 }
-.cardDivComputer{
+.cardDivPlayerB{
     display: flex;
     flex-direction: column-reverse;
 }
-.cardDivComputer > *:nth-child(n+2){
-    margin-bottom: -225px;
-    box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5);
+.cardDivPlayerB > *:nth-child(n+2){
+    margin-bottom: -60px;
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5);
 }
-.cardDivPlayer{
+.cardDivPlayerA{
     display: flex;
     flex-direction: column;
 }
-.cardDivPlayerReg:hover{
+.cardDivPlayerAReg:hover{
     box-shadow: 0 0 0 0 transparent;
 }
-.cardDivPlayerPlay:hover{
-    box-shadow: 2px 10px 25px silver;
+.cardDivPlayerAPlay:hover{
+    box-shadow: 0px 5px 12px silver;
 }
-.cardDivPlayer > *:nth-child(n+2){
-    margin-top: -225px;
-    box-shadow: 0 -25px 35px rgba(0, 0, 0, 0.5);
+.cardDivPlayerA > *:nth-child(n+2){
+    margin-top: -60px;
+    box-shadow: 1px -2px 5px rgba(0, 0, 0, 0.5);
 }
 #buttCheckWin{
-    width: 350px;
-    height: 350px;
-    border-radius: 175px;
+    width: 90px;
+    height: 90px;
+    margin:30px;
+    border-radius: 45px;
     color: rgb(112, 22, 22);
-    border: 15px solid rgb(112, 22, 22);
-    font-size: 150px;
-    margin-left: 450px;
-    margin-top: 80px;
+    border: 3px solid rgb(112, 22, 22);
+    font-size: 35px;
+    align-self:center;
     cursor: pointer;
     position: relative;
     overflow: hidden;
     background-color:  gold;
     transition: background-color 0.5s ease, transform 0.5s ease;
+    transform: translateY(5px);
+    box-shadow: 2px 2px 0px rgb(112, 22, 22), 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 #buttCheckWin:hover{
-    transform: scale(1.2);
-    background-color: rgb(255, 200, 0);
+    /* transform: scale(1.05); */
+    /* background-color: rgb(255, 200, 0); */
+    color:red;
 }
 #buttFlip:hover {
     transform: scale(1.15);
 }
 #divPop{
-    box-shadow: 0 75px 100px rgba(0, 0, 0, 0.5);
+    box-shadow: 15px 15px 5px rgba(0, 0, 0, 0.5);
     background-color: #35654d;
-    border: 15px solid rgb(113 59 59);
-    border-radius: 35px;
+    border: 7.5px solid rgb(179 37 37);
+    border-radius: 20px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     overflow: auto; 
-    z-index: 15;
     overflow: visible;
     position: absolute;
     font-size: 1.5vh;
-    padding: 15px;
-    margin: 15px;
+    padding: 5px;
+    margin: 5px;
     min-height: 40vh;
     max-height: 40vh;
-    min-width: 85vh;
-    max-width: 85vh;
+    min-width: 100vh;
+    max-width: 100vh;
     z-index: 1000;
 }
 #divPopLeft{
     display: flex;
     flex-direction: column;
-    margin:auto;
-    padding:50px;
-    padding-bottom:275px;
-    border-left: 15px solid rgb(113 59 59);
+    margin:0px;
+    padding:5px 25px;
+    padding-bottom:20px;
+    border-left: 4px solid rgb(179 37 37);
 }
 #divPopLeft img{
-    max-height:575px;
-    height: auto;
-    box-shadow: 25px 25px 35px #000000;
+    width:100%;
+    height:auto;
+    box-shadow: 3px 3px 5px #ffd7008f;
 
 }
 #divPopRight{
     display: flex;
     flex-direction: column;
     margin: auto;
-    padding:50px;
-    padding-left: 100px;
+    padding:5px;
+    padding-left: 2px;
     align-items:center;
 }
 #innerDivPop{
     display: flex;
     flex-direction: row;
-    margin:auto;
+    /* margin:auto; */
     margin-left:10px;
     justify-content:center;
 }
 #innerDivPop img{
     align-items: center;
-    width: 17.5%;
-    height: 25.4%;
+    width: 15%;
+    height: 0%;
     margin: 2px 5px;
-    box-shadow: 25px 25px 35px #000000; 
-    filter: brightness(50%);
+    box-shadow: 5px 5px 5px #0e050594; 
+    filter: brightness(70%);
     
 }
 #innerDivPop img:nth-child(5) {
-    box-shadow: 25px 25px 35px #000000;
-    width:23%;
-    height: 29.04%;
+    box-shadow: 3px 3px 5px #ffd7008f;
+    width:19.5%;
     filter: brightness(100%);
     
 }
@@ -377,11 +402,11 @@ h1, h2, h3, h4{
 .divCancel{
     display: flex;
     align-items: center;
-    margin: 50px 400px;
+    margin: 5px 4px;
     padding: 15px;
 }
 .imgCardAnimated{
-    width: 225px;
+    width: 60px;
     animation: flipToReveal 1s ease-in-out;
     backface-visibility: hidden;
 }
@@ -393,27 +418,25 @@ h1, h2, h3, h4{
         transform: rotateY(360deg);
     }
 }
-.cardDivComputerLostAnimated  > *:nth-child(n+2){
+.cardDivPlayerBLostAnimated  > *:nth-child(n+2){
     animation: foldLosingHandComputer 1.5s ease-in-out;
-    box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5);
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5);
 }
 @keyframes foldLosingHandComputer{
     from{
-        transform: translateY(0);
-        /* margin-bottom: -225px; */
-        
+        transform: translateY(0);        
     }
     to{
         transform: translateY(1);
-        margin-bottom: -300px;
+        margin-bottom: -77.5px;
     }
 }
-.cardDivComputerLostFinal > *:nth-child(n+2){
-    margin-bottom: -300px!important;
+.cardDivPlayerBLostFinal > *:nth-child(n+2){
+    margin-bottom: -77.5px!important;
 }
-.cardDivPlayerLostAnimated  > *:nth-child(n+2){
+.cardDivPlayerALostAnimated  > *:nth-child(n+2){
     animation: foldLosingHandPlayer 1.5s ease-in-out;
-    box-shadow: 0 -25px 35px rgba(0, 0, 0, 0.5);
+    box-shadow: 1px -2px 5px rgba(0, 0, 0, 0.5);
 }
 @keyframes foldLosingHandPlayer{
     from{
@@ -422,11 +445,11 @@ h1, h2, h3, h4{
     }
     to{
         transform: translateY(1);
-        margin-top: -300px;
+        margin-top: -77.5px;
     }
 }
-.cardDivPlayerLostFinal > *:nth-child(n+2){
-    margin-top: -300px!important;
+.cardDivPlayerALostFinal > *:nth-child(n+2){
+    margin-top:-77.5px!important;
 }
 .divInfoPlayers{
     margin: 5px;
@@ -434,30 +457,34 @@ h1, h2, h3, h4{
     height: 40%;
     display: flex;
     flex-direction: column;
+    align-items:center;
+    text-align:center;
 }
 .divInfoPlayers h1{
-    background-color: rgb(29, 26, 26);
+    background-color: rgb(113 59 59);
+    font-size:3vh;
+    width:100%;
   
 }
 .divInfoPlayers h2{
-    font-size: 75px;
-    margin: 15px 25px;
-    /* -webkit-text-stroke: 0.5px rgb(255, 255, 255); */
+    font-size:2.6vh;
+    margin: 2px;
 }
 .hBottomLine{
     color: gold;
-    margin: 15px;
+    margin: 5px;
+    
     animation: sizeDownHeader 0.5s ease-in-out forwards;
 }
 @keyframes sizeDownHeader {
     0%{
-        margin-top: 25px;
+        margin-top: 15px;
         transform: scale(0);
         font-size: 2.5vh;
     }
     100% {
         transform: scale(1);
-        margin-top: 120px;
+        margin-top: 15px;
         font-size: 5vh;
         
     }

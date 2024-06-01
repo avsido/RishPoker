@@ -7,7 +7,7 @@ let actions = {
   "/place_card": myApi.placeCard,
   "/computer_go_on": myApi.computerGoOn,
   "/butt_replace_wild_card": myApi.buttReplaceWildCard,
-  "/flip_computer_cards": myApi.flipComputerCards,
+  "/flip_player_b_cards": myApi.flipPlayerBCards,
   "/check_win": myApi.checkWin,
   "/get_menu_items": myApi.getMenuItems,
   "/get_info": myApi.getInfo,

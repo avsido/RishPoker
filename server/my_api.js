@@ -4,7 +4,7 @@ let fs = require("fs");
 let data = {};
 let cp = {};
 let computerPlay = 3;
-let computerFinalCards = ["", "", "", "", ""];
+let playerBFinalCards = ["", "", "", "", ""];
 
 exports.getMenuItems = (req, res, q) => {
   menuItems = [
@@ -41,11 +41,13 @@ exports.getAboutUsInfo = (req, res, q) => {
 exports.startGameVSComputer = (req, res, q) => {
   cp = new Game();
   ///
-  data.computerCards = cp.computerCards;
-  data.playerCards = cp.playerCards;
+  data.playerBCards = cp.playerBCards;
+  data.playerACards = cp.playerACards;
+  console.log(data.playerACards);
+  console.log(data.playerBCards);
   data.drawnCard = cp.drawCard();
   data.cardsLeft = cp.deck.length;
-  data.playerTurn = true;
+  data.playerATurn = cp.playerATurn;
   data.results = {};
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
@@ -79,7 +81,7 @@ exports.placeCard = (req, res, q) => {
     return;
   }
 
-  let temp = data.playerCards[wantedHand].length; // gave rare weird following error:
+  let temp = data.playerACards[wantedHand].length; // gave rare weird following error:
   //   C:\Users\97252\Desktop\chinesePoker\RishponPoker\server\my_api.js:82
   //   let temp = data.playerCards[hand].length;
   //                              ^
@@ -92,25 +94,25 @@ exports.placeCard = (req, res, q) => {
   //     at HTTPParser.parserOnHeadersComplete (node:_http_common:119:17)
   // Node.js v20.9.0
   // probably has to do with this check:
-  for (let i = 0; i < data.playerCards.length; i++) {
-    if (temp > data.playerCards[wantedHand].length) {
+  for (let i = 0; i < data.playerACards.length; i++) {
+    if (temp > data.playerACards[i].length) {
       res.writeHead(400, { "Content-Type": "text/plain" });
       res.end("Bad Request 4 placeCard");
       return;
     }
   }
-  data.playerCards[wantedHand].push(data.drawnCard);
+  data.playerACards[wantedHand].push(data.drawnCard);
   data.cardsLeft = cp.deck.length - 1;
-  data.playerTurn = false;
+  data.playerATurn = false;
 
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
 };
 
 exports.computerGoOn = (req, res, q) => {
-  data.playerTurn = true;
+  data.playerATurn = true;
   // computerTurn();
-  computerTurnTrial();
+  computerTurnGPT(data.playerACards, data.playerBCards);
   if (cp.deck.length > 0) data.drawnCard = cp.drawCard();
   data.cardsLeft = cp.deck.length;
   res.writeHead(200, { "Content-Type": "application/json" });
@@ -136,13 +138,13 @@ exports.checkWin = (req, res, q) => {
     return;
   }
 
-  data.computerCards[cardIndex][4] = computerFinalCards.splice(0, 1)[0];
+  data.playerBCards[cardIndex][4] = playerBFinalCards.splice(0, 1)[0];
   data.drawnCard = null;
-  data.playerTurn = false;
+  data.playerATurn = false;
   data.cardIndex = cardIndex;
   data.results = comparePokerHands(
-    data.computerCards[cardIndex],
-    data.playerCards[cardIndex]
+    data.playerBCards[cardIndex],
+    data.playerACards[cardIndex]
   );
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
@@ -171,9 +173,9 @@ exports.buttReplaceWildCard = (req, res, q) => {
     return;
   }
 
-  data.playerCards[hand].splice(card, 1, data.drawnCard);
+  data.playerACards[hand].splice(card, 1, data.drawnCard);
   data.drawnCard = null;
-  data.playerTurn = false;
+  data.playerATurn = false;
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
 };
@@ -192,7 +194,7 @@ exports.buttReplaceWildCard = (req, res, q) => {
 //   res.end(JSON.stringify(data));
 // };
 
-function comparePokerHands(hand1, hand2) {
+function comparePokerHands(handPlayerB, handPlayerA) {
   const pokerHands = [
     "High Card",
     "One Pair",
@@ -313,117 +315,170 @@ function comparePokerHands(hand1, hand2) {
     };
   }
 
-  function compareHighCards(values1, values2) {
-    for (let i = 0; i < values1.length; i++) {
-      if (values1[i] > values2[i]) return 1;
-      if (values1[i] < values2[i]) return -1;
+  function compareHighCards(valuesPlayerB, valuesPlayerA) {
+    for (let i = 0; i < valuesPlayerB.length; i++) {
+      if (valuesPlayerB[i] > valuesPlayerA[i]) return 1;
+      if (valuesPlayerB[i] < valuesPlayerA[i]) return -1;
     }
     return 0;
   }
 
-  const result1 = rankHand(hand1);
-  const result2 = rankHand(hand2);
+  const resultPlayerB = rankHand(handPlayerB);
+  const resultPlayerA = rankHand(handPlayerA);
 
-  if (result1.rank > result2.rank) {
+  if (resultPlayerB.rank > resultPlayerA.rank) {
     return {
       winner: 1,
-      hand1Name: result1.name,
-      hand2Name: result2.name,
-      highCard1: result1.highCard,
-      highCard2: result2.highCard,
+      handPlayerBName: resultPlayerB.name,
+      handPlayerAName: resultPlayerA.name,
+      highCardPlayerB: resultPlayerB.highCard,
+      highCardPlayerA: resultPlayerA.highCard,
     };
-  } else if (result1.rank < result2.rank) {
+  } else if (resultPlayerB.rank < resultPlayerA.rank) {
     return {
       winner: -1,
-      hand1Name: result1.name,
-      hand2Name: result2.name,
-      highCard1: result1.highCard,
-      highCard2: result2.highCard,
+      handPlayerBName: resultPlayerB.name,
+      handPlayerAName: resultPlayerA.name,
+      highCardPlayerB: resultPlayerB.highCard,
+      highCardPlayerA: resultPlayerA.highCard,
     };
   } else {
-    if (result1.rank === 1) {
+    if (resultPlayerB.rank === 1) {
       // One Pair
-      const pair1 = hand1.find(
-        (card) => hand1.filter((c) => c.rank === card.rank).length === 2
+      const pair1 = handPlayerB.find(
+        (card) => handPlayerB.filter((c) => c.rank === card.rank).length === 2
       ).rankValue;
-      const pair2 = hand2.find(
-        (card) => hand2.filter((c) => c.rank === card.rank).length === 2
+      const pair2 = handPlayerA.find(
+        (card) => handPlayerA.filter((c) => c.rank === card.rank).length === 2
       ).rankValue;
       if (pair1 > pair2)
         return {
           winner: 1,
-          hand1Name: result1.name,
-          hand2Name: result2.name,
-          highCard1: result1.highCard,
-          highCard2: result2.highCard,
+          handPlayerBName: resultPlayerB.name,
+          handPlayerAName: resultPlayerA.name,
+          highCardPlayerB: resultPlayerB.highCard,
+          highCardPlayerA: resultPlayerA.highCard,
         };
       if (pair1 < pair2)
         return {
           winner: -1,
-          hand1Name: result1.name,
-          hand2Name: result2.name,
-          highCard1: result1.highCard,
-          highCard2: result2.highCard,
+          handPlayerBName: resultPlayerB.name,
+          handPlayerAName: resultPlayerA.name,
+          highCardPlayerB: resultPlayerB.highCard,
+          highCardPlayerA: resultPlayerA.highCard,
         };
     }
-    if (result1.rank === 2) {
+    if (resultPlayerB.rank === 2) {
       // Two Pairs
-      const pairs1 = hand1
+      const pairsPlayerB = handPlayerB
         .filter(
-          (card) => hand1.filter((c) => c.rank === card.rank).length === 2
+          (card) => handPlayerB.filter((c) => c.rank === card.rank).length === 2
         )
         .map((c) => c.rankValue)
         .sort((a, b) => b - a);
-      const pairs2 = hand2
+      const pairsPlayerA = handPlayerA
         .filter(
-          (card) => hand2.filter((c) => c.rank === card.rank).length === 2
+          (card) => handPlayerA.filter((c) => c.rank === card.rank).length === 2
         )
         .map((c) => c.rankValue)
         .sort((a, b) => b - a);
-      for (let i = 0; i < pairs1.length; i++) {
-        if (pairs1[i] > pairs2[i])
+      for (let i = 0; i < pairsPlayerB.length; i++) {
+        if (pairsPlayerB[i] > pairsPlayerA[i])
           return {
             winner: 1,
-            hand1Name: result1.name,
-            hand2Name: result2.name,
-            highCard1: result1.highCard,
-            highCard2: result2.highCard,
+            handPlayerBName: resultPlayerB.name,
+            handPlayerAName: resultPlayerA.name,
+            highCardPlayerB: resultPlayerB.highCard,
+            highCardPlayerA: resultPlayerA.highCard,
           };
-        if (pairs1[i] < pairs2[i])
+        if (pairsPlayerB[i] < pairsPlayerA[i])
           return {
             winner: -1,
-            hand1Name: result1.name,
-            hand2Name: result2.name,
-            highCard1: result1.highCard,
-            highCard2: result2.highCard,
+            handPlayerBName: resultPlayerB.name,
+            handPlayerAName: resultPlayerA.name,
+            highCardPlayerB: resultPlayerB.highCard,
+            highCardPlayerA: resultPlayerA.highCard,
           };
       }
     }
-    const highCardComparison = compareHighCards(result1.values, result2.values);
+    if (resultPlayerB.rank === 3) {
+      // Three of a Kind
+      const three1 = handPlayerB.find(
+        (card) => handPlayerB.filter((c) => c.rank === card.rank).length === 3
+      ).rankValue;
+      const three2 = handPlayerA.find(
+        (card) => handPlayerA.filter((c) => c.rank === card.rank).length === 3
+      ).rankValue;
+      if (three1 > three2)
+        return {
+          winner: 1,
+          handPlayerBName: resultPlayerB.name,
+          handPlayerAName: resultPlayerA.name,
+          highCardPlayerB: resultPlayerB.highCard,
+          highCardPlayerA: resultPlayerA.highCard,
+        };
+      if (three1 < three2)
+        return {
+          winner: -1,
+          handPlayerBName: resultPlayerB.name,
+          handPlayerAName: resultPlayerA.name,
+          highCardPlayerB: resultPlayerB.highCard,
+          highCardPlayerA: resultPlayerA.highCard,
+        };
+    }
+    if (resultPlayerB.rank === 7) {
+      // Four of a Kind
+      const four1 = handPlayerB.find(
+        (card) => handPlayerB.filter((c) => c.rank === card.rank).length === 4
+      ).rankValue;
+      const four2 = handPlayerA.find(
+        (card) => handPlayerA.filter((c) => c.rank === card.rank).length === 4
+      ).rankValue;
+      if (four1 > four2)
+        return {
+          winner: 1,
+          handPlayerBName: resultPlayerB.name,
+          handPlayerAName: resultPlayerA.name,
+          highCardPlayerB: resultPlayerB.highCard,
+          highCardPlayerA: resultPlayerA.highCard,
+        };
+      if (four1 < four2)
+        return {
+          winner: -1,
+          handPlayerBName: resultPlayerB.name,
+          handPlayerAName: resultPlayerA.name,
+          highCardPlayerB: resultPlayerB.highCard,
+          highCardPlayerA: resultPlayerA.highCard,
+        };
+    }
+    const highCardComparison = compareHighCards(
+      resultPlayerB.values,
+      resultPlayerA.values
+    );
 
     if (highCardComparison > 0) {
       return {
         winner: 1,
-        hand1Name: result1.name,
-        hand2Name: result2.name,
-        highCard1: result1.highCard,
-        highCard2: result2.highCard,
+        handPlayerBName: resultPlayerB.name,
+        handPlayerAName: resultPlayerA.name,
+        highCardPlayerB: resultPlayerB.highCard,
+        highCardPlayerA: resultPlayerA.highCard,
       };
     } else if (highCardComparison < 0) {
       return {
         winner: -1,
-        hand1Name: result1.name,
-        hand2Name: result2.name,
-        highCard1: result1.highCard,
-        highCard2: result2.highCard,
+        handPlayerBName: resultPlayerB.name,
+        handPlayerAName: resultPlayerA.name,
+        highCardPlayerB: resultPlayerB.highCard,
+        highCardPlayerA: resultPlayerA.highCard,
       };
     } else {
       return {
         winner: 0,
-        hand1Name: result1.name,
-        hand2Name: result2.name,
-        highCard1: result1.highCard,
-        highCard2: result2.highCard,
+        handPlayerBName: resultPlayerB.name,
+        handPlayerAName: resultPlayerA.name,
+        highCardPlayerB: resultPlayerB.highCard,
+        highCardPlayerA: resultPlayerA.highCard,
       };
     }
   }
@@ -435,159 +490,284 @@ function computerTurn() {
   } else {
     computerPlay += 1;
   }
-  if (data.computerCards[computerPlay].length > 3) {
-    data.computerCards[computerPlay].push({ name: "anon_card" });
-    computerFinalCards[computerPlay] = cp.drawCard();
-  } else data.computerCards[computerPlay].push(cp.drawCard());
+  if (data.playerBCards[computerPlay].length > 3) {
+    data.playerBCards[computerPlay].push({ name: "anon_card" });
+    playerBFinalCards[computerPlay] = cp.drawCard();
+  } else data.playerBCards[computerPlay].push(cp.drawCard());
 }
 // FIX RECURRING push/givenCard bug
-function computerTurnTrial() {
-  let givenCard = cp.drawCard();
-  console.log(givenCard);
-  // define a function to check if optional straight
-  function isOptionalStraight(hand, card) {
-    let rankValueArr = [];
-    for (let i = 0; i < hand.length; i++) {
-      rankValueArr.push(hand[i].rankValue);
-    }
-    rankValueArr.push(card.rankValue);
+// function computerTurnTrial() {
+//   let givenCard = cp.drawCard();
+//   console.log(givenCard);
+//   // define a function to check if optional straight
+//   function isOptionalStraight(hand, card) {
+//     let rankValueArr = [];
+//     for (let i = 0; i < hand.length; i++) {
+//       rankValueArr.push(hand[i].rankValue);
+//     }
+//     rankValueArr.push(card.rankValue);
 
-    let minNum = Math.min(...arr);
-    let maxNum = Math.max(...arr);
-    if (maxNum - minNum + 1 === arr.length) {
-      const uniqueNumbers = new Set(arr);
-      if (uniqueNumbers.size === arr.length) {
-        return true;
-      }
-    }
-    return false;
-  }
-  function is10OrHigher(card) {
-    if (card.rankValue > 9) return true;
-    return false;
-  }
-  // let humanCards = [];
-  // filling humanCards with all of the human player's cards. for comfortable iteration:
-  // for (let i = 0; i < data.playerCards.length; i++) {
-  //   for (let j = 0; j < data.playerCards[i].length; j++) {
-  //     if (j < 4) {
-  //       humanCards.push(data.playerCards[i][j]);
-  //     }
-  //   }
-  // }
-  let availableHands = [];
-  let temp = 1;
-  // setting temp value:
-  for (let i = 0; i < data.computerCards.length; i++) {
-    if (data.computerCards[i].length > temp) {
-      temp = data.computerCards[i].length;
-    }
-  }
-  // filling availableHands arr:
-  if (data.computerCards.every((hand) => hand.length == temp)) {
-    for (let i = 0; i < data.computerCards.length; i++) {
-      availableHands.push(data.computerCards[i]);
-    }
-  } else {
-    for (let i = 0; i < data.computerCards.length; i++) {
-      if (data.computerCards[i].length < temp) {
-        availableHands.push(data.computerCards[i]);
-      }
-    }
-  }
-  if (availableHands.length == 1) {
-    availableHands[0].push(givenCard);
+//     let minNum = Math.min(...arr);
+//     let maxNum = Math.max(...arr);
+//     if (maxNum - minNum + 1 === arr.length) {
+//       const uniqueNumbers = new Set(arr);
+//       if (uniqueNumbers.size === arr.length) {
+//         return true;
+//       }
+//     }
+//     return false;
+//   }
+//   function is10OrHigher(card) {
+//     if (card.rankValue > 9) return true;
+//     return false;
+//   }
+//   // let humanCards = [];
+//   // filling humanCards with all of the human player's cards. for comfortable iteration:
+//   // for (let i = 0; i < data.playerCards.length; i++) {
+//   //   for (let j = 0; j < data.playerCards[i].length; j++) {
+//   //     if (j < 4) {
+//   //       humanCards.push(data.playerCards[i][j]);
+//   //     }
+//   //   }
+//   // }
+//   let availableHands = [];
+//   let temp = 1;
+//   // setting temp value:
+//   for (let i = 0; i < data.computerCards.length; i++) {
+//     if (data.computerCards[i].length > temp) {
+//       temp = data.computerCards[i].length;
+//     }
+//   }
+//   // filling availableHands arr:
+//   if (data.computerCards.every((hand) => hand.length == temp)) {
+//     for (let i = 0; i < data.computerCards.length; i++) {
+//       availableHands.push(data.computerCards[i]);
+//     }
+//   } else {
+//     for (let i = 0; i < data.computerCards.length; i++) {
+//       if (data.computerCards[i].length < temp) {
+//         availableHands.push(data.computerCards[i]);
+//       }
+//     }
+//   }
+//   if (availableHands.length == 1) {
+//     availableHands[0].push(givenCard);
+//     return;
+//   }
+//   // deciding where to place card:
+//   if (availableHands.every((hand) => hand.length == 1)) {
+//     // 1
+
+//     for (let i = 0; i < availableHands.length; i++) {
+//       // for royalty cards:
+//       if (is10OrHigher(givenCard)) {
+//         if (
+//           // look for high pair:
+//           availableHands[i][0].rank == givenCard.rank &&
+//           Math.random() < 0.95
+//         ) {
+//           availableHands[i].push(givenCard);
+//           return;
+//         }
+//         // look for high flush:
+//         else if (
+//           is10OrHigher(availableHands[i][0]) &&
+//           availableHands[i][0].suit == givenCard.suit &&
+//           Math.random() < 0.9
+//         ) {
+//           availableHands[i].push(givenCard);
+//           return;
+//         } else if (
+//           // look for high straight (consecutive):
+//           is10OrHigher(availableHands[i][0]) &&
+//           Math.abs(availableHands[i][0].rankValue - givenCard.rankValue) == 1 &&
+//           Math.random() < 0.9
+//         ) {
+//           availableHands[i].push(givenCard);
+//           return;
+//         } else if (
+//           availableHands[i][0].suit == givenCard.suit &&
+//           Math.random() < 0.9
+//         ) {
+//           // look for any flush:
+//           availableHands[i].push(givenCard);
+//           return;
+//         } else if (is10OrHigher(availableHands[i][0] && Math.random() < 0.9)) {
+//           // look for high straight (any):
+//           availableHands[i].push(givenCard);
+//           return;
+//         } else {
+//           // just place it randomly:
+//           availableHands[
+//             Math.floor(Math.random() * (availableHands.length + 1))
+//           ].push(givenCard);
+//           return;
+//         }
+//       } else {
+//         // givenCard not royal
+//         // look for pair:
+//         if (
+//           availableHands[i][0].rank == givenCard.rank &&
+//           Math.random() < 0.9
+//         ) {
+//           availableHands[i].push(givenCard);
+//           return;
+//         } else if (
+//           // look for straight flush:
+//           availableHands[i][0].suit == givenCard.suit &&
+//           Math.abs(availableHands[i][0].rankValue - givenCard.rankValue) == 1
+//         ) {
+//           availableHands[i].push(givenCard);
+//           return;
+//         } else if (
+//           // look for flush:
+//           availableHands[i][0].suit == givenCard.suit &&
+//           Math.random() < 0.9
+//         ) {
+//           availableHands[i].push(givenCard);
+//           return;
+//         } else if (
+//           // look for straight:
+//           Math.abs(availableHands[i][0].rankValue - givenCard.rankValue) == 1 &&
+//           Math.random() < 0.9
+//         ) {
+//           availableHands[i].push(givenCard);
+//           return;
+//         } else {
+//           // just place it randomly:
+//           let randomIndex = Math.floor(
+//             Math.random() * (availableHands.length - 1 + 1)
+//           );
+//           availableHands[randomIndex].push(givenCard);
+//           return;
+//         }
+//       }
+//     }
+//   }
+// }
+// WHAT TO DO WITH ACES???
+
+function computerTurnGPT(cardsArrayA, cardsArrayB) {
+  if (cp.deck.length == 0) {
     return;
   }
-  // deciding where to place card:
-  if (availableHands.every((hand) => hand.length == 1)) {
-    // 1
+  let drawnCard = cp.drawCard();
 
-    for (let i = 0; i < availableHands.length; i++) {
-      // for royalty cards:
-      if (is10OrHigher(givenCard)) {
-        if (
-          // look for high pair:
-          availableHands[i][0].rank == givenCard.rank &&
-          Math.random() < 0.95
-        ) {
-          availableHands[i].push(givenCard);
-          return;
-        }
-        // look for high flush:
-        else if (
-          is10OrHigher(availableHands[i][0]) &&
-          availableHands[i][0].suit == givenCard.suit &&
-          Math.random() < 0.9
-        ) {
-          availableHands[i].push(givenCard);
-          return;
-        } else if (
-          // look for high straight (consecutive):
-          is10OrHigher(availableHands[i][0]) &&
-          Math.abs(availableHands[i][0].rankValue - givenCard.rankValue) == 1 &&
-          Math.random() < 0.9
-        ) {
-          availableHands[i].push(givenCard);
-          return;
-        } else if (
-          availableHands[i][0].suit == givenCard.suit &&
-          Math.random() < 0.9
-        ) {
-          // look for any flush:
-          availableHands[i].push(givenCard);
-          return;
-        } else if (is10OrHigher(availableHands[i][0] && Math.random() < 0.9)) {
-          // look for high straight (any):
-          availableHands[i].push(givenCard);
-          return;
-        } else {
-          // just place it randomly:
-          availableHands[
-            Math.floor(Math.random() * (availableHands.length + 1))
-          ].push(givenCard);
-          return;
-        }
-      } else {
-        // givenCard not royal
-        // look for pair:
-        if (
-          availableHands[i][0].rank == givenCard.rank &&
-          Math.random() < 0.9
-        ) {
-          availableHands[i].push(givenCard);
-          return;
-        } else if (
-          // look for straight flush:
-          availableHands[i][0].suit == givenCard.suit &&
-          Math.abs(availableHands[i][0].rankValue - givenCard.rankValue) == 1
-        ) {
-          availableHands[i].push(givenCard);
-          return;
-        } else if (
-          // look for flush:
-          availableHands[i][0].suit == givenCard.suit &&
-          Math.random() < 0.9
-        ) {
-          availableHands[i].push(givenCard);
-          return;
-        } else if (
-          // look for straight:
-          Math.abs(availableHands[i][0].rankValue - givenCard.rankValue) == 1 &&
-          Math.random() < 0.9
-        ) {
-          availableHands[i].push(givenCard);
-          return;
-        } else {
-          // just place it randomly:
-          let randomIndex = Math.floor(
-            Math.random() * (availableHands.length - 1 + 1)
-          );
-          availableHands[randomIndex].push(givenCard);
-          return;
-        }
-      }
+  function calculateDrawnCardRankValue(drawnCard, hand) {
+    if (drawnCard.rank === "Ace") {
+      const values = hand.map((card) => card.rankValue);
+      return values.includes(2) &&
+        values.includes(3) &&
+        values.includes(4) &&
+        values.includes(5)
+        ? 1
+        : 14;
+    } else {
+      return drawnCard.rankValue;
     }
   }
+
+  function isFlush(hand) {
+    const suit = hand[0].suit;
+    return hand.every((card) => card.suit === suit);
+  }
+
+  function isStraight(hand) {
+    const sortedHand = hand.slice().sort((a, b) => a.rankValue - b.rankValue);
+    for (let i = 0; i < sortedHand.length - 1; i++) {
+      if (sortedHand[i + 1].rankValue - sortedHand[i].rankValue !== 1) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function evaluateHand(hand) {
+    if (hand.length < 2) return 0;
+
+    if (isFlush(hand)) return 5;
+    if (isStraight(hand)) return 4;
+
+    const rankCount = {};
+    hand.forEach((card) => {
+      rankCount[card.rank] = (rankCount[card.rank] || 0) + 1;
+    });
+    const counts = Object.values(rankCount);
+    const maxCount = Math.max(...counts);
+
+    if (maxCount === 4) return 7;
+    if (maxCount === 3 && counts.includes(2)) return 6;
+    if (maxCount === 3) return 3;
+    if (maxCount === 2 && counts.filter((count) => count === 2).length === 2)
+      return 2;
+    if (maxCount === 2) return 1;
+
+    return 0;
+  }
+
+  function evaluateHandDifference(myHand, opponentHand) {
+    const myHandStrength = evaluateHand(myHand);
+    const opponentHandStrength = evaluateHand(opponentHand);
+    return myHandStrength - opponentHandStrength;
+  }
+
+  const handSizes = cardsArrayB.map((hand) => hand.length);
+  const minHandSize = Math.min(...handSizes);
+
+  let bestHandIndex = -1;
+  let bestHandScore = -Infinity;
+  const drawnCardRankValue = calculateDrawnCardRankValue(drawnCard, []);
+
+  for (let i = 0; i < cardsArrayB.length; i++) {
+    if (cardsArrayB[i].length > minHandSize) continue;
+
+    const currentHand = cardsArrayB[i];
+    const combinedHand = currentHand.concat({
+      ...drawnCard,
+      rankValue: drawnCardRankValue,
+    });
+
+    let handScore = evaluateHandDifference(combinedHand, cardsArrayA[i]);
+
+    let potentialHandStrength = evaluateHand(combinedHand);
+    handScore += potentialHandStrength * 2;
+
+    const opponentHand = cardsArrayA[i];
+    const opponentHandStrength = evaluateHand(opponentHand);
+    if (potentialHandStrength > opponentHandStrength) {
+      handScore += (potentialHandStrength - opponentHandStrength) * 2;
+    }
+
+    if (drawnCard.rankValue >= 11) {
+      const currentHighCards = currentHand.filter(
+        (card) => card.rankValue >= 11
+      ).length;
+      const opponentHighCards = cardsArrayA[i].filter(
+        (card) => card.rankValue >= 11
+      ).length;
+
+      if (currentHighCards <= opponentHighCards) {
+        handScore += drawnCard.rankValue;
+      }
+    }
+
+    if (
+      drawnCard.rankValue >= 11 &&
+      currentHand.some((card) => card.rankValue >= 11)
+    ) {
+      handScore += drawnCard.rankValue;
+    }
+
+    if (handScore > bestHandScore) {
+      bestHandIndex = i;
+      bestHandScore = handScore;
+    }
+  }
+
+  if (data.playerBCards[bestHandIndex].length > 3) {
+    data.playerBCards[bestHandIndex].push({ name: "anon_card" });
+    playerBFinalCards[bestHandIndex] = drawnCard;
+  } else {
+    data.playerBCards[bestHandIndex].push(drawnCard);
+  }
 }
-// WHAT TO DO WITH ACES???

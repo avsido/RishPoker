@@ -6,10 +6,10 @@ let buttNav,
   divHeaders,
   divDeck,
   divPlayers,
-  divComputer,
-  divPlayer,
+  divPlayerB,
+  divPlayerA,
   divInfo,
-  divPlayerPickupCard,
+  divPlayerAPickupCard,
   buttCheckWin;
 let soundOn = true;
 let data = {};
@@ -60,7 +60,6 @@ function greet() {
     });
   };
   let buttPlayVSRemotePlayer = document.createElement("button");
-  // buttPlayVSComputer.src = "images/spades.png";
   buttPlayVSRemotePlayer.className = "buttPlay";
   buttPlayVSRemotePlayer.innerHTML = "Play vs friend";
   divMain.appendChild(buttPlayVSRemotePlayer);
@@ -94,12 +93,12 @@ function init() {
   divDeck.id = "divDeck";
   divPlayers = document.createElement("div");
   divPlayers.id = "divPlayers";
-  divComputer = document.createElement("div");
-  divComputer.id = "divComputer";
-  divPlayer = document.createElement("div");
-  divPlayer.id = "divPlayer";
-  divPlayerPickupCard = document.createElement("div");
-  divPlayerPickupCard.id = "divPlayerPickupCard";
+  divPlayerB = document.createElement("div");
+  divPlayerB.id = "divPlayerB";
+  divPlayerA = document.createElement("div");
+  divPlayerA.id = "divPlayerA";
+  divPlayerAPickupCard = document.createElement("div");
+  divPlayerAPickupCard.id = "divPlayerAPickupCard";
   divInfo = document.createElement("div");
   divInfo.id = "divInfo";
   divHeaders = document.createElement("div");
@@ -109,8 +108,8 @@ function init() {
 function render() {
   cleanElement(divDeck);
   cleanElement(divPlayers);
-  cleanElement(divComputer);
-  cleanElement(divPlayer);
+  cleanElement(divPlayerB);
+  cleanElement(divPlayerA);
   cleanElement(divInfo);
 
   divMain.style.flexDirection = "row";
@@ -127,7 +126,7 @@ function render() {
     buttCheckWin.innerHTML = "Flip!";
     /////////////////////////////////////////////////////////////////////////////////////
     buttCheckWin.onclick = () => {
-      for (let i = 0; i < data.computerCards.length; i++) {
+      for (let i = 0; i < data.playerBCards.length; i++) {
         setTimeout(() => {
           sendHttpGETReq("api/check_win?cardIndex=" + i, (res) => {
             data = JSON.parse(res);
@@ -140,24 +139,26 @@ function render() {
     };
     /////////////////////////////////////////////////////////////////////////////////////
   } else {
-    hStatus.innerHTML = data.playerTurn
+    hStatus.innerHTML = data.playerATurn
       ? "&middot; your turn to place card"
-      : "&middot; computer's turn, please wait";
+      : "&middot; opponent's turn, please wait";
   }
   let hCardsleft = document.createElement("h1");
   hCardsleft.innerHTML = "&middot; deck count: " + data.cardsLeft;
 
   //deck image:
   let hDeck = document.createElement("h1");
-  if (data.cardsLeft >= 2) {
-    hDeck.innerHTML = "your card:";
+  if (data.playerATurn) {
+    if (data.cardsLeft > 2) {
+      hDeck.innerHTML = "~ your card ~";
+    } else {
+      if (data.cardsLeft == 2) {
+        hDeck.innerHTML = "~ your wild card ~";
+      }
+    }
   } else {
-    hDeck.innerHTML =
-      data.cardsLeft == 1 && !data.playerTurn
-        ? "played wild card."
-        : "your wild card:";
+    hDeck.innerHTML = "...";
   }
-
   let imgDeck = document.createElement("img");
   imgDeck.src = "images/deck.png";
   let divImgDeck = document.createElement("div");
@@ -168,7 +169,7 @@ function render() {
   //drawn card:
   let drawnCard = document.createElement("img");
   drawnCard.id = "drawnCard";
-  if (data.playerTurn) {
+  if (data.playerATurn) {
     if (data.cardsLeft >= 1) {
       drawnCard.src = "images/" + data.drawnCard.name.toLowerCase() + ".png";
     }
@@ -183,50 +184,48 @@ function render() {
   if (data.cardsLeft == 1) {
     cleanElement(divDeck);
     drawnCard.style.marginLeft = "35%";
-    if (data.playerTurn) divDeck.appendChild(drawnCard);
+    if (data.playerATurn) divDeck.appendChild(drawnCard);
     divInfo.appendChild(buttCheckWin);
   }
   divMain.appendChild(divInfo);
 
   //players divs
-  divPlayers.append(divComputer, divPlayer);
+  divPlayers.append(divPlayerB, divPlayerA);
   divMain.appendChild(divPlayers);
-  let hComputer = document.createElement("h2");
-  hComputer.innerHTML = "Opponent";
-  let hPlayer = document.createElement("h2");
-  hPlayer.innerHTML = "You";
+  let hPlayerB = document.createElement("h2");
+  hPlayerB.innerHTML = "Opponent";
+  let hPlayerA = document.createElement("h2");
+  hPlayerA.innerHTML = "You";
 
   //cards computer
-  for (let i = 0; i < data.computerCards.length; i++) {
+  for (let i = 0; i < data.playerBCards.length; i++) {
     let cardDiv = document.createElement("div");
-    cardDiv.classList.add("cardDiv", "cardDivComputer");
-    for (let j = 0; j < data.computerCards[i].length; j++) {
+    cardDiv.classList.add("cardDiv", "cardDivPlayerB");
+    for (let j = 0; j < data.playerBCards[i].length; j++) {
       let imgCard = document.createElement("img");
       imgCard.style.zIndex += 1;
       imgCard.src =
-        "images/" + data.computerCards[i][j].name.toLowerCase() + ".png";
+        "images/" + data.playerBCards[i][j].name.toLowerCase() + ".png";
       if (j > 3) {
         if (data.cardIndex == i) {
-          if (data.computerCards[i][j].name != "anon_card") {
+          if (data.playerBCards[i][j].name != "anon_card") {
             imgCard.src = "images/anon_card.png";
             setTimeout(() => {
               imgCard.classList.add("imgCardAnimated");
               if (soundOn) flipOpponentCardSound.play();
               imgCard.src =
-                "images/" +
-                data.computerCards[i][j].name.toLowerCase() +
-                ".png";
+                "images/" + data.playerBCards[i][j].name.toLowerCase() + ".png";
             }, 2);
             if (winArr[i] == -1) {
               setTimeout(() => {
-                cardDiv.classList.add("cardDivComputerLostAnimated");
+                cardDiv.classList.add("cardDivPlayerBLostAnimated");
               }, 500);
 
               // This will only happen for the last hand should the computer loose
               // This is a special case because we usually draw this _after_
               if (i == 4) {
                 setTimeout(() => {
-                  cardDiv.classList.add("cardDivComputerLostFinal");
+                  cardDiv.classList.add("cardDivPlayerBLostFinal");
                 }, 2000);
               }
             }
@@ -234,62 +233,61 @@ function render() {
         } else {
           // This will happen in the NEXT iteration of i
           if (winArr[i] == -1) {
-            cardDiv.classList.add("cardDivComputerLostFinal");
+            cardDiv.classList.add("cardDivPlayerBLostFinal");
           }
         }
       }
       cardDiv.appendChild(imgCard);
     }
 
-    divComputer.appendChild(cardDiv);
+    divPlayerB.appendChild(cardDiv);
   }
 
   //cards player  /// TRY to fuse this loop into the next (SAME LOOP).
   let temp = 1;
-  for (let i = 0; i < data.playerCards.length; i++) {
-    if (data.playerCards[i].length > temp) {
-      temp = data.playerCards[i].length;
+  for (let i = 0; i < data.playerACards.length; i++) {
+    if (data.playerACards[i].length > temp) {
+      temp = data.playerACards[i].length;
     }
   }
-  for (let i = 0; i < data.playerCards.length; i++) {
+  for (let i = 0; i < data.playerACards.length; i++) {
     let cardDiv = document.createElement("div");
-    cardDiv.classList.add("cardDiv", "cardDivPlayer");
-    if (data.playerTurn) {
+    cardDiv.classList.add("cardDiv", "cardDivPlayerA");
+    if (data.playerATurn) {
       if (
-        data.playerCards.every((hand) => hand.length == temp) ||
-        data.playerCards[i].length < temp
+        data.playerACards.every((hand) => hand.length == temp) ||
+        data.playerACards[i].length < temp
       ) {
-        cardDiv.classList.add("cardDivPlayerPlay");
+        cardDiv.classList.add("cardDivPlayerAPlay");
       }
       if (data.cardsLeft == 1) {
-        cardDiv.classList.remove("cardDivPlayerPlay");
+        cardDiv.classList.remove("cardDivPlayerAPlay");
       }
     }
 
-    for (let j = 0; j < data.playerCards[i].length; j++) {
+    for (let j = 0; j < data.playerACards[i].length; j++) {
       let imgCard = document.createElement("img");
       if (j > 3) {
         if (data.cardIndex == i) {
           if (winArr[i] == 1) {
             setTimeout(() => {
-              cardDiv.classList.add("cardDivPlayerLostAnimated");
-              if (soundOn) foldSound.play();
+              cardDiv.classList.add("cardDivPlayerALostAnimated");
             }, 500);
             if (i == 4) {
               setTimeout(() => {
-                cardDiv.classList.add("cardDivPlayerLostFinal");
+                cardDiv.classList.add("cardDivPlayerALostFinal");
               }, 2000);
             }
           }
         } else {
           // This will happen in the NEXT iteration of i
           if (winArr[i] == 1) {
-            cardDiv.classList.add("cardDivPlayerLostFinal");
+            cardDiv.classList.add("cardDivPlayerALostFinal");
           }
         }
       }
 
-      if (data.cardsLeft == 1 && data.playerTurn && j == 4) {
+      if (data.cardsLeft == 1 && data.playerATurn && j == 4) {
         imgCard.classList.add("imgCardPlayerWild");
         imgCard.onclick = (ev) => {
           let divPop = document.createElement("div");
@@ -311,11 +309,11 @@ function render() {
           innerDivPop.id = "innerDivPop";
           let divOverlay = document.createElement("div");
           divOverlay.id = "divOverlay";
-          for (let k = 0; k < data.playerCards[i].length; k++) {
+          for (let k = 0; k < data.playerACards[i].length; k++) {
             let img = document.createElement("img");
 
             img.src =
-              "images/" + data.playerCards[i][k].name.toLowerCase() + ".png";
+              "images/" + data.playerACards[i][k].name.toLowerCase() + ".png";
             if (k == 4) {
               img.id = "innerDivPopFifth";
             }
@@ -356,11 +354,11 @@ function render() {
         };
       }
       imgCard.src =
-        "images/" + data.playerCards[i][j].name.toLowerCase() + ".png";
+        "images/" + data.playerACards[i][j].name.toLowerCase() + ".png";
       cardDiv.appendChild(imgCard);
     }
     cardDiv.onclick = (ev) => {
-      if (!data.playerTurn) {
+      if (!data.playerATurn) {
         if (soundOn) invalidMoveSound.play();
         return;
       }
@@ -383,64 +381,70 @@ function render() {
             render();
           });
           if (soundOn) placeCardSound.play();
-        }, 2500);
+        }, 500); //1750
       });
     };
-    divPlayer.appendChild(cardDiv);
+    divPlayerA.appendChild(cardDiv);
   }
-  divPlayers.append(hComputer, divComputer, hPlayer, divPlayer);
+  divPlayers.append(hPlayerB, divPlayerB, hPlayerA, divPlayerA);
 }
-let arrComputerHandMessages = [];
-let arrPlayerHandMessages = [];
+let arrPlayerBHandMessages = [];
+let arrPlayerAHandMessages = [];
 
 function renderInfoScore() {
   cleanElement(divInfo);
-  let hand1Name = data.results.hand1Name;
-  let hand2Name = data.results.hand2Name;
-  if (hand1Name.startsWith("Two Pairs")) {
-    hand1Name = formatCardPairs(hand1Name);
+  let handPlayerBName = data.results.handPlayerBName;
+  let handPlayerAName = data.results.handPlayerAName;
+  if (handPlayerBName.startsWith("Two Pairs")) {
+    handPlayerBName = formatCard2Pairs(handPlayerBName);
   } else {
-    hand1Name = hand1Name.replace(/_/g, " ");
+    handPlayerBName = handPlayerBName.replace(/_/g, " ");
   }
-  if (hand2Name.startsWith("Two Pairs")) {
-    hand2Name = formatCardPairs(hand2Name);
+  if (handPlayerAName.startsWith("Two Pairs")) {
+    handPlayerAName = formatCard2Pairs(handPlayerAName);
   } else {
-    hand2Name = hand2Name.replace(/_/g, " ");
+    handPlayerAName = handPlayerAName.replace(/_/g, " ");
   }
-  arrComputerHandMessages.push(hand1Name);
-  arrPlayerHandMessages.push(hand2Name);
-  let divInfoComputer = document.createElement("div");
-  divInfoComputer.className = "divInfoPlayers";
-  let hHandComputer = document.createElement("h1");
-  hHandComputer.innerHTML = "Opponent:";
-  divInfoComputer.appendChild(hHandComputer);
-  let divInfoPlayer = document.createElement("div");
-  divInfoPlayer.className = "divInfoPlayers";
-  let hHandPlayer = document.createElement("h1");
-  hHandPlayer.innerHTML = "You:";
-  divInfoPlayer.appendChild(hHandPlayer);
-  for (let i = 0; i < arrComputerHandMessages.length; i++) {
+  if (handPlayerAName.startsWith("Pair ")) {
+    handPlayerAName = formatCardPair(handPlayerAName);
+  }
+  if (handPlayerBName.startsWith("Pair ")) {
+    handPlayerBName = formatCardPair(handPlayerBName);
+  }
+  arrPlayerBHandMessages.push(handPlayerBName);
+  arrPlayerAHandMessages.push(handPlayerAName);
+  let divInfoPlayerB = document.createElement("div");
+  divInfoPlayerB.className = "divInfoPlayers";
+  let hHandPlayerB = document.createElement("h1");
+  hHandPlayerB.innerHTML = "Opponent:";
+  divInfoPlayerB.appendChild(hHandPlayerB);
+  let divInfoPlayerA = document.createElement("div");
+  divInfoPlayerA.className = "divInfoPlayers";
+  let hHandPlayerA = document.createElement("h1");
+  hHandPlayerA.innerHTML = "You:";
+  divInfoPlayerA.appendChild(hHandPlayerA);
+  for (let i = 0; i < arrPlayerBHandMessages.length; i++) {
     let h2 = document.createElement("h2");
-    h2.innerHTML = "&middot; " + arrComputerHandMessages[i];
+    h2.innerHTML = "&middot; " + arrPlayerBHandMessages[i];
     if (winArr[i] == -1) {
-      h2.style.color = "rgb(112, 22, 22)";
+      h2.style.color = "red";
     }
     if (winArr[i] == 1) {
       h2.style.color = "#031561";
     }
-    divInfoComputer.appendChild(h2);
+    divInfoPlayerB.appendChild(h2);
   }
 
-  for (let i = 0; i < arrPlayerHandMessages.length; i++) {
+  for (let i = 0; i < arrPlayerAHandMessages.length; i++) {
     let h2 = document.createElement("h2");
-    h2.innerHTML = "&middot; " + arrPlayerHandMessages[i];
+    h2.innerHTML = "&middot; " + arrPlayerAHandMessages[i];
     if (winArr[i] == -1) {
       h2.style.color = "#031561";
     }
     if (winArr[i] == 1) {
-      h2.style.color = "rgb(112, 22, 22)";
+      h2.style.color = "red";
     }
-    divInfoPlayer.appendChild(h2);
+    divInfoPlayerA.appendChild(h2);
   }
 
   let hBottomLine = document.createElement("h1");
@@ -463,7 +467,7 @@ function renderInfoScore() {
       if (soundOn) tieSound.play();
     }
   }
-  divInfo.append(divInfoComputer, divInfoPlayer, hBottomLine);
+  divInfo.append(divInfoPlayerB, divInfoPlayerA, hBottomLine);
 }
 
 function openSideMenu() {
@@ -510,8 +514,18 @@ function openSideMenu() {
   }
 }
 
-function formatCardPairs(description) {
-  const cardPart = description.substring("Two Pairs ".length);
+function formatCardPair(str) {
+  const words = str.split(" ");
+
+  words.splice(0, 2);
+
+  const resultName = words.join(" ");
+
+  return resultName;
+}
+
+function formatCard2Pairs(str) {
+  const cardPart = str.substring("".length);
 
   const cardRanks = cardPart
     .match(/(\d+|[A-Za-z]+)&/g)

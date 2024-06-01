@@ -37,3 +37,16 @@ TODO missions:
 5. animation for player side cards.~~V
 6. navbar and pop up info window.
 7. find friendlier fonts.
+
+
+multiplayer ballpark: 
+feature start game (one side creates)
+in this MultiplayerGame:
+takes ID, 
+ux: 
+1. 
+
+1. 
+create DOMManagement event
+
+יוצר סוקט אייאו בשרת

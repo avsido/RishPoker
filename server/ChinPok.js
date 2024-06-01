@@ -18,11 +18,12 @@ class ChinPok {
     ];
     this.rankValues = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
     this.deck = [];
-    this.playerCards = [];
-    this.computerCards = [];
+    this.playerACards = [];
+    this.playerBCards = [];
     this.setDeck();
     this.shuffleDeck();
     this.dealHands();
+    this.playerATurn = true;
   }
   setDeck() {
     for (let i = 0; i < this.suits.length; i++) {
@@ -44,8 +45,8 @@ class ChinPok {
   }
   dealHands() {
     for (let i = 0; i < 5; i++) {
-      this.playerCards.push([this.deck.pop()]);
-      this.computerCards.push([this.deck.pop()]);
+      this.playerACards.push([this.deck.pop()]);
+      this.playerBCards.push([this.deck.pop()]);
     }
   }
   drawCard() {
