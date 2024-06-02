@@ -1,6 +1,6 @@
 const Game = require("./ChinPok");
 let fs = require("fs");
-const socketManager = require("./socketManager");
+const socketServer = require("./socket_server");
 
 let data = {};
 let cp = {};
@@ -624,9 +624,4 @@ function computerTurnGPT(cardsArrayA, cardsArrayB) {
   }
 }
 
-exports.someFunction = () => {
-  console.log("hahahaha");
-  const io = socketManager.getIo();
-  io.emit("some_event", { someProperty: "someValue" });
-  console.log("finished someFunc");
-};
+

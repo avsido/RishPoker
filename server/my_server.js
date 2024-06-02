@@ -3,7 +3,7 @@ let url = require("url");
 let fs = require("fs");
 let path = require("path");
 
-const socketManager = require('./socketManager');
+const socketServer = require('./socket_server');
 
 function startServer(actions) {
   const server = http
@@ -69,7 +69,7 @@ function startServer(actions) {
       }
     })
 
-    socketManager.startServer(server);
+    socketServer.startServer(server);
 
     server.listen(8080);
 }

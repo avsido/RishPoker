@@ -18,6 +18,5 @@ let actions = {
   "/log_out": myApi.logOut, // TBC
   "/register": myApi.register, // TBC
   "/reset": myApi.reset, // re-evaluate if needed
-  "/some_function": myApi.someFunction, // for test Socketsio
 };
 myServer.startServer(actions);

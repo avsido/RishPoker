@@ -11,5 +11,5 @@ socket.on("connect", function () {
 
 // Listen for 'message' event from server
 socket.on("some_event", function (data) {
-  console.log("Received message from server:", data);
+  console.log("Received some_event from server:", data);
 });
