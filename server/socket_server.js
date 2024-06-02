@@ -6,15 +6,20 @@ let io;
 function startServer(server) {
     io = socketIo(server);
     // Your socket setup logic here
+    //
     io.on('connection', (socket) => {
-        console.log('a user connected');
+        socket.on('create-online-game', (msg) => {
+            console.log("User created online game!!");
+            console.log(msg);
+        });
     });
 
+    /*
     io.on('create-online-game', (socket) => {
+        console.log("I got a create-online-game event from a client!");
         let random_pin = "3453";
         // This will map a PIN to a game-iniator
-        waitingGames[random_pin] = socket;
-        console.log('a user connected');
+        //waitingGames[random_pin] = socket;
     });
 
     io.on('join-online-game', (socket, data) => {
@@ -28,6 +33,7 @@ function startServer(server) {
         }
         console.log('a user c2onnected');
     });
+    */
 }
 
 

@@ -1,3 +1,24 @@
+
+// Include Socket.IO library
+console.log("Creating a new io() instance..");
+var io = io();
+
+// Connect to the server
+console.log("connecting...");
+var io_client = io.connect("http://localhost:8080");
+
+// Listen for 'connect' event
+io_client.on("connect", function () {
+  console.log("Connected to server");
+  io.emit('create-online-game', {data: "Zibi"});
+});
+
+// Listen for 'message' event from server
+io_client.on("some_event", function (data) {
+  console.log("Received some_event from server:", data);
+});
+
+
 // initializing variables
 let buttNav,
   buttSound,
@@ -54,6 +75,8 @@ function greet() {
   buttPlayVSComputer.innerHTML = "Play vs machine";
   divMain.appendChild(buttPlayVSComputer);
   buttPlayVSComputer.onclick = () => {
+    io.emit('create-online-game', {name: "Avi"});
+    console.log("I emitted create-online-game!");
     sendHttpGETReq("api/start_game_vs_computer", (res) => {
       data = JSON.parse(res);
       init();
@@ -551,6 +574,8 @@ function formatCard2Pairs(str) {
 
   return formattedRanks.join(" & ");
 }
+
+
 function countOnesAndMinusOnes(winArr) {
   let counter = 0;
   let counterMinus = 0;
@@ -563,6 +588,8 @@ function countOnesAndMinusOnes(winArr) {
   } else if (counter < counterMinus) return 1;
   return 0;
 }
+
+
 function toggleSound() {
   let imgButtSound = document.getElementById("imgButtSound");
   if (soundOn) {
