@@ -3,8 +3,10 @@ let url = require("url");
 let fs = require("fs");
 let path = require("path");
 
+const socketManager = require('./socketManager');
+
 function startServer(actions) {
-  http
+  const server = http
     .createServer((req, res) => {
       let q = url.parse(req.url, true);
 
@@ -66,6 +68,9 @@ function startServer(actions) {
         });
       }
     })
-    .listen(8080);
+
+    socketManager.startServer(server);
+
+    server.listen(8080);
 }
 exports.startServer = startServer;
