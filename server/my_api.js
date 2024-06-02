@@ -1,5 +1,6 @@
 const Game = require("./ChinPok");
 let fs = require("fs");
+const socketManager = require("./socketManager");
 
 let data = {};
 let cp = {};
@@ -180,19 +181,21 @@ exports.buttReplaceWildCard = (req, res, q) => {
   res.end(JSON.stringify(data));
 };
 
-// exports.reset = (req, res, q) => {
-//   // think over whole reset button
-//   cp = new Game();
-//   ///
-//   data.computerCards = cp.computerCards;  // will probably cancel
-//   data.playerCards = cp.playerCards;
-//   data.drawnCard = cp.drawCard();
-//   data.cardsLeft = cp.deck.length;
-//   data.playerTurn = true;
-//   data.results = {};
-//   res.writeHead(200, { "Content-Type": "application/json" });
-//   res.end(JSON.stringify(data));
-// };
+exports.quit = (req, res, q) => {
+  // cp = new Game();
+  // ///
+  // data.computerCards = cp.computerCards;  // will probably cancel
+  // data.playerCards = cp.playerCards;
+  // data.drawnCard = cp.drawCard();
+  // data.cardsLeft = cp.deck.length;
+  // data.playerTurn = true;
+  // data.results = {};
+  // res.writeHead(200, { "Content-Type": "application/json" });
+  // res.end(JSON.stringify(data));
+  cp = {};
+  data = {};
+  res.end(JSON.stringify(data));
+};
 
 function comparePokerHands(handPlayerB, handPlayerA) {
   const pokerHands = [
@@ -495,157 +498,6 @@ function computerTurn() {
     playerBFinalCards[computerPlay] = cp.drawCard();
   } else data.playerBCards[computerPlay].push(cp.drawCard());
 }
-// FIX RECURRING push/givenCard bug
-// function computerTurnTrial() {
-//   let givenCard = cp.drawCard();
-//   console.log(givenCard);
-//   // define a function to check if optional straight
-//   function isOptionalStraight(hand, card) {
-//     let rankValueArr = [];
-//     for (let i = 0; i < hand.length; i++) {
-//       rankValueArr.push(hand[i].rankValue);
-//     }
-//     rankValueArr.push(card.rankValue);
-
-//     let minNum = Math.min(...arr);
-//     let maxNum = Math.max(...arr);
-//     if (maxNum - minNum + 1 === arr.length) {
-//       const uniqueNumbers = new Set(arr);
-//       if (uniqueNumbers.size === arr.length) {
-//         return true;
-//       }
-//     }
-//     return false;
-//   }
-//   function is10OrHigher(card) {
-//     if (card.rankValue > 9) return true;
-//     return false;
-//   }
-//   // let humanCards = [];
-//   // filling humanCards with all of the human player's cards. for comfortable iteration:
-//   // for (let i = 0; i < data.playerCards.length; i++) {
-//   //   for (let j = 0; j < data.playerCards[i].length; j++) {
-//   //     if (j < 4) {
-//   //       humanCards.push(data.playerCards[i][j]);
-//   //     }
-//   //   }
-//   // }
-//   let availableHands = [];
-//   let temp = 1;
-//   // setting temp value:
-//   for (let i = 0; i < data.computerCards.length; i++) {
-//     if (data.computerCards[i].length > temp) {
-//       temp = data.computerCards[i].length;
-//     }
-//   }
-//   // filling availableHands arr:
-//   if (data.computerCards.every((hand) => hand.length == temp)) {
-//     for (let i = 0; i < data.computerCards.length; i++) {
-//       availableHands.push(data.computerCards[i]);
-//     }
-//   } else {
-//     for (let i = 0; i < data.computerCards.length; i++) {
-//       if (data.computerCards[i].length < temp) {
-//         availableHands.push(data.computerCards[i]);
-//       }
-//     }
-//   }
-//   if (availableHands.length == 1) {
-//     availableHands[0].push(givenCard);
-//     return;
-//   }
-//   // deciding where to place card:
-//   if (availableHands.every((hand) => hand.length == 1)) {
-//     // 1
-
-//     for (let i = 0; i < availableHands.length; i++) {
-//       // for royalty cards:
-//       if (is10OrHigher(givenCard)) {
-//         if (
-//           // look for high pair:
-//           availableHands[i][0].rank == givenCard.rank &&
-//           Math.random() < 0.95
-//         ) {
-//           availableHands[i].push(givenCard);
-//           return;
-//         }
-//         // look for high flush:
-//         else if (
-//           is10OrHigher(availableHands[i][0]) &&
-//           availableHands[i][0].suit == givenCard.suit &&
-//           Math.random() < 0.9
-//         ) {
-//           availableHands[i].push(givenCard);
-//           return;
-//         } else if (
-//           // look for high straight (consecutive):
-//           is10OrHigher(availableHands[i][0]) &&
-//           Math.abs(availableHands[i][0].rankValue - givenCard.rankValue) == 1 &&
-//           Math.random() < 0.9
-//         ) {
-//           availableHands[i].push(givenCard);
-//           return;
-//         } else if (
-//           availableHands[i][0].suit == givenCard.suit &&
-//           Math.random() < 0.9
-//         ) {
-//           // look for any flush:
-//           availableHands[i].push(givenCard);
-//           return;
-//         } else if (is10OrHigher(availableHands[i][0] && Math.random() < 0.9)) {
-//           // look for high straight (any):
-//           availableHands[i].push(givenCard);
-//           return;
-//         } else {
-//           // just place it randomly:
-//           availableHands[
-//             Math.floor(Math.random() * (availableHands.length + 1))
-//           ].push(givenCard);
-//           return;
-//         }
-//       } else {
-//         // givenCard not royal
-//         // look for pair:
-//         if (
-//           availableHands[i][0].rank == givenCard.rank &&
-//           Math.random() < 0.9
-//         ) {
-//           availableHands[i].push(givenCard);
-//           return;
-//         } else if (
-//           // look for straight flush:
-//           availableHands[i][0].suit == givenCard.suit &&
-//           Math.abs(availableHands[i][0].rankValue - givenCard.rankValue) == 1
-//         ) {
-//           availableHands[i].push(givenCard);
-//           return;
-//         } else if (
-//           // look for flush:
-//           availableHands[i][0].suit == givenCard.suit &&
-//           Math.random() < 0.9
-//         ) {
-//           availableHands[i].push(givenCard);
-//           return;
-//         } else if (
-//           // look for straight:
-//           Math.abs(availableHands[i][0].rankValue - givenCard.rankValue) == 1 &&
-//           Math.random() < 0.9
-//         ) {
-//           availableHands[i].push(givenCard);
-//           return;
-//         } else {
-//           // just place it randomly:
-//           let randomIndex = Math.floor(
-//             Math.random() * (availableHands.length - 1 + 1)
-//           );
-//           availableHands[randomIndex].push(givenCard);
-//           return;
-//         }
-//       }
-//     }
-//   }
-// }
-// WHAT TO DO WITH ACES???
 
 function computerTurnGPT(cardsArrayA, cardsArrayB) {
   if (cp.deck.length == 0) {
@@ -771,3 +623,10 @@ function computerTurnGPT(cardsArrayA, cardsArrayB) {
     data.playerBCards[bestHandIndex].push(drawnCard);
   }
 }
+
+exports.someFunction = () => {
+  console.log("hahahaha");
+  const io = socketManager.getIo();
+  io.emit("some_event", { someProperty: "someValue" });
+  console.log("finished someFunc");
+};

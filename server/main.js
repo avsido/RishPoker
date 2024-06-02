@@ -4,6 +4,7 @@ let myApi = require("./my_api.js");
 let actions = {
   "/start_game_vs_computer": myApi.startGameVSComputer,
   "/start_game_vs_remote_player": myApi.startGameVSRemotePlayer,
+  "/quit": myApi.quit,
   "/place_card": myApi.placeCard,
   "/computer_go_on": myApi.computerGoOn,
   "/butt_replace_wild_card": myApi.buttReplaceWildCard,
@@ -17,5 +18,6 @@ let actions = {
   "/log_out": myApi.logOut, // TBC
   "/register": myApi.register, // TBC
   "/reset": myApi.reset, // re-evaluate if needed
+  "/some_function": myApi.someFunction, // for test Socketsio
 };
 myServer.startServer(actions);

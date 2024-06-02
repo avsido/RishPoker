@@ -44,6 +44,7 @@ function greet() {
   buttMenu = document.getElementById("buttMenu");
   // buttSound = document.getElementById("buttSound");
   divMain = document.getElementById("divMain");
+  divMain.style.flexDirection = "column";
   let img = document.createElement("img");
   img.src = "images/flush.png";
   img.id = "flush";
@@ -78,17 +79,20 @@ function greet() {
 // init func
 function init() {
   cleanElement(divMain);
-  // let reset = document.createElement("button");
-  // reset.innerHTML = "reset";
-  // reset.className = "buttReset";
-  // document.body.appendChild(reset);   // will probably cancel this..
-  // reset.onclick = () => {
-  //   sendHttpGETReq("api/reset", (res) => {
-  //     data = JSON.parse(res);
-  //     init();
-  //     render();
-  //   });
-  // };
+  let buttQuit = document.createElement("button");
+  buttQuit.innerHTML = "quit";
+  buttQuit.className = "buttGame";
+  document.body.appendChild(buttQuit);
+  buttQuit.onclick = (ev) => {
+    sendHttpGETReq("api/quit", (res) => {
+      // data = JSON.parse(res);
+      document.body.removeChild(ev.target);
+      console.log("lalala");
+      cleanElement(divMain);
+
+      greet();
+    });
+  };
   divDeck = document.createElement("div");
   divDeck.id = "divDeck";
   divPlayers = document.createElement("div");

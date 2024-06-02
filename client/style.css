@@ -148,7 +148,7 @@ h1, h2, h3, h4{
     margin-top: 75px;
     font-size: 20px;
 }
-.buttReset{
+.buttGame{
     width: 6vw;
     height: 3vh;
     border:none;
@@ -160,7 +160,7 @@ h1, h2, h3, h4{
     justify-content: center; 
     align-items: center;
 }
-.buttReset:hover{
+.buttGame:hover{
     background-color: rgb(149, 139, 9);
     color: white;
 }
