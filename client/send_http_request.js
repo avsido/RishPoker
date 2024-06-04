@@ -12,8 +12,3 @@ function sendHttpGETReq(url, callback) {
   httpRequest.send();
 }
 
-function cleanElement(element) {
-  while (element.lastElementChild) {
-    element.removeChild(element.lastElementChild);
-  }
-}
