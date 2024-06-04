@@ -14,8 +14,8 @@ io_client.on("test-event", function () {
   console.log("im in client test event");
 });
 
-io_client.on("create-online-game", function (data) {
-  console.log("Received some_event from server:", data);
+io_client.on("server-created-online-game", function (data) {
+  console.log("Received PIN from server:", data.pin);
 });
 
 // export { io_client };
