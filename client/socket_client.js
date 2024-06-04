@@ -1,19 +1,21 @@
-// Include Socket.IO library
-var io = io();
+// import { io } from "socket.io-client";
 
-// Connect to the server
-var io_client = io.connect("http://localhost:8080");
+const io_client = io.connect("http://localhost:8080");
 
-// Listen for 'connect' event
 io_client.on("connect", function () {
   console.log("Connected to server");
 });
 
-// Listen for 'message' event from server
-io_client.on("some_event", function (data) {
+io_client.on("disconnect", function () {
+  console.log("Disconnected from server");
+});
+
+io_client.on("test-event", function () {
+  console.log("im in client test event");
+});
+
+io_client.on("create-online-game", function (data) {
   console.log("Received some_event from server:", data);
 });
 
-
-export default io_client;
-
+// export { io_client };

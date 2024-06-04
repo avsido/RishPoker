@@ -25,18 +25,19 @@ exports.getInfo = (req, res, q) => {
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(content));
 };
+
 exports.getRules = (req, res, q) => {
   let content = fs.readFileSync("game_rules.txt", "utf-8");
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(content));
 };
+
 exports.getAboutUsInfo = (req, res, q) => {
   let content = fs.readFileSync("about_us.txt", "utf-8");
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(content));
 };
 
-//func to start game:
 // creates instance of game, and sends the player their starting hand and starting card
 // also sends computer's opening cards for presentation
 exports.startGameVSComputer = (req, res, q) => {
@@ -44,14 +45,16 @@ exports.startGameVSComputer = (req, res, q) => {
   ///
   data.playerBCards = cp.playerBCards;
   data.playerACards = cp.playerACards;
-  console.log(data.playerACards);
-  console.log(data.playerBCards);
   data.drawnCard = cp.drawCard();
   data.cardsLeft = cp.deck.length;
   data.playerATurn = cp.playerATurn;
   data.results = {};
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
+};
+
+exports.startGameVSRemotePlayer = () => {
+  socketServer.on("connect", function () {});
 };
 
 //// func to place player card on chosen hand.
@@ -82,19 +85,7 @@ exports.placeCard = (req, res, q) => {
     return;
   }
 
-  let temp = data.playerACards[wantedHand].length; // gave rare weird following error:
-  //   C:\Users\97252\Desktop\chinesePoker\RishponPoker\server\my_api.js:82
-  //   let temp = data.playerCards[hand].length;
-  //                              ^
-
-  // TypeError: Cannot read properties of undefined (reading '3')
-  //     at exports.placeCard [as /place_card] (C:\Users\97252\Desktop\chinesePoker\RishponPoker\server\my_api.js:82:30)
-  //     at Server.<anonymous> (C:\Users\97252\Desktop\chinesePoker\RishponPoker\server\my_server.js:21:24)
-  //     at Server.emit (node:events:514:28)
-  //     at parserOnIncoming (node:_http_server:1143:12)
-  //     at HTTPParser.parserOnHeadersComplete (node:_http_common:119:17)
-  // Node.js v20.9.0
-  // probably has to do with this check:
+  let temp = data.playerACards[wantedHand].length;
   for (let i = 0; i < data.playerACards.length; i++) {
     if (temp > data.playerACards[i].length) {
       res.writeHead(400, { "Content-Type": "text/plain" });
@@ -623,5 +614,3 @@ function computerTurnGPT(cardsArrayA, cardsArrayB) {
     data.playerBCards[bestHandIndex].push(drawnCard);
   }
 }
-
-

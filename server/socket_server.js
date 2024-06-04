@@ -1,28 +1,36 @@
-// socketManager.js
-const socketIo = require('socket.io');
+const io = require("socket.io");
 
-let io;
+let io_server;
 
 function startServer(server) {
-    io = socketIo(server);
-    // Your socket setup logic here
-    //
-    io.on('connection', (socket) => {
-        socket.on('create-online-game', (msg) => {
-            console.log("User created online game!!");
-            console.log(msg);
-        });
-    });
+  io_server = io(server);
 
-    /*
-    io.on('create-online-game', (socket) => {
+  io_server.on("connect", (socket) => {
+    socket.on("create-online-game", (msg) => {
+      console.log("User created online game!!");
+      console.log(msg);
+    });
+    io_server.on("test-event", function (msg) {
+      console.log(msg);
+    });
+  });
+
+  io_server.on("disconnect", (socket) => {
+    socket.on("disconnecting", (msg) => {
+      console.log("User disconected");
+      console.log(msg);
+    });
+  });
+
+  /*
+    io_server.on('create-online-game', (socket) => {
         console.log("I got a create-online-game event from a client!");
         let random_pin = "3453";
         // This will map a PIN to a game-iniator
         //waitingGames[random_pin] = socket;
     });
 
-    io.on('join-online-game', (socket, data) => {
+    io_server.on('join-online-game', (socket, data) => {
         let pin_to_look_for = data.pin;
 
         // is there a game with this PIN that is waiting for a game? 
@@ -36,16 +44,14 @@ function startServer(server) {
     */
 }
 
-
 function getIo() {
-    if (!io) {
-        throw new Error("Socket.io instance not initialized!");
-    }
-    return io;
+  if (!io_server) {
+    throw new Error("Socket.io instance not initialized!");
+  }
+  return io_server;
 }
 
 module.exports = {
-    startServer,
-    getIo,
+  startServer,
+  getIo,
 };
-

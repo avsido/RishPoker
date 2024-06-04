@@ -1,28 +1,7 @@
-
-// Include Socket.IO library
-console.log("Creating a new io() instance..");
-var io = io();
-
-// Connect to the server
-console.log("connecting...");
-var io_client = io.connect("http://localhost:8080");
-
-// Listen for 'connect' event
-io_client.on("connect", function () {
-  console.log("Connected to server");
-  io.emit('create-online-game', {data: "Zibi"});
-});
-
-// Listen for 'message' event from server
-io_client.on("some_event", function (data) {
-  console.log("Received some_event from server:", data);
-});
-
+console.log("DOMManagement.js loaded");
 
 // initializing variables
-let buttNav,
-  buttSound,
-  divMenu,
+let buttMenu,
   divMain,
   divHeaders,
   divDeck,
@@ -44,9 +23,6 @@ let placeCardSound = new Howl({
 let flipOpponentCardSound = new Howl({
   src: ["sounds/card_flip.wav"],
 });
-let foldSound = new Howl({
-  src: ["sounds/fold.wav"],
-});
 let winSound = new Howl({
   src: ["sounds/win.wav"],
 });
@@ -56,12 +32,10 @@ let loseSound = new Howl({
 let tieSound = new Howl({
   src: ["sounds/tie.wav"],
 });
-let invalidMoveSound = new Howl({
-  src: ["sounds/invalid_move.mp3"],
-});
 
 //greet screen func
 function greet() {
+  console.log(io_client);
   buttMenu = document.getElementById("buttMenu");
   // buttSound = document.getElementById("buttSound");
   divMain = document.getElementById("divMain");
@@ -75,8 +49,6 @@ function greet() {
   buttPlayVSComputer.innerHTML = "Play vs machine";
   divMain.appendChild(buttPlayVSComputer);
   buttPlayVSComputer.onclick = () => {
-    io.emit('create-online-game', {name: "Avi"});
-    console.log("I emitted create-online-game!");
     sendHttpGETReq("api/start_game_vs_computer", (res) => {
       data = JSON.parse(res);
       init();
@@ -88,11 +60,9 @@ function greet() {
   buttPlayVSRemotePlayer.innerHTML = "Play vs friend";
   divMain.appendChild(buttPlayVSRemotePlayer);
   buttPlayVSRemotePlayer.onclick = () => {
-    // sendHttpGETReq("api/start_game_vs_remote_player", (res) => {
-    //   data = JSON.parse(res);
-    //   init();
-    //   render();
-    // });
+    io_client.on("connect", () => {
+      console.log("Socket connected!");
+    });
   };
   let aSignIn = document.createElement("a");
   aSignIn.className = "aSignIn";
@@ -110,9 +80,7 @@ function init() {
     sendHttpGETReq("api/quit", (res) => {
       // data = JSON.parse(res);
       document.body.removeChild(ev.target);
-      console.log("lalala");
       cleanElement(divMain);
-
       greet();
     });
   };
@@ -386,15 +354,12 @@ function render() {
     }
     cardDiv.onclick = (ev) => {
       if (!data.playerATurn) {
-        if (soundOn) invalidMoveSound.play();
         return;
       }
       if (data.cardsLeft == 1) {
         ev.target.onclick = () => {
-          if (soundOn) invalidMoveSound.play();
           return;
         };
-        if (soundOn) invalidMoveSound.play();
         return;
       }
       sendHttpGETReq("api/place_card?i=" + i, (res) => {
@@ -575,7 +540,6 @@ function formatCard2Pairs(str) {
   return formattedRanks.join(" & ");
 }
 
-
 function countOnesAndMinusOnes(winArr) {
   let counter = 0;
   let counterMinus = 0;
@@ -588,7 +552,6 @@ function countOnesAndMinusOnes(winArr) {
   } else if (counter < counterMinus) return 1;
   return 0;
 }
-
 
 function toggleSound() {
   let imgButtSound = document.getElementById("imgButtSound");
