@@ -143,11 +143,7 @@ h1, h2, h3, h4{
     transform: scale(1.15);
     box-shadow: 0 12px 15px rgba(0, 0, 0, 0.5);
 }
-.aSignIn{
-    text-decoration: underline;
-    margin-top: 75px;
-    font-size: 20px;
-}
+
 .buttGame{
     width: 6vw;
     height: 3vh;
@@ -353,7 +349,6 @@ h1, h2, h3, h4{
 #innerDivPop{
     display: flex;
     flex-direction: row;
-    /* margin:auto; */
     margin-left:10px;
     justify-content:center;
 }
@@ -489,4 +484,34 @@ h1, h2, h3, h4{
         
     }
 }
+.divPIN{
+    width: 12vw;
+    height: 13vh;
+    box-shadow: 15px 15px 5px rgba(0, 0, 0, 0.5);
+    background-color: #21523a;
+    border: 7.5px solid rgb(179 37 37);
+    border-radius: 20px;
+    text-align: center;
+    margin: 15px;
+    padding: 5px;
+    color:gold;
+}
+.pHeaderPIN{
+    margin: 0px;
+}
+.divPIN button{
+    height: 25px;
+    width: 25px;
+    margin: 5px;
+}
+.divPPIN{
+    display: flex;
+    height:40%;
+    flex-direction: row;
+    background-color:#35654d;
+    align-items: center;
+    justify-content:center;
+    margin: 10px;
+}
+
 

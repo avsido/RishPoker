@@ -1,9 +1,9 @@
-const Game = require("./ChinPok");
+const RishPok = require("./RishPok");
 let fs = require("fs");
-const socketServer = require("./socket_server");
+// const socketServer = require("./socket_server");
 
 let data = {};
-let cp = {};
+let rp = {};
 let computerPlay = 3;
 let playerBFinalCards = ["", "", "", "", ""];
 
@@ -41,21 +41,21 @@ exports.getAboutUsInfo = (req, res, q) => {
 // creates instance of game, and sends the player their starting hand and starting card
 // also sends computer's opening cards for presentation
 exports.startGameVSComputer = (req, res, q) => {
-  cp = new Game();
+  rp = new RishPok();
   ///
-  data.playerBCards = cp.playerBCards;
-  data.playerACards = cp.playerACards;
-  data.drawnCard = cp.drawCard();
-  data.cardsLeft = cp.deck.length;
-  data.playerATurn = cp.playerATurn;
+  data.playerBCards = rp.playerBCards;
+  data.playerACards = rp.playerACards;
+  data.drawnCard = rp.drawCard();
+  data.cardsLeft = rp.deck.length;
+  data.playerATurn = rp.playerATurn;
   data.results = {};
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
 };
 
-exports.startGameVSRemotePlayer = () => {
-  socketServer.on("connect", function () {});
-};
+// exports.startGameVSRemotePlayer = () => {
+//   socketServer.on("connect", function () {});
+// };
 
 //// func to place player card on chosen hand.
 // will:
@@ -94,7 +94,7 @@ exports.placeCard = (req, res, q) => {
     }
   }
   data.playerACards[wantedHand].push(data.drawnCard);
-  data.cardsLeft = cp.deck.length - 1;
+  data.cardsLeft = rp.deck.length - 1;
   data.playerATurn = false;
 
   res.writeHead(200, { "Content-Type": "application/json" });
@@ -105,8 +105,8 @@ exports.computerGoOn = (req, res, q) => {
   data.playerATurn = true;
   // computerTurn();
   computerTurnGPT(data.playerACards, data.playerBCards);
-  if (cp.deck.length > 0) data.drawnCard = cp.drawCard();
-  data.cardsLeft = cp.deck.length;
+  if (rp.deck.length > 0) data.drawnCard = rp.drawCard();
+  data.cardsLeft = rp.deck.length;
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
 };
@@ -173,7 +173,7 @@ exports.buttReplaceWildCard = (req, res, q) => {
 };
 
 exports.quit = (req, res, q) => {
-  // cp = new Game();
+  // rp = new Game();
   // ///
   // data.computerCards = cp.computerCards;  // will probably cancel
   // data.playerCards = cp.playerCards;
@@ -183,7 +183,7 @@ exports.quit = (req, res, q) => {
   // data.results = {};
   // res.writeHead(200, { "Content-Type": "application/json" });
   // res.end(JSON.stringify(data));
-  cp = {};
+  rp = {};
   data = {};
   res.end(JSON.stringify(data));
 };
@@ -486,19 +486,143 @@ function computerTurn() {
   }
   if (data.playerBCards[computerPlay].length > 3) {
     data.playerBCards[computerPlay].push({ name: "anon_card" });
-    playerBFinalCards[computerPlay] = cp.drawCard();
-  } else data.playerBCards[computerPlay].push(cp.drawCard());
+    playerBFinalCards[computerPlay] = rp.drawCard();
+  } else data.playerBCards[computerPlay].push(rp.drawCard());
 }
+// v1:
+// function computerTurnGPT(cardsArrayA, cardsArrayB) {
+//   if (rp.deck.length == 0) {
+//     return;
+//   }
+//   let drawnCard = rp.drawCard();
 
+//   function calculateDrawnCardRankValue(drawnCard, hand) {
+//     if (drawnCard.rank === "Ace") {
+//       const values = hand.map((card) => card.rankValue);
+//       return values.includes(2) &&
+//         values.includes(3) &&
+//         values.includes(4) &&
+//         values.includes(5)
+//         ? 1
+//         : 14;
+//     } else {
+//       return drawnCard.rankValue;
+//     }
+//   }
+
+//   function isFlush(hand) {
+//     const suit = hand[0].suit;
+//     return hand.every((card) => card.suit === suit);
+//   }
+
+//   function isStraight(hand) {
+//     const sortedHand = hand.slice().sort((a, b) => a.rankValue - b.rankValue);
+//     for (let i = 0; i < sortedHand.length - 1; i++) {
+//       if (sortedHand[i + 1].rankValue - sortedHand[i].rankValue !== 1) {
+//         return false;
+//       }
+//     }
+//     return true;
+//   }
+
+//   function evaluateHand(hand) {
+//     if (hand.length < 2) return 0;
+
+//     if (isFlush(hand)) return 5;
+//     if (isStraight(hand)) return 4;
+
+//     const rankCount = {};
+//     hand.forEach((card) => {
+//       rankCount[card.rank] = (rankCount[card.rank] || 0) + 1;
+//     });
+//     const counts = Object.values(rankCount);
+//     const maxCount = Math.max(...counts);
+
+//     if (maxCount === 4) return 7;
+//     if (maxCount === 3 && counts.includes(2)) return 6;
+//     if (maxCount === 3) return 3;
+//     if (maxCount === 2 && counts.filter((count) => count === 2).length === 2)
+//       return 2;
+//     if (maxCount === 2) return 1;
+
+//     return 0;
+//   }
+
+//   function evaluateHandDifference(myHand, opponentHand) {
+//     const myHandStrength = evaluateHand(myHand);
+//     const opponentHandStrength = evaluateHand(opponentHand);
+//     return myHandStrength - opponentHandStrength;
+//   }
+
+//   const handSizes = cardsArrayB.map((hand) => hand.length);
+//   const minHandSize = Math.min(...handSizes);
+
+//   let bestHandIndex = -1;
+//   let bestHandScore = -Infinity;
+//   const drawnCardRankValue = calculateDrawnCardRankValue(drawnCard, []);
+
+//   for (let i = 0; i < cardsArrayB.length; i++) {
+//     if (cardsArrayB[i].length > minHandSize) continue;
+
+//     const currentHand = cardsArrayB[i];
+//     const combinedHand = currentHand.concat({
+//       ...drawnCard,
+//       rankValue: drawnCardRankValue,
+//     });
+
+//     let handScore = evaluateHandDifference(combinedHand, cardsArrayA[i]);
+
+//     let potentialHandStrength = evaluateHand(combinedHand);
+//     handScore += potentialHandStrength * 2;
+
+//     const opponentHand = cardsArrayA[i];
+//     const opponentHandStrength = evaluateHand(opponentHand);
+//     if (potentialHandStrength > opponentHandStrength) {
+//       handScore += (potentialHandStrength - opponentHandStrength) * 2;
+//     }
+
+//     if (drawnCard.rankValue >= 11) {
+//       const currentHighCards = currentHand.filter(
+//         (card) => card.rankValue >= 11
+//       ).length;
+//       const opponentHighCards = cardsArrayA[i].filter(
+//         (card) => card.rankValue >= 11
+//       ).length;
+
+//       if (currentHighCards <= opponentHighCards) {
+//         handScore += drawnCard.rankValue;
+//       }
+//     }
+
+//     if (
+//       drawnCard.rankValue >= 11 &&
+//       currentHand.some((card) => card.rankValue >= 11)
+//     ) {
+//       handScore += drawnCard.rankValue;
+//     }
+
+//     if (handScore > bestHandScore) {
+//       bestHandIndex = i;
+//       bestHandScore = handScore;
+//     }
+//   }
+
+//   if (data.playerBCards[bestHandIndex].length > 3) {
+//     data.playerBCards[bestHandIndex].push({ name: "anon_card" });
+//     playerBFinalCards[bestHandIndex] = drawnCard;
+//   } else {
+//     data.playerBCards[bestHandIndex].push(drawnCard);
+//   }
+// }
+
+// v2:
 function computerTurnGPT(cardsArrayA, cardsArrayB) {
-  if (cp.deck.length == 0) {
-    return;
-  }
-  let drawnCard = cp.drawCard();
-
+  let drawnCard = rp.drawCard();
+  // Helper function to calculate the rank value of the drawn card, considering Ace's value for straights
   function calculateDrawnCardRankValue(drawnCard, hand) {
     if (drawnCard.rank === "Ace") {
-      const values = hand.map((card) => card.rankValue);
+      // If Ace is needed for a lower straight, its rank value is 1
+      let values = hand.map((card) => card.rankValue);
       return values.includes(2) &&
         values.includes(3) &&
         values.includes(4) &&
@@ -510,13 +634,17 @@ function computerTurnGPT(cardsArrayA, cardsArrayB) {
     }
   }
 
+  // Helper function to check if a hand is a flush
   function isFlush(hand) {
-    const suit = hand[0].suit;
+    let suit = hand[0].suit;
     return hand.every((card) => card.suit === suit);
   }
 
+  // Helper function to check if a hand is a straight
   function isStraight(hand) {
-    const sortedHand = hand.slice().sort((a, b) => a.rankValue - b.rankValue);
+    // Sort the cards by rank value
+    let sortedHand = hand.slice().sort((a, b) => a.rankValue - b.rankValue);
+    // Check if the cards form a sequence
     for (let i = 0; i < sortedHand.length - 1; i++) {
       if (sortedHand[i + 1].rankValue - sortedHand[i].rankValue !== 1) {
         return false;
@@ -525,80 +653,73 @@ function computerTurnGPT(cardsArrayA, cardsArrayB) {
     return true;
   }
 
+  // Helper function to evaluate the hand strength
   function evaluateHand(hand) {
-    if (hand.length < 2) return 0;
+    if (hand.length < 2) return 0; // Single card hand is the weakest
 
-    if (isFlush(hand)) return 5;
-    if (isStraight(hand)) return 4;
+    // Check for flush
+    if (isFlush(hand)) return 5; // Flush
 
-    const rankCount = {};
+    // Check for straight
+    if (isStraight(hand)) return 4; // Straight
+
+    // Check for pairs, three of a kind, four of a kind, full house
+    let rankCount = {};
     hand.forEach((card) => {
       rankCount[card.rank] = (rankCount[card.rank] || 0) + 1;
     });
-    const counts = Object.values(rankCount);
-    const maxCount = Math.max(...counts);
+    let counts = Object.values(rankCount);
+    let maxCount = Math.max(...counts);
 
-    if (maxCount === 4) return 7;
-    if (maxCount === 3 && counts.includes(2)) return 6;
-    if (maxCount === 3) return 3;
+    if (maxCount === 4) return 7; // Four of a kind
+    if (maxCount === 3 && counts.includes(2)) return 6; // Full house
+    if (maxCount === 3) return 3; // Three of a kind
     if (maxCount === 2 && counts.filter((count) => count === 2).length === 2)
-      return 2;
-    if (maxCount === 2) return 1;
+      return 2; // Two pairs
+    if (maxCount === 2) return 1; // One pair
 
-    return 0;
+    return 0; // High card
   }
 
+  // Helper function to evaluate hand strength difference
   function evaluateHandDifference(myHand, opponentHand) {
-    const myHandStrength = evaluateHand(myHand);
-    const opponentHandStrength = evaluateHand(opponentHand);
+    let myHandStrength = evaluateHand(myHand);
+    let opponentHandStrength = evaluateHand(opponentHand);
     return myHandStrength - opponentHandStrength;
   }
 
-  const handSizes = cardsArrayB.map((hand) => hand.length);
-  const minHandSize = Math.min(...handSizes);
+  // Find the current size of each hand
+  let handSizes = cardsArrayB.map((hand) => hand.length);
+  let minHandSize = Math.min(...handSizes);
 
   let bestHandIndex = -1;
   let bestHandScore = -Infinity;
-  const drawnCardRankValue = calculateDrawnCardRankValue(drawnCard, []);
+  let drawnCardRankValue = calculateDrawnCardRankValue(drawnCard, []);
 
+  // Iterate over each hand in cardsArrayB
   for (let i = 0; i < cardsArrayB.length; i++) {
-    if (cardsArrayB[i].length > minHandSize) continue;
+    if (cardsArrayB[i].length > minHandSize) continue; // Skip if this hand is already larger
 
-    const currentHand = cardsArrayB[i];
-    const combinedHand = currentHand.concat({
+    let currentHand = cardsArrayB[i];
+    let combinedHand = currentHand.concat({
       ...drawnCard,
       rankValue: drawnCardRankValue,
     });
 
+    // Evaluate the hand strength difference
     let handScore = evaluateHandDifference(combinedHand, cardsArrayA[i]);
 
+    // Boost score if creating a potential strong hand
     let potentialHandStrength = evaluateHand(combinedHand);
-    handScore += potentialHandStrength * 2;
+    if (potentialHandStrength >= 4) {
+      handScore += potentialHandStrength;
+    }
 
-    const opponentHand = cardsArrayA[i];
-    const opponentHandStrength = evaluateHand(opponentHand);
+    // Adjust score based on opponent's hand
+    let opponentHand = cardsArrayA[i];
+    let opponentHandStrength = evaluateHand(opponentHand);
     if (potentialHandStrength > opponentHandStrength) {
       handScore += (potentialHandStrength - opponentHandStrength) * 2;
-    }
-
-    if (drawnCard.rankValue >= 11) {
-      const currentHighCards = currentHand.filter(
-        (card) => card.rankValue >= 11
-      ).length;
-      const opponentHighCards = cardsArrayA[i].filter(
-        (card) => card.rankValue >= 11
-      ).length;
-
-      if (currentHighCards <= opponentHighCards) {
-        handScore += drawnCard.rankValue;
-      }
-    }
-
-    if (
-      drawnCard.rankValue >= 11 &&
-      currentHand.some((card) => card.rankValue >= 11)
-    ) {
-      handScore += drawnCard.rankValue;
     }
 
     if (handScore > bestHandScore) {
@@ -606,11 +727,8 @@ function computerTurnGPT(cardsArrayA, cardsArrayB) {
       bestHandScore = handScore;
     }
   }
-
   if (data.playerBCards[bestHandIndex].length > 3) {
     data.playerBCards[bestHandIndex].push({ name: "anon_card" });
     playerBFinalCards[bestHandIndex] = drawnCard;
-  } else {
-    data.playerBCards[bestHandIndex].push(drawnCard);
-  }
+  } else data.playerBCards[bestHandIndex].push(drawnCard);
 }

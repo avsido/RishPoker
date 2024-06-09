@@ -1,4 +1,4 @@
-class ChinPok {
+class RishPok {
   constructor() {
     this.suits = ["Hearts", "Spades", "Clubs", "Diamonds"];
     this.ranks = [
@@ -53,4 +53,4 @@ class ChinPok {
     return this.deck.pop();
   }
 }
-module.exports = ChinPok;
+module.exports = RishPok;

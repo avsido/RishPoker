@@ -1,4 +1,3 @@
-
 function render() {
   cleanElement(divDeck);
   cleanElement(divPlayers);
@@ -12,7 +11,7 @@ function render() {
   let hStatus = document.createElement("h1");
   if (data.cardsLeft == 1) {
     //
-    hStatus.innerHTML = data.playerTurn
+    hStatus.innerHTML = data.playerATurn
       ? "&middot; select Switch card or -"
       : "&middot; NOW -";
     buttCheckWin = document.createElement("button");
@@ -279,4 +278,3 @@ function render() {
   }
   divPlayers.append(hPlayerB, divPlayerB, hPlayerA, divPlayerA);
 }
-

@@ -1,47 +1,114 @@
 const io = require("socket.io");
-
+const { LocalStorage } = require("node-localstorage");
+const RishPok = require("./RishPok");
+const localStorage = new LocalStorage("./scratch");
+// localStorage.setItem("lastGamePIN", "1234");
 let io_server;
+
+let pendingGames = {};
+let games;
+let game = {};
+let currentGame = {};
+let rishPok;
+let drawnCard;
+
+if (localStorage.getItem("games")) {
+  games = JSON.parse(localStorage.getItem("games"));
+} else {
+  games = {};
+}
 
 function startServer(server) {
   io_server = io(server);
 
   io_server.on("connect", (socket) => {
-    socket.on("create-online-game", (msg) => {
-      console.log("User created online game!!");
-      console.log(msg);
+    socket.on("game-request-from-user", (msg) => {
+      let pin = parseInt(localStorage.getItem("lastGamePIN")) + 1;
+      pendingGames[pin.toString()] = socket.id;
+      localStorage.setItem("lastGamePIN", pin);
+      io_server.emit("game-request-response", pin);
     });
-    io_server.on("test-event", function (msg) {
-      console.log(msg);
+
+    socket.on("join-online-game", (pin) => {
+      if (!pendingGames[pin]) {
+        io_server.emit("game-start", "invalid");
+      } else {
+        game.playerA = pendingGames[pin]; //socketID for player A
+        game.playerB = socket.id; //socketID for player B
+
+        game.winner = null;
+        games[pin] = game;
+
+        localStorage.setItem("games", JSON.stringify(games));
+
+        rishPok = new RishPok();
+
+        currentGame.playerACards = rishPok.playerACards;
+        currentGame.playerBCards = rishPok.playerBCards;
+
+        drawnCard = rishPok.drawCard();
+        currentGame.cardsLeft = rishPok.deck.length;
+
+        currentGame.player = "a";
+
+        io_server
+          .to(game.playerA)
+          .emit("game-start", { currentGame, drawnCard });
+
+        currentGame.player = "b";
+        io_server
+          .to(game.playerB)
+          .emit("game-start", { currentGame, drawnCard: null });
+      }
+    });
+    socket.on("place-card", (i) => {
+      let player;
+      let opponent;
+      let playerCards;
+
+      if (socket.id == game.playerA) {
+        player = game.playerA;
+        opponent = game.playerB;
+        playerCards = currentGame.playerACards;
+        currentGame.player = "a";
+      }
+      if (socket.id == game.playerB) {
+        player = game.playerB;
+        opponent = game.playerA;
+        playerCards = currentGame.playerBCards;
+        currentGame.player = "b";
+      }
+
+      if (isValidPlacement(playerCards, i)) {
+        playerCards[i].push(drawnCard);
+        // data.cardsLeft = rishPok.deck.length - 1;
+        drawnCard = rishPok.drawCard();
+        currentGame.cardsLeft = rishPok.deck.length;
+
+        io_server
+          .to(player)
+          .emit("player-played", { currentGame, drawnCard: null });
+
+        if (currentGame.player == "a") {
+          currentGame.player = "b";
+        } else if (currentGame.player == "b") {
+          currentGame.player = "a";
+        }
+
+        io_server
+          .to(opponent)
+          .emit("player-played", { currentGame, drawnCard });
+      } else {
+        io_server.to(player).emit("player-played", "invalid");
+      }
     });
   });
 
   io_server.on("disconnect", (socket) => {
     socket.on("disconnecting", (msg) => {
-      console.log("User disconected");
-      console.log(msg);
+      console.log("User disconected " + msg);
     });
   });
-
-  /*
-    io_server.on('create-online-game', (socket) => {
-        console.log("I got a create-online-game event from a client!");
-        let random_pin = "3453";
-        // This will map a PIN to a game-iniator
-        //waitingGames[random_pin] = socket;
-    });
-
-    io_server.on('join-online-game', (socket, data) => {
-        let pin_to_look_for = data.pin;
-
-        // is there a game with this PIN that is waiting for a game? 
-        if (onlineGames.hasOwnProperty(pin_to_look_for)) {
-            player_a = waitingGames[pin_to_look_for]; // this is a socket
-            player_b = socket; // this is also a socket
-            OnlineGame(player_a, player_b);
-        }
-        console.log('a user c2onnected');
-    });
-    */
 }
 
 function getIo() {
@@ -55,3 +122,25 @@ module.exports = {
   startServer,
   getIo,
 };
+
+function isValidPlacement(cardsToCheck, wantedHand) {
+  if (isNaN(wantedHand)) {
+    return false;
+  }
+  wantedHand = parseInt(wantedHand);
+
+  if (!Number.isInteger(wantedHand)) {
+    return false;
+  }
+  if (wantedHand < 0 || wantedHand > 4) {
+    return false;
+  }
+
+  let temp = cardsToCheck[wantedHand].length;
+  for (let i = 0; i < cardsToCheck.length; i++) {
+    if (temp > cardsToCheck[i].length) {
+      return false;
+    }
+  }
+  return true;
+}
