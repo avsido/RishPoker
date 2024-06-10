@@ -61,6 +61,7 @@ function startServer(server) {
           .emit("game-start", { currentGame, drawnCard: null });
       }
     });
+
     socket.on("place-card", (i) => {
       let player;
       let opponent;
@@ -81,19 +82,29 @@ function startServer(server) {
 
       if (isValidPlacement(playerCards, i)) {
         playerCards[i].push(drawnCard);
-        // data.cardsLeft = rishPok.deck.length - 1;
         drawnCard = rishPok.drawCard();
         currentGame.cardsLeft = rishPok.deck.length;
 
-        io_server
-          .to(player)
-          .emit("player-played", { currentGame, drawnCard: null });
+        if (rishPok.deck.length == 1) {
+          io_server
+            .to(player)
+            .emit("player-played", { currentGame, drawnCard });
+          drawnCard = rishPok.drawCard();
+        } else {
+          io_server
+            .to(player)
+            .emit("player-played", { currentGame, drawnCard: null });
+        }
 
         if (currentGame.player == "a") {
           currentGame.player = "b";
         } else if (currentGame.player == "b") {
           currentGame.player = "a";
         }
+
+        // if (playerCards[i].length == 5) {
+        //   playerCards[i][playerCards[i].length - 1] = { name: "anon_card" };
+        // }
 
         io_server
           .to(opponent)

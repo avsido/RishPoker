@@ -9,11 +9,11 @@ function renderMultiplayer() {
   cleanElement(divPlayerB);
   cleanElement(divPlayerA);
   cleanElement(divInfo);
-
+  let winArr = [];
   divMain.style.flexDirection = "row";
   let hStatus = document.createElement("h1");
   let hCardsleft = document.createElement("h1");
-  if (currentGame.cardsLeft > 0) {
+  if (currentGame.cardsLeft > 2) {
     hCardsleft.innerHTML = "&middot; deck count: " + currentGame.cardsLeft;
   }
 
@@ -32,14 +32,15 @@ function renderMultiplayer() {
   divMain.appendChild(divInfo);
 
   if (drawnCard) {
-    hStatus.innerHTML = "&middot; your turn to place card";
+    hStatus.innerHTML =
+      currentGame.cardsLeft == 1
+        ? "&middot; play wild card?"
+        : "&middot; your turn to place card";
     imgDrawnCard.id = "drawnCard";
     imgDrawnCard.src = "images/" + drawnCard.name + ".png";
     hDeck.innerHTML = "~ your card ~";
-    if (
-      (currentGame.player == "a" && currentGame.cardsLeft == 2) ||
-      (currentGame.player == "b" && currentGame.cardsLeft == 1)
-    ) {
+
+    if (currentGame.cardsLeft == 1) {
       hDeck.innerHTML = "~ your wild card ~";
     }
   } else {
@@ -70,6 +71,7 @@ function renderMultiplayer() {
     playerCards = currentGame.playerBCards;
     opponentCards = currentGame.playerACards;
   }
+
   //opponent cards
   for (let i = 0; i < opponentCards.length; i++) {
     let cardDiv = document.createElement("div");
@@ -80,32 +82,32 @@ function renderMultiplayer() {
       imgCard.src = "images/" + opponentCards[i][j].name.toLowerCase() + ".png";
       if (j > 3) {
         if (data.cardIndex == i) {
-          // if (opponentCards[i][j].name != "anon_card") {
-          //   imgCard.src = "images/anon_card.png";
-          //   setTimeout(() => {
-          //     imgCard.classList.add("imgCardAnimated");
-          //     if (soundOn) flipOpponentCardSound.play();
-          //     imgCard.src =
-          //       "images/" + opponentCards[i][j].name.toLowerCase() + ".png";
-          //   }, 2);
-          // if (winArr[i] == -1) {
-          //   setTimeout(() => {
-          //     cardDiv.classList.add("cardDivPlayerBLostAnimated");
-          //   }, 500);
-          //   // This will only happen for the last hand should the computer loose
-          //   // This is a special case because we usually draw this _after_
-          //   if (i == 4) {
-          //     setTimeout(() => {
-          //       cardDiv.classList.add("cardDivPlayerBLostFinal");
-          //     }, 2000);
-          //   }
-          // }
-          // }
+          if (opponentCards[i][j].name != "anon_card") {
+            imgCard.src = "images/anon_card.png";
+            setTimeout(() => {
+              imgCard.classList.add("imgCardAnimated");
+              if (soundOn) flipOpponentCardSound.play();
+              imgCard.src =
+                "images/" + opponentCards[i][j].name.toLowerCase() + ".png";
+            }, 2);
+            if (winArr[i] == -1) {
+              setTimeout(() => {
+                cardDiv.classList.add("cardDivPlayerBLostAnimated");
+              }, 500);
+              // This will only happen for the last hand should the computer loose
+              // This is a special case because we usually draw this _after_
+              if (i == 4) {
+                setTimeout(() => {
+                  cardDiv.classList.add("cardDivPlayerBLostFinal");
+                }, 2000);
+              }
+            }
+          }
         } else {
           // This will happen in the NEXT iteration of i
-          // if (winArr[i] == -1) {
-          //   cardDiv.classList.add("cardDivPlayerBLostFinal");
-          // }
+          if (winArr[i] == -1) {
+            cardDiv.classList.add("cardDivPlayerBLostFinal");
+          }
         }
       }
       cardDiv.appendChild(imgCard);
@@ -131,7 +133,7 @@ function renderMultiplayer() {
       ) {
         cardDiv.classList.add("cardDivPlayerAPlay");
       }
-      if (data.cardsLeft == 1) {
+      if (currentGame.cardsLeft == 1) {
         cardDiv.classList.remove("cardDivPlayerAPlay");
       }
     }

@@ -145,8 +145,13 @@ function greet() {
 }
 
 io_client.on("player-played", (data) => {
-  ({ currentGame, drawnCard } = data);
-  renderMultiplayer();
+  if (data == "invalid") {
+    console.log("invalid card placement");
+    return;
+  } else {
+    ({ currentGame, drawnCard } = data);
+    renderMultiplayer();
+  }
 });
 io_client.on("game-start", (data) => {
   if (data == "invalid") {
