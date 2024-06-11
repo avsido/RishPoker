@@ -12,7 +12,7 @@ function render() {
   if (data.cardsLeft == 1) {
     //
     hStatus.innerHTML = data.playerATurn
-      ? "&middot; select Switch card or -"
+      ? "&middot; play wild card or flip"
       : "&middot; NOW -";
     buttCheckWin = document.createElement("button");
     buttCheckWin.id = "buttCheckWin";
@@ -196,7 +196,7 @@ function render() {
           let divPopRight = document.createElement("div");
           divPopRight.id = "divcPopRight";
           let hRight = document.createElement("h1");
-          hRight.innerHTML = "your switch card:";
+          hRight.innerHTML = "your wild card:";
           divPopRight.id = "divPopRight";
           let innerDivPop = document.createElement("div");
           innerDivPop.id = "innerDivPop";

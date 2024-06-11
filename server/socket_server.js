@@ -2,7 +2,6 @@ const io = require("socket.io");
 const { LocalStorage } = require("node-localstorage");
 const RishPok = require("./RishPok");
 const localStorage = new LocalStorage("./scratch");
-// localStorage.setItem("lastGamePIN", "1234");
 let io_server;
 
 let pendingGames = {};
@@ -24,7 +23,7 @@ function startServer(server) {
   io_server.on("connect", (socket) => {
     socket.on("game-request-from-user", (msg) => {
       let pin = parseInt(localStorage.getItem("lastGamePIN")) + 1;
-      pendingGames[pin.toString()] = socket.id;
+      pendingGames[pin + ""] = socket.id;
       localStorage.setItem("lastGamePIN", pin);
       io_server.emit("game-request-response", pin);
     });
@@ -63,9 +62,7 @@ function startServer(server) {
     });
 
     socket.on("place-card", (i) => {
-      let player;
-      let opponent;
-      let playerCards;
+      let player, opponent, playerCards;
 
       if (socket.id == game.playerA) {
         player = game.playerA;
@@ -80,7 +77,7 @@ function startServer(server) {
         currentGame.player = "b";
       }
 
-      if (isValidPlacement(playerCards, i)) {
+      if (isValidCardPlacement(playerCards, i)) {
         playerCards[i].push(drawnCard);
         drawnCard = rishPok.drawCard();
         currentGame.cardsLeft = rishPok.deck.length;
@@ -95,16 +92,12 @@ function startServer(server) {
             .to(player)
             .emit("player-played", { currentGame, drawnCard: null });
         }
-
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (currentGame.player == "a") {
           currentGame.player = "b";
         } else if (currentGame.player == "b") {
           currentGame.player = "a";
         }
-
-        // if (playerCards[i].length == 5) {
-        //   playerCards[i][playerCards[i].length - 1] = { name: "anon_card" };
-        // }
 
         io_server
           .to(opponent)
@@ -134,7 +127,7 @@ module.exports = {
   getIo,
 };
 
-function isValidPlacement(cardsToCheck, wantedHand) {
+function isValidCardPlacement(cardsToCheck, wantedHand) {
   if (isNaN(wantedHand)) {
     return false;
   }
@@ -155,3 +148,8 @@ function isValidPlacement(cardsToCheck, wantedHand) {
   }
   return true;
 }
+
+// function changeAnons(cardsList) {
+//   cardsList[i].pop();
+//   cardsList[i].push({ name: "anon_card" });
+// }

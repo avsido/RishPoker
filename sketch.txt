@@ -46,7 +46,114 @@ takes ID,
 ux: 
 1. 
 
-1. 
-create DOMManagement event
+1. handle taking "anon_cards" for opponent.
+2. manage replacing wild card socket event
+3. delve into fonts.
+4. sounds for multiPlayer.
+5. something went wrong with single player flip button, fix it.
+6. 
 
-יוצר סוקט אייאו בשרת
+
+sql excercise HW: complete decrease func while avoiding verbose as much as poss + complete client side 
+
+
+
+function startServer(server) {
+  io_server = io(server);
+
+  io_server.on("connect", (socket) => {
+    socket.on("game-request-from-user", (msg) => {
+      let pin = parseInt(localStorage.getItem("lastGamePIN")) + 1;
+      pendingGames[pin + ""] = socket.id;
+      localStorage.setItem("lastGamePIN", pin);
+      io_server.emit("game-request-response", pin);
+    });
+
+    socket.on("join-online-game", (pin) => {
+      if (!pendingGames[pin]) {
+        io_server.emit("game-start", "invalid");
+      } else {
+        game.playerA = pendingGames[pin]; //socketID for player A
+        game.playerB = socket.id; //socketID for player B
+
+        game.winner = null;
+        games[pin] = game;
+
+        localStorage.setItem("games", JSON.stringify(games));
+
+        rishPok = new RishPok();
+
+        currentGame.playerACards = rishPok.playerACards;
+        currentGame.playerBCards = rishPok.playerBCards;
+
+        drawnCard = rishPok.drawCard();
+        currentGame.cardsLeft = rishPok.deck.length;
+
+        currentGame.player = "a";
+
+        io_server
+          .to(game.playerA)
+          .emit("game-start", { currentGame, drawnCard });
+
+        currentGame.player = "b";
+        io_server
+          .to(game.playerB)
+          .emit("game-start", { currentGame, drawnCard: null });
+      }
+    });
+
+    socket.on("place-card", (i) => {
+      let player;
+      let opponent;
+      let playerCards;
+
+      if (socket.id == game.playerA) {
+        player = game.playerA;
+        opponent = game.playerB;
+        playerCards = currentGame.playerACards;
+        currentGame.player = "a";
+      }
+      if (socket.id == game.playerB) {
+        player = game.playerB;
+        opponent = game.playerA;
+        playerCards = currentGame.playerBCards;
+        currentGame.player = "b";
+      }
+
+      if (isValidPlacement(playerCards, i)) {
+        playerCards[i].push(drawnCard);
+        drawnCard = rishPok.drawCard();
+        currentGame.cardsLeft = rishPok.deck.length;
+
+        if (rishPok.deck.length == 1) {
+          io_server
+            .to(player)
+            .emit("player-played", { currentGame, drawnCard });
+          drawnCard = rishPok.drawCard();
+        } else {
+          io_server
+            .to(player)
+            .emit("player-played", { currentGame, drawnCard: null });
+        }
+
+        if (currentGame.player == "a") {
+          currentGame.player = "b";
+        } else if (currentGame.player == "b") {
+          currentGame.player = "a";
+        }
+
+        io_server
+          .to(opponent)
+          .emit("player-played", { currentGame, drawnCard });
+      } else {
+        io_server.to(player).emit("player-played", "invalid");
+      }
+    });
+  });
+
+  io_server.on("disconnect", (socket) => {
+    socket.on("disconnecting", (msg) => {
+      console.log("User disconected " + msg);
+    });
+  });
+}

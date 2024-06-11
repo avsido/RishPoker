@@ -62,6 +62,7 @@ function greet() {
       divMain.removeChild(divPIN);
       return;
     }
+
     let pHeader = document.createElement("p");
     pHeader.innerHTML = "insert PIN:";
     pHeader.className = "pHeaderPIN";
@@ -222,21 +223,23 @@ function renderInfoScore() {
   let divInfoPlayerB = document.createElement("div");
   divInfoPlayerB.className = "divInfoPlayers";
   let hHandPlayerB = document.createElement("h1");
-  hHandPlayerB.innerHTML = "Opponent:";
+  hHandPlayerB.innerHTML = "Opponent got:";
+  hHandPlayerB.style.color = "darkgrey";
   divInfoPlayerB.appendChild(hHandPlayerB);
   let divInfoPlayerA = document.createElement("div");
   divInfoPlayerA.className = "divInfoPlayers";
   let hHandPlayerA = document.createElement("h1");
-  hHandPlayerA.innerHTML = "You:";
+  hHandPlayerA.innerHTML = "You got:";
+  hHandPlayerA.style.color = "darkgrey";
   divInfoPlayerA.appendChild(hHandPlayerA);
   for (let i = 0; i < arrPlayerBHandMessages.length; i++) {
     let h2 = document.createElement("h2");
     h2.innerHTML = "&middot; " + arrPlayerBHandMessages[i];
     if (winArr[i] == -1) {
-      h2.style.color = "red";
+      h2.style.color = "black";
     }
     if (winArr[i] == 1) {
-      h2.style.color = "#031561";
+      h2.style.color = "white";
     }
     divInfoPlayerB.appendChild(h2);
   }
@@ -245,10 +248,10 @@ function renderInfoScore() {
     let h2 = document.createElement("h2");
     h2.innerHTML = "&middot; " + arrPlayerAHandMessages[i];
     if (winArr[i] == -1) {
-      h2.style.color = "#031561";
+      h2.style.color = "white";
     }
     if (winArr[i] == 1) {
-      h2.style.color = "red";
+      h2.style.color = "black";
     }
     divInfoPlayerA.appendChild(h2);
   }

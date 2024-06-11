@@ -110,10 +110,10 @@ body{
     align-items: center;
     border: 10px solid rgb(113 59 59);
     border-radius: 25px;
-    min-width: 50vw;
-    max-width: 50vw;
-    max-height:80vh;
-    min-height: 80vh;
+    min-width: 800px;
+    max-width: 800px;
+    max-height: 560px; 
+    min-height: 560px;
     margin: 5px;
     padding: 5px;
 }
@@ -124,7 +124,7 @@ body{
 }
 h1, h2, h3, h4{
     font-family: "Parisienne", cursive;
-    font-weight: 400;
+    font-weight: 500;
     font-style: normal;
     color: white;
 }
