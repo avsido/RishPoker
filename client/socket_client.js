@@ -10,9 +10,9 @@ io_client.on("disconnect", function () {
   console.log("client disconnected from server");
 });
 
-io_client.on("test-event", function () {
-  console.log("im in client test event");
-});
+// io_client.on("test-event", function () {
+//   console.log("im in client test event");
+// });
 
 io_client.on("server-created-online-game", function (pin) {
   console.log("in client manager >> PIN received from server:", pin);

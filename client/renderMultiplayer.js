@@ -245,3 +245,7 @@ function renderMultiplayer() {
   divPlayers.append(hPlayerB, divPlayerB, hPlayerA, divPlayerA);
   divMain.appendChild(divPlayers);
 }
+
+// function renderLastCard(){
+
+// }

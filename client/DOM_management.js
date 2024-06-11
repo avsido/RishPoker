@@ -154,6 +154,7 @@ io_client.on("player-played", (data) => {
     renderMultiplayer();
   }
 });
+io_client.on("place-last-card", (hand) => {});
 io_client.on("game-start", (data) => {
   if (data == "invalid") {
     alert(data + " PIN number");

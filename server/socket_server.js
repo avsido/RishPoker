@@ -81,16 +81,22 @@ function startServer(server) {
         playerCards[i].push(drawnCard);
         drawnCard = rishPok.drawCard();
         currentGame.cardsLeft = rishPok.deck.length;
-
+        let pseudoObj = JSON.parse(JSON.stringify(currentGame));
+        if (pseudoObj.player == "a") {
+          handsToPatch = pseudoObj.playerBCards;
+        } else {
+          handsToPatch = pseudoObj.playerACards;
+        }
+        changeAnons(handsToPatch);
         if (rishPok.deck.length == 1) {
           io_server
             .to(player)
-            .emit("player-played", { currentGame, drawnCard });
+            .emit("player-played", { currentGame: pseudoObj, drawnCard });
           drawnCard = rishPok.drawCard();
         } else {
           io_server
             .to(player)
-            .emit("player-played", { currentGame, drawnCard: null });
+            .emit("player-played", { currentGame: pseudoObj, drawnCard: null });
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (currentGame.player == "a") {
@@ -99,9 +105,16 @@ function startServer(server) {
           currentGame.player = "a";
         }
 
+        pseudoObj = JSON.parse(JSON.stringify(currentGame));
+        if (pseudoObj.player == "a") {
+          handsToPatch = pseudoObj.playerBCards;
+        } else {
+          handsToPatch = pseudoObj.playerACards;
+        }
+        changeAnons(handsToPatch);
         io_server
           .to(opponent)
-          .emit("player-played", { currentGame, drawnCard });
+          .emit("player-played", { currentGame: pseudoObj, drawnCard });
       } else {
         io_server.to(player).emit("player-played", "invalid");
       }
@@ -149,7 +162,11 @@ function isValidCardPlacement(cardsToCheck, wantedHand) {
   return true;
 }
 
-// function changeAnons(cardsList) {
-//   cardsList[i].pop();
-//   cardsList[i].push({ name: "anon_card" });
-// }
+function changeAnons(cardsListOpponent) {
+  for (let i = 0; i < cardsListOpponent.length; i++) {
+    if (cardsListOpponent[i].length > 4) {
+      cardsListOpponent[i].pop();
+      cardsListOpponent[i].push({ name: "anon_card" });
+    }
+  }
+}
