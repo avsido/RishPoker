@@ -56,8 +56,6 @@ ux:
 
 sql excercise HW: complete decrease func while avoiding verbose as much as poss + complete client side 
 
-
-
 function startServer(server) {
   io_server = io(server);
 
@@ -157,3 +155,8 @@ function startServer(server) {
     });
   });
 }
+
+options
+1. client side
+2. break render so that it doesnt clean all divs.
+3. local minimal func to take single event

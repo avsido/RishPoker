@@ -232,13 +232,9 @@ function renderMultiplayer() {
       if (!drawnCard) {
         return;
       }
-      if (currentGame.cardsLeft == 1) {
-        ev.target.onclick = () => {
-          return;
-        };
-        return;
+      if (currentGame.cardsLeft > 1) {
+        io_client.emit("place-card", i);
       }
-      io_client.emit("place-card", i);
     };
     divPlayerA.appendChild(cardDiv);
   }

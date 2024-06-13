@@ -145,26 +145,6 @@ function greet() {
   };
 }
 
-io_client.on("player-played", (data) => {
-  if (data == "invalid") {
-    console.log("invalid card placement");
-    return;
-  } else {
-    ({ currentGame, drawnCard } = data);
-    renderMultiplayer();
-  }
-});
-io_client.on("place-last-card", (hand) => {});
-io_client.on("game-start", (data) => {
-  if (data == "invalid") {
-    alert(data + " PIN number");
-  } else {
-    ({ currentGame, drawnCard } = data);
-    init();
-    renderMultiplayer();
-  }
-});
-
 // init func
 function init() {
   cleanElement(divMain);
