@@ -9,6 +9,21 @@ function renderMultiplayer() {
 
   divMain.style.flexDirection = "row";
 
+  let playerCards;
+  let opponentCards;
+  let playedWildCard;
+
+  if (currentGame.player == "a") {
+    playerCards = currentGame.playerACards;
+    opponentCards = currentGame.playerBCards;
+    playedWildCard = currentGame.playerAPlayedWildCard;
+  }
+  if (currentGame.player == "b") {
+    playerCards = currentGame.playerBCards;
+    opponentCards = currentGame.playerACards;
+    playedWildCard = currentGame.playerBPlayedWildCard;
+  }
+
   let hStatus = document.createElement("h1");
   let hCardsleft = document.createElement("h1");
 
@@ -19,12 +34,12 @@ function renderMultiplayer() {
   imgDeck.src = "images/deck.png";
   let divImgDeck = document.createElement("div");
   divImgDeck.id = "imgDeck";
-  divImgDeck.appendChild(imgDeck);
+  if (!playedWildCard) divImgDeck.appendChild(imgDeck);
   divDeck.appendChild(divImgDeck);
 
   //drawn card:
   let imgDrawnCard = document.createElement("img");
-  divDeck.appendChild(imgDrawnCard);
+  if (!playedWildCard) divDeck.appendChild(imgDrawnCard);
   divInfo.append(hDeck, divDeck, hCardsleft, hStatus);
   divMain.appendChild(divInfo);
   ///////////////////////////////////////////////////////////////////////////////////////////
@@ -47,27 +62,13 @@ function renderMultiplayer() {
     imgDrawnCard.id = "waitGif";
     imgDrawnCard.src = "images/5.gif";
   }
+
   ////////////////////////////////////////////////////////////////////////////
 
   let hPlayerB = document.createElement("h2");
   hPlayerB.innerHTML = "Opponent";
   let hPlayerA = document.createElement("h2");
   hPlayerA.innerHTML = "You";
-
-  let playerCards;
-  let opponentCards;
-  let playedWildCard;
-
-  if (currentGame.player == "a") {
-    playerCards = currentGame.playerACards;
-    opponentCards = currentGame.playerBCards;
-    playedWildCard = currentGame.playerAPlayedWildCard;
-  }
-  if (currentGame.player == "b") {
-    playerCards = currentGame.playerBCards;
-    opponentCards = currentGame.playerACards;
-    playedWildCard = currentGame.playerBPlayedWildCard;
-  }
 
   //opponent cards
   for (let i = 0; i < opponentCards.length; i++) {
