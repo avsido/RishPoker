@@ -40,18 +40,6 @@ function render() {
   hCardsleft.innerHTML = "&middot; deck count: " + data.cardsLeft;
 
   //deck image:
-  let hDeck = document.createElement("h1");
-  if (data.playerATurn) {
-    if (data.cardsLeft > 2) {
-      hDeck.innerHTML = "~ your card ~";
-    } else {
-      if (data.cardsLeft == 2) {
-        hDeck.innerHTML = "~ your wild card ~";
-      }
-    }
-  } else {
-    hDeck.innerHTML = "...";
-  }
   let imgDeck = document.createElement("img");
   imgDeck.src = "images/deck.png";
   let divImgDeck = document.createElement("div");

@@ -171,12 +171,14 @@ function startServer(server) {
       }
       if (currentGame.player == "a") {
         currentGame.playerAPlayedWildCard = true;
-      } else {
+      }
+      if (currentGame.player == "b") {
         currentGame.playerBPlayedWildCard = true;
       }
       playerCards[hand].splice(card, 1, drawnCard);
 
       currentGame.cardsLeft = rishPok.deck.length;
+
       let pseudoObj = JSON.parse(JSON.stringify(currentGame));
 
       if (pseudoObj.player == "a") {

@@ -29,38 +29,46 @@ function renderMultiplayer() {
 
   hCardsleft.innerHTML = "&middot; deck count: " + currentGame.cardsLeft;
 
-  let hDeck = document.createElement("h1");
   let imgDeck = document.createElement("img");
   imgDeck.src = "images/deck.png";
   let divImgDeck = document.createElement("div");
   divImgDeck.id = "imgDeck";
-  if (!playedWildCard) divImgDeck.appendChild(imgDeck);
-  divDeck.appendChild(divImgDeck);
+
+  divImgDeck.appendChild(imgDeck);
+  if (currentGame.cardsLeft >= 2) {
+    divDeck.appendChild(divImgDeck);
+  }
 
   //drawn card:
   let imgDrawnCard = document.createElement("img");
   if (!playedWildCard) divDeck.appendChild(imgDrawnCard);
-  divInfo.append(hDeck, divDeck, hCardsleft, hStatus);
+  divInfo.append(divDeck, hCardsleft, hStatus);
   divMain.appendChild(divInfo);
   ///////////////////////////////////////////////////////////////////////////////////////////
 
   if (drawnCard) {
-    hStatus.innerHTML =
-      currentGame.cardsLeft == 1
-        ? "&middot; play wild card?"
-        : "&middot; your turn to place card";
-    imgDrawnCard.id = "drawnCard";
-    imgDrawnCard.src = "images/" + drawnCard.name + ".png";
-    hDeck.innerHTML = "~ your card ~";
-
-    if (currentGame.cardsLeft == 1) {
-      hDeck.innerHTML = "~ your wild card ~";
+    if (!playedWildCard) {
+      imgDrawnCard.src = "images/" + drawnCard.name + ".png";
+      imgDrawnCard.id = "drawnCard";
+      if (currentGame.cardsLeft == 0) {
+        // imgDrawnCard.id = "drawnCardStatic";
+        imgDrawnCard.style.animation = "none";
+        imgDrawnCard.style.marginRight = "0px";
+        hStatus.innerHTML = "&middot; play wild card or flip";
+      } else {
+        hStatus.innerHTML = "&middot; your turn to place card";
+      }
+    } else {
+      hStatus.innerHTML = "&middot; played wild card";
     }
   } else {
-    hStatus.innerHTML = "&middot; opponent's turn, please wait";
-    hDeck.innerHTML = "...";
-    imgDrawnCard.id = "waitGif";
-    imgDrawnCard.src = "images/5.gif";
+    if (currentGame.cardsLeft == 0) {
+      hStatus.innerHTML = "&middot; played wild card";
+    } else {
+      hStatus.innerHTML = "&middot; opponent's turn, please wait";
+      imgDrawnCard.id = "waitGif";
+      imgDrawnCard.src = "images/5.gif";
+    }
   }
 
   ////////////////////////////////////////////////////////////////////////////

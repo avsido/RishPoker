@@ -182,6 +182,7 @@ h1, h2, h3, h4{
     display: flex;
     flex-direction: row;
     align-items:center;
+    text-align: center;
     justify-content: space-between;
     padding: 10px;
     min-height: 150px;
@@ -194,11 +195,16 @@ h1, h2, h3, h4{
     width:135px;
     margin-left: -70px;
 }
+#drawnCardStatic{
+    width: 30%;
+    box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
+}
 #drawnCard{
     min-width:100px;
     animation: drawFromLeft 0.5s ease-in-out forwards;
     box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
 }
+
 @keyframes drawFromLeft {
     0%{
         transform: scale(0);
