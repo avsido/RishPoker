@@ -1,6 +1,6 @@
 const io = require("socket.io");
 const { LocalStorage } = require("node-localstorage");
-const RishPok = require("./RishPok");
+const RishPokMulti = require("./RishPokMulti");
 const localStorage = new LocalStorage("./scratch");
 let io_server;
 
@@ -10,6 +10,8 @@ let game = {};
 let currentGame = {};
 let rishPok;
 let drawnCard;
+let wildCardA;
+let wildCardB;
 
 if (localStorage.getItem("games")) {
   games = JSON.parse(localStorage.getItem("games"));
@@ -40,12 +42,20 @@ function startServer(server) {
 
         localStorage.setItem("games", JSON.stringify(games));
 
-        rishPok = new RishPok();
+        rishPok = new RishPokMulti();
 
         currentGame.playerACards = rishPok.playerACards;
         currentGame.playerBCards = rishPok.playerBCards;
 
+        currentGame.playerAPlayedWildCard = rishPok.playerAPlayedWildCard;
+        currentGame.playerBPlayedWildCard = rishPok.playerBPlayedWildCard;
+
+        let wildCards = rishPok.getWildCards();
+        wildCardA = wildCards[0];
+        wildCardB = wildCards[1];
+
         drawnCard = rishPok.drawCard();
+
         currentGame.cardsLeft = rishPok.deck.length;
 
         currentGame.player = "a";
@@ -118,6 +128,87 @@ function startServer(server) {
       } else {
         io_server.to(player).emit("player-played", "invalid");
       }
+    });
+
+    socket.on("place-wild-card", (data) => {
+      // serious kefel kod ahead, couldnt shake it..
+      let hand = data.hand;
+      let card = data.card;
+
+      let player, opponent, playerCards, drawnCardOpponent;
+
+      if (socket.id == game.playerA) {
+        player = game.playerA;
+        opponent = game.playerB;
+        playerCards = currentGame.playerACards;
+        drawnCard = wildCardA;
+        drawnCardOpponent = wildCardB;
+        currentGame.player = "a";
+      }
+      if (socket.id == game.playerB) {
+        player = game.playerB;
+        opponent = game.playerA;
+        playerCards = currentGame.playerBCards;
+        drawnCard = wildCardB;
+        drawnCardOpponent = wildCardA;
+        currentGame.player = "b";
+      }
+      if (isNaN(hand) || isNaN(card)) {
+        io_server.to(player).emit("player-played-wild-card", "invalid");
+        return;
+      }
+
+      hand = parseInt(hand);
+      card = parseInt(card);
+
+      if (!Number.isInteger(hand) || !Number.isInteger(card)) {
+        io_server.to(player).emit("player-played-wild-card", "invalid");
+        return;
+      }
+      if (hand < 0 || hand > 4 || card != 4) {
+        io_server.to(player).emit("player-played-wild-card", "invalid");
+        return;
+      }
+      if (currentGame.player == "a") {
+        currentGame.playerAPlayedWildCard = true;
+      } else {
+        currentGame.playerBPlayedWildCard = true;
+      }
+      playerCards[hand].splice(card, 1, drawnCard);
+
+      currentGame.cardsLeft = rishPok.deck.length;
+      let pseudoObj = JSON.parse(JSON.stringify(currentGame));
+
+      if (pseudoObj.player == "a") {
+        handsToPatch = pseudoObj.playerBCards;
+      } else {
+        handsToPatch = pseudoObj.playerACards;
+      }
+      changeAnons(handsToPatch);
+
+      io_server.to(player).emit("player-played-wild-card", {
+        currentGame: pseudoObj,
+        drawnCard: null,
+      });
+
+      if (currentGame.player == "a") {
+        currentGame.player = "b";
+      } else if (currentGame.player == "b") {
+        currentGame.player = "a";
+      }
+
+      pseudoObj = JSON.parse(JSON.stringify(currentGame));
+      if (pseudoObj.player == "a") {
+        handsToPatch = pseudoObj.playerBCards;
+      } else {
+        handsToPatch = pseudoObj.playerACards;
+      }
+      changeAnons(handsToPatch);
+
+      io_server.to(opponent).emit("player-played-wild-card", {
+        currentGame: pseudoObj,
+        drawnCard: drawnCardOpponent,
+      });
     });
   });
 

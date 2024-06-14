@@ -34,6 +34,13 @@ io_client.on("server-created-online-game", function (pin) {
   console.log("in client manager >> PIN received from server:", pin);
 });
 
-io_client.on();
+io_client.on("player-played-wild-card", (data) => {
+  if (data == "invalid") {
+    alert(data + " card placement");
+  } else {
+    ({ currentGame, drawnCard } = data);
+    renderMultiplayer();
+  }
+});
 
 // export { io_client };
