@@ -39,10 +39,19 @@ function renderMultiplayer() {
     divDeck.appendChild(divImgDeck);
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////////////
+  buttCheckWin = document.createElement("button");
+  buttCheckWin.id = "buttCheckWin";
+  buttCheckWin.innerHTML = playedWildCard ? "flip!" : "ready to flip";
+  buttCheckWin.onclick = (ev) => {
+    divInfo.removeChild(ev.target);
+    hStatus.innerHTML = "&middot; great, now wait for opponent response";
+    io_client.emit("client-ready-to-flip");
+  };
+  ////////////////////////////////////////////////////////////////////////////
+
   //drawn card:
   let imgDrawnCard = document.createElement("img");
-
-  ///////////////////////////////////////////////////////////////////////////////////////////
 
   if (drawnCard) {
     if (!playedWildCard) {
@@ -58,6 +67,7 @@ function renderMultiplayer() {
       } else {
         hStatus.innerHTML = "&middot; your turn to place card";
       }
+      divDeck.appendChild(imgDrawnCard);
     } else {
       hStatus.innerHTML = "&middot; played wild card";
     }
@@ -70,10 +80,15 @@ function renderMultiplayer() {
       imgDrawnCard.src = "images/5.gif";
     }
   }
-  if (!playedWildCard) divDeck.appendChild(imgDrawnCard);
+
   divInfo.append(divDeck, hCardsleft, hStatus);
   divMain.appendChild(divInfo);
-  ////////////////////////////////////////////////////////////////////////////
+  if (
+    (!playedWildCard && currentGame.cardsLeft == 1) ||
+    currentGame.cardsLeft == 0
+  ) {
+    divInfo.appendChild(buttCheckWin);
+  }
 
   let hPlayerB = document.createElement("h2");
   hPlayerB.innerHTML = "Opponent";
