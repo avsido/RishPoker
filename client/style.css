@@ -128,24 +128,30 @@ h1, h2, h3, h4{
     font-style: normal;
     color: white;
 }
-.buttPlay{
+.buttPlay {
     height: auto;
     width: 150px;
-    padding: 5px;
-    margin-top:10px;
+    padding: 7.5px;
+    margin-top: 10px;
     background-color: rgba(0, 0, 0, 0.805);
     color: white;
     font-size: 15px;
-    font-family:'Franklin Gothic Medium';
+    font-family: 'Franklin Gothic Medium', sans-serif;
     border-radius: 150px;
     border: none;
-    transition: 0.3s ease-in-out;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
 }
-.buttPlay:hover{
+
+.buttPlay:hover {
+    color: gold;
     transform: scale(1.05);
     box-shadow: 0 12px 15px rgba(0, 0, 0, 0.5);
 }
+
 
 .buttGame{
     width: 6vw;
@@ -303,13 +309,9 @@ h1, h2, h3, h4{
     position: relative;
     overflow: hidden;
     background-color:  gold;
-    transition: background-color 0.5s ease, transform 0.5s ease;
-    transform: translateY(5px);
     box-shadow: 2px 2px 0px rgb(112, 22, 22), 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 #buttCheckWin:hover{
-    /* transform: scale(1.05); */
-    /* background-color: rgb(255, 200, 0); */
     color:red;
 }
 #buttFlip:hover {
@@ -496,8 +498,10 @@ h1, h2, h3, h4{
     }
 }
 .divPIN{
-    width: 12vw;
-    height: 13vh;
+    min-width: 175px;
+    max-width: 175px;
+    min-height:100px;
+    max-height:100px;
     box-shadow: 15px 15px 5px rgba(0, 0, 0, 0.5);
     background-color: #21523a;
     border: 7.5px solid rgb(179 37 37);
@@ -522,7 +526,12 @@ h1, h2, h3, h4{
     background-color:#35654d;
     align-items: center;
     justify-content:center;
-    margin: 10px;
+    margin: 4px;
 }
-
-
+.pPIN{
+    padding: 4px;
+    margin: 4px;
+}
+.pPIN::first-line{
+    background-color: coral;
+}

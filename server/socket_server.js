@@ -2,6 +2,7 @@ const io = require("socket.io");
 const { LocalStorage } = require("node-localstorage");
 const RishPokMulti = require("./RishPokMulti");
 const localStorage = new LocalStorage("./scratch");
+
 let io_server;
 
 let pendingGames = {};
@@ -36,7 +37,8 @@ function startServer(server) {
       } else {
         game.playerA = pendingGames[pin]; //socketID for player A
         game.playerB = socket.id; //socketID for player B
-
+        game.playerAFlipReady = false;
+        game.playerBFlipReady = false;
         game.winner = null;
         games[pin] = game;
 
@@ -211,6 +213,25 @@ function startServer(server) {
         currentGame: pseudoObj,
         drawnCard: drawnCardOpponent,
       });
+    });
+
+    socket.on("client-ready-to-flip", () => {
+      let msg = "your opponent is ready to flip cards";
+
+      if (socket.id == game.playerA) {
+        game.playerAFlipReady = true;
+        if (game.playerBFlipReady) {
+        } else {
+          io_server.to(game.playerB).emit("opponent-flip-ready", msg);
+        }
+      } else {
+        game.playerBFlipReady = true;
+
+        if (game.playerAFlipReady) {
+        } else {
+          io_server.to(game.playerA).emit("opponent-flip-ready", msg);
+        }
+      }
     });
   });
 

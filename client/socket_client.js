@@ -43,4 +43,9 @@ io_client.on("player-played-wild-card", (data) => {
   }
 });
 
-// export { io_client };
+io_client.on("opponent-flip-ready", (msg) => {
+  let hOpponentReady = document.createElement("h1");
+  hOpponentReady.innerHTML = msg;
+  hOpponentReady.style.color = "yellow";
+  divInfo.appendChild(hOpponentReady);
+});
