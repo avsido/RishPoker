@@ -61,7 +61,7 @@ function render() {
 
   divDeck.appendChild(drawnCard);
 
-  divInfo.append(hDeck, divDeck, hCardsleft, hStatus);
+  divInfo.append(divDeck, hCardsleft, hStatus);
   if (data.cardsLeft == 1) {
     cleanElement(divDeck);
     drawnCard.style.marginLeft = "35%";

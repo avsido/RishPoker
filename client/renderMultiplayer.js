@@ -41,20 +41,20 @@ function renderMultiplayer() {
 
   //drawn card:
   let imgDrawnCard = document.createElement("img");
-  if (!playedWildCard) divDeck.appendChild(imgDrawnCard);
-  divInfo.append(divDeck, hCardsleft, hStatus);
-  divMain.appendChild(divInfo);
+
   ///////////////////////////////////////////////////////////////////////////////////////////
 
   if (drawnCard) {
     if (!playedWildCard) {
       imgDrawnCard.src = "images/" + drawnCard.name + ".png";
       imgDrawnCard.id = "drawnCard";
-      if (currentGame.cardsLeft == 0) {
-        // imgDrawnCard.id = "drawnCardStatic";
-        imgDrawnCard.style.animation = "none";
-        imgDrawnCard.style.marginRight = "0px";
+      if (currentGame.cardsLeft == 1 || currentGame.cardsLeft == 0) {
+        imgDrawnCard.style.marginLeft = "75px";
         hStatus.innerHTML = "&middot; play wild card or flip";
+        if (currentGame.cardsLeft == 0) {
+          imgDrawnCard.style.animation = "none";
+          imgDrawnCard.style.width = "30%";
+        }
       } else {
         hStatus.innerHTML = "&middot; your turn to place card";
       }
@@ -70,7 +70,9 @@ function renderMultiplayer() {
       imgDrawnCard.src = "images/5.gif";
     }
   }
-
+  if (!playedWildCard) divDeck.appendChild(imgDrawnCard);
+  divInfo.append(divDeck, hCardsleft, hStatus);
+  divMain.appendChild(divInfo);
   ////////////////////////////////////////////////////////////////////////////
 
   let hPlayerB = document.createElement("h2");

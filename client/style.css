@@ -192,12 +192,12 @@ h1, h2, h3, h4{
     
 }
 #divDeck img{
-    width:135px;
+    width: 135px;
     margin-left: -70px;
 }
 #drawnCardStatic{
+    margin-right: -150px;
     width: 30%;
-    box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
 }
 #drawnCard{
     min-width:100px;
