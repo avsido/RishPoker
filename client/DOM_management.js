@@ -117,7 +117,6 @@ function greet() {
     let buttCopy = document.createElement("img");
     buttCopy.src = "images/copy.png";
     buttCopy.onclick = (ev) => {
-      // divMain.removeChild(divPIN);
       let textPIN = pPIN.innerText;
       let dummyTextarea = document.createElement("textarea");
       dummyTextarea.value = textPIN;
@@ -125,7 +124,6 @@ function greet() {
       dummyTextarea.select();
       document.execCommand("copy");
       document.body.removeChild(dummyTextarea);
-      // if (divMain.contains(divPIN)) divMain.removeChild(divPIN);
       ev.target.src = "images/copied.png";
     };
     let buttCancel = document.createElement("img");

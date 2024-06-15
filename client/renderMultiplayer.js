@@ -39,7 +39,6 @@ function renderMultiplayer() {
     divDeck.appendChild(divImgDeck);
   }
 
-  ///////////////////////////////////////////////////////////////////////////////////////////
   buttCheckWin = document.createElement("button");
   buttCheckWin.id = "buttCheckWin";
   buttCheckWin.innerHTML = playedWildCard ? "flip!" : "ready to flip";
@@ -49,7 +48,6 @@ function renderMultiplayer() {
     hStatus.innerHTML = "&middot; great, now wait for opponent response";
     io_client.emit("client-ready-to-flip");
   };
-  ////////////////////////////////////////////////////////////////////////////
 
   //drawn card:
   let imgDrawnCard = document.createElement("img");

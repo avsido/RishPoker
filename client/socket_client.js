@@ -43,9 +43,11 @@ io_client.on("player-played-wild-card", (data) => {
   }
 });
 
-io_client.on("opponent-flip-ready", (msg) => {
-  let hOpponentReady = document.createElement("h1");
-  hOpponentReady.innerHTML = msg;
-  hOpponentReady.style.color = "yellow";
-  divInfo.appendChild(hOpponentReady);
+io_client.on("opponent-flip-ready", (opponentReadyToFlip) => {
+  if (opponentReadyToFlip) {
+    let hOpponentReady = document.createElement("h1");
+    hOpponentReady.innerHTML = "&middot; your opponent is ready to flip";
+    hOpponentReady.className = "hOpponentReady";
+    divInfo.appendChild(hOpponentReady);
+  }
 });

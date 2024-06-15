@@ -216,20 +216,24 @@ function startServer(server) {
     });
 
     socket.on("client-ready-to-flip", () => {
-      let msg = "your opponent is ready to flip cards";
+      let opponentReadyToFlip = true;
 
       if (socket.id == game.playerA) {
         game.playerAFlipReady = true;
         if (game.playerBFlipReady) {
         } else {
-          io_server.to(game.playerB).emit("opponent-flip-ready", msg);
+          io_server
+            .to(game.playerB)
+            .emit("opponent-flip-ready", opponentReadyToFlip);
         }
       } else {
         game.playerBFlipReady = true;
 
         if (game.playerAFlipReady) {
         } else {
-          io_server.to(game.playerA).emit("opponent-flip-ready", msg);
+          io_server
+            .to(game.playerA)
+            .emit("opponent-flip-ready", opponentReadyToFlip);
         }
       }
     });
