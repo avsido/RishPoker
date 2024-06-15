@@ -45,6 +45,7 @@ function renderMultiplayer() {
   buttCheckWin.innerHTML = playedWildCard ? "flip!" : "ready to flip";
   buttCheckWin.onclick = (ev) => {
     divInfo.removeChild(ev.target);
+    hCardsleft.innerHTML = " ";
     hStatus.innerHTML = "&middot; great, now wait for opponent response";
     io_client.emit("client-ready-to-flip");
   };
