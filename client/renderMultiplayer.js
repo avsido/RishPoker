@@ -5,8 +5,6 @@ function renderMultiplayer() {
   cleanElement(divPlayerA);
   cleanElement(divInfo);
 
-  let winArr = [];
-
   divMain.style.flexDirection = "row";
 
   let playerCards;
@@ -66,7 +64,6 @@ function renderMultiplayer() {
       } else {
         hStatus.innerHTML = "&middot; your turn to place card";
       }
-      divDeck.appendChild(imgDrawnCard);
     } else {
       hStatus.innerHTML = "&middot; played wild card";
     }
@@ -80,8 +77,10 @@ function renderMultiplayer() {
     }
   }
 
+  divDeck.appendChild(imgDrawnCard);
   divInfo.append(divDeck, hCardsleft, hStatus);
   divMain.appendChild(divInfo);
+
   if (
     (!playedWildCard && currentGame.cardsLeft == 1) ||
     currentGame.cardsLeft == 0
@@ -138,7 +137,8 @@ function renderMultiplayer() {
     divPlayerB.appendChild(cardDiv);
   }
 
-  //cards player  /// TRY to fuse this loop into the next (SAME LOOP).
+  //cards player
+  /// TRY to fuse this loop into the next (SAME LOOP).
   let temp = 1;
   for (let i = 0; i < playerCards.length; i++) {
     if (playerCards[i].length > temp) {

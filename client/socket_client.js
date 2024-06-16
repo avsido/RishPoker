@@ -51,3 +51,8 @@ io_client.on("opponent-flip-ready", (opponentReadyToFlip) => {
     divInfo.appendChild(hOpponentReady);
   }
 });
+
+io_client.on("start-flippin", (data) => {
+  ({ currentGame, drawnCard } = data);
+  renderMultiplayer();
+});

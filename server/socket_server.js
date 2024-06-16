@@ -1,4 +1,5 @@
 const io = require("socket.io");
+const comparePokerHands = require("./comparePokerHands");
 const { LocalStorage } = require("node-localstorage");
 const RishPokMulti = require("./RishPokMulti");
 const localStorage = new LocalStorage("./scratch");
@@ -39,6 +40,7 @@ function startServer(server) {
         game.playerB = socket.id; //socketID for player B
         game.playerAFlipReady = false;
         game.playerBFlipReady = false;
+        game.winArr = [];
         game.winner = null;
         games[pin] = game;
 
@@ -214,27 +216,42 @@ function startServer(server) {
         drawnCard: drawnCardOpponent,
       });
     });
-
     socket.on("client-ready-to-flip", () => {
-      let opponentReadyToFlip = true;
-
+      let player, opponent, opponentFlipReady;
       if (socket.id == game.playerA) {
         game.playerAFlipReady = true;
-        if (game.playerBFlipReady) {
-        } else {
-          io_server
-            .to(game.playerB)
-            .emit("opponent-flip-ready", opponentReadyToFlip);
-        }
+        opponentFlipReady = game.playerBFlipReady;
+        player = game.playerA;
+        opponent = game.playerB;
       } else {
         game.playerBFlipReady = true;
-
-        if (game.playerAFlipReady) {
-        } else {
-          io_server
-            .to(game.playerA)
-            .emit("opponent-flip-ready", opponentReadyToFlip);
+        opponentFlipReady = game.playerAFlipReady;
+        player = game.playerB;
+        opponent = game.playerA;
+      }
+      if (opponentFlipReady) {
+        ////////////////////////////////////////////////
+        for (let i = 0; i < 5; i++) {
+          game.winArr.push(
+            comparePokerHands(
+              currentGame.playerBCards[i],
+              currentGame.playerACards[i]
+            )
+          );
         }
+
+        ////////////////////////////////////////////////
+        console.log(game.winArr);
+        // currentGame.player = "a";
+        // io_server
+        //   .to(game.playerA)
+        //   .emit("start-flipping", { currentGame, drawnCard: 1 });
+        // currentGame.player = "b";
+        // io_server
+        //   .to(game.playerB)
+        //   .emit("start-flipping", { currentGame, drawnCard: 1 });
+      } else {
+        io_server.to(opponent).emit("opponent-flip-ready", true);
       }
     });
   });
