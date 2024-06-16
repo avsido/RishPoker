@@ -259,7 +259,7 @@ function render() {
             render();
           });
           if (soundOn) placeCardSound.play();
-        }, 500); //1750
+        }, 500);
       });
     };
     divPlayerA.appendChild(cardDiv);

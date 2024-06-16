@@ -54,7 +54,8 @@ io_client.on("opponent-flip-ready", (opponentReadyToFlip) => {
 
 io_client.on("start-flippin", (data) => {
   ({ currentGame, socketWinArr } = data);
-  console.log(socketWinArr);
+  let arrPlayerBHandMessages = [];
+  let arrPlayerAHandMessages = [];
   for (let i = 0; i < 5; i++) {
     setTimeout(() => {
       renderWinMultiplayer(i);

@@ -1,62 +1,16 @@
-//   request 1: play
-//// server will:
-//// 1. set dec
-//// 2. shuffle deck
-//// 3. deal 5 cards to each player
-//// 4. and draw card from the deck for the player to play.
-//// 5. client-side render()
+near future TO DO:
+1. ending animation for player (multi)
+2. disable 'wild card' when 'ready to flip' button is pressed (multi) 
+3. add sounds for multi
+4. go over single player
+5. add chat? (multi)
+6. rule out PIN numbers already in 'games' (multi)
+7. add poker hands hierarchy in info
 
-//   request 2: place card on div
-//// server will validate selected div.
-//// if NOT-LEGIT: negative answer and let client try again.
-//// if LEGIT:
-//// 1. server will internally insert card to the specific array that co-relates to that div.
-//// 2. server will make computer play its turn.
-//// 3. server will send the player his/her hands && NEW drawn card for the player to play
-//// 4. client-side render()
-
-first - putting last deck card (while still in deck) in 'drawnCard'
-second - placing said last card on one of player's hands (pop())
-third - computer will take last card and place it on desired hand (pop())
-fourth - putting last deck card (while still in deck) in drawn card
-
-
-checking each opposing couple of hands will happen on the serverSide with a request for each couple:
-    for i in 5{
-
-        getRequest(''api/check_pair_of_hands?hand1=hand1&hand2=hand2, (res)=>{
-            res will include last computer cards, hand name, players scores, 
-        });
-    }
-
-TODO missions: 
-1. make only last card glow when wild card is up. and only the THIS card can be replaced with wild card.~~V
-2. see to correct gui represenation of winChecks info: a div to each player and appending hand messages~~V
-3. animation for flipping of cards.~~V
-4. add optional sounds~~V
-5. animation for player side cards.~~V
-6. navbar and pop up info window.
-7. find friendlier fonts.
-
-
-multiplayer ballpark: 
-feature start game (one side creates)
-in this MultiplayerGame:
-takes ID, 
-ux: 
-1. 
-
-1. handle taking "anon_cards" for opponent.
-2. manage replacing wild card socket event
-3. delve into fonts.
-4. sounds for multiPlayer.
-5. something went wrong with single player flip button, fix it.
-6. 
-
-
-sql excercise HW: complete decrease func while avoiding verbose as much as poss + complete client side 
-
-
+overall TO DO:
+1. REACT NATIVE mobile app
+2. add user+passwrd mechanism, with option to go over past games
+3. 
 
 
 

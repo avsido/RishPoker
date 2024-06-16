@@ -33,6 +33,7 @@ function renderMultiplayer() {
   divImgDeck.id = "imgDeck";
 
   divImgDeck.appendChild(imgDeck);
+
   if (currentGame.cardsLeft >= 2) {
     divDeck.appendChild(divImgDeck);
   }
