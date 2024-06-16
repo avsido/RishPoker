@@ -101,42 +101,11 @@ function renderMultiplayer() {
       let imgCard = document.createElement("img");
       imgCard.style.zIndex += 1;
       imgCard.src = "images/" + opponentCards[i][j].name.toLowerCase() + ".png";
-      if (j > 3) {
-        // if (data.cardIndex == i) {
-        //   if (opponentCards[i][j].name != "anon_card") {
-        //     imgCard.src = "images/anon_card.png";
-        //     setTimeout(() => {
-        //       imgCard.classList.add("imgCardAnimated");
-        //       if (soundOn) flipOpponentCardSound.play();
-        //       imgCard.src =
-        //         "images/" + opponentCards[i][j].name.toLowerCase() + ".png";
-        //     }, 2);
-        //     if (winArr[i] == -1) {
-        //       setTimeout(() => {
-        //         cardDiv.classList.add("cardDivPlayerBLostAnimated");
-        //       }, 500);
-        //       // This will only happen for the last hand should the computer loose
-        //       // This is a special case because we usually draw this _after_
-        //       if (i == 4) {
-        //         setTimeout(() => {
-        //           cardDiv.classList.add("cardDivPlayerBLostFinal");
-        //         }, 2000);
-        //       }
-        //     }
-        //   }
-        // } else {
-        //   // This will happen in the NEXT iteration of i
-        //   if (winArr[i] == -1) {
-        //     cardDiv.classList.add("cardDivPlayerBLostFinal");
-        //   }
-        // }
-      }
       cardDiv.appendChild(imgCard);
     }
 
     divPlayerB.appendChild(cardDiv);
   }
-
   //cards player
   /// TRY to fuse this loop into the next (SAME LOOP).
   let temp = 1;
@@ -162,26 +131,6 @@ function renderMultiplayer() {
 
     for (let j = 0; j < playerCards[i].length; j++) {
       let imgCard = document.createElement("img");
-      // if (j > 3) {
-      //   if (data.cardIndex == i) {
-      //     if (winArr[i] == 1) {
-      //       setTimeout(() => {
-      //         cardDiv.classList.add("cardDivPlayerALostAnimated");
-      //       }, 500);
-      //       if (i == 4) {
-      //         setTimeout(() => {
-      //           cardDiv.classList.add("cardDivPlayerALostFinal");
-      //         }, 2000);
-      //       }
-      //     }
-      //   } else {
-      //     // This will happen in the NEXT iteration of i
-      //     if (winArr[i] == 1) {
-      //       cardDiv.classList.add("cardDivPlayerALostFinal");
-      //     }
-      //   }
-      // }
-
       if (j == 4) {
         if (currentGame.cardsLeft <= 1) {
           if (!playedWildCard && drawnCard) {

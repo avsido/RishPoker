@@ -53,6 +53,11 @@ io_client.on("opponent-flip-ready", (opponentReadyToFlip) => {
 });
 
 io_client.on("start-flippin", (data) => {
-  ({ currentGame, drawnCard } = data);
-  renderMultiplayer();
+  ({ currentGame, socketWinArr } = data);
+  console.log(socketWinArr);
+  for (let i = 0; i < 5; i++) {
+    setTimeout(() => {
+      renderWinMultiplayer(i);
+    }, 2000 * i);
+  }
 });

@@ -216,6 +216,7 @@ function startServer(server) {
         drawnCard: drawnCardOpponent,
       });
     });
+
     socket.on("client-ready-to-flip", () => {
       let player, opponent, opponentFlipReady;
       if (socket.id == game.playerA) {
@@ -239,17 +240,18 @@ function startServer(server) {
             )
           );
         }
-
-        ////////////////////////////////////////////////
         console.log(game.winArr);
-        // currentGame.player = "a";
-        // io_server
-        //   .to(game.playerA)
-        //   .emit("start-flipping", { currentGame, drawnCard: 1 });
-        // currentGame.player = "b";
-        // io_server
-        //   .to(game.playerB)
-        //   .emit("start-flipping", { currentGame, drawnCard: 1 });
+        ////////////////////////////////////////////////
+        currentGame.player = "a";
+        io_server.to(game.playerA).emit("start-flippin", {
+          currentGame,
+          socketWinArr: game.winArr,
+        });
+        currentGame.player = "b";
+        io_server.to(game.playerB).emit("start-flippin", {
+          currentGame,
+          socketWinArr: game.winArr,
+        });
       } else {
         io_server.to(opponent).emit("opponent-flip-ready", true);
       }
