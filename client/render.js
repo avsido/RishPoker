@@ -224,6 +224,7 @@ function render() {
               "api/butt_replace_wild_card?hand=" + i + "&card=" + j,
               (res) => {
                 data = JSON.parse(res);
+                if (soundOn) wildCardSound.play();
                 render();
               }
             );

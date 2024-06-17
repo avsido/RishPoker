@@ -201,6 +201,7 @@ function renderWinMultiplayer(index) {
       hBottomLine.innerHTML = "You Win!";
       if (soundOn) winSound.play();
     } else {
+      if (soundOn) tieSound.play();
       hBottomLine.innerHTML = "It's a tie.";
     }
   }

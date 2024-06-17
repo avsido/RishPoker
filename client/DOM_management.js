@@ -29,7 +29,13 @@ let loseSound = new Howl({
   src: ["sounds/lose.wav"],
 });
 let tieSound = new Howl({
-  src: ["sounds/tie.wav"],
+  src: ["sounds/tie.mp3"],
+});
+let wildCardSound = new Howl({
+  src: ["sounds/wild_card.mp3"],
+});
+let openingSound = new Howl({
+  src: ["sounds/opening.mp3"],
 });
 
 //greet screen func
@@ -48,6 +54,7 @@ function greet() {
   buttPlayVSComputer.onclick = () => {
     sendHttpGETReq("api/start_game_vs_computer", (res) => {
       data = JSON.parse(res);
+      if (soundOn) openingSound.play();
       init();
       render();
     });

@@ -14,6 +14,7 @@ io_client.on("game-start", (data) => {
   if (data == "invalid") {
     alert(data + " PIN number");
   } else {
+    if (soundOn) openingSound.play();
     ({ currentGame, drawnCard } = data);
     init();
     renderMultiplayer();
@@ -26,6 +27,7 @@ io_client.on("player-played", (data) => {
     return;
   } else {
     ({ currentGame, drawnCard } = data);
+    if (soundOn) placeCardSound.play();
     renderMultiplayer();
   }
 });
@@ -39,6 +41,7 @@ io_client.on("player-played-wild-card", (data) => {
     alert(data + " card placement");
   } else {
     ({ currentGame, drawnCard } = data);
+    if (soundOn) wildCardSound.play();
     renderMultiplayer();
   }
 });
