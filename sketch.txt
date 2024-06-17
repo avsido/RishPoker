@@ -1,17 +1,24 @@
-near future TO DO:
-1. ending animation for player (multi) D~O~N~E
-2. disable 'wild card' when 'ready to flip' button is pressed (multi) 
-3. add sounds for multi
-4. go over single player
-5. add chat? (multi)
-6. rule out PIN numbers already in 'games' (multi)
-7. add poker hands hierarchy in info
-8. make it so that player who quits game counts as loser (multi)
-
 overall TO DO:
 1. REACT NATIVE mobile app
 2. add user+passwrd mechanism, with option to go over past games
 3. 
 
+near future TO DO:
+1. ending animation for player (multi) D~O~N~E
+2. disable 'wild card' when 'ready to flip' button is pressed (multi) D~O~N~E
+3. add sounds for multi D~O~N~E
+4. go over single player
+5. add chat? (multi)
+6. rule out PIN numbers already in 'games' (multi)
+7. add poker hands hierarchy in info
+8. make it so that player who quits game counts as loser (multi)
+9. re-think opening sound
+10. go through images/sounds folders and lose un-used files
 
+for CR w/Bar:
+1. code readability, verbose-ness, sense-of-it-all
+2. server integrity -- fuckin attack it
+3. data integrity
+4. effectiveness and actions I could spare
+5. sockets - am I doing it right?
 

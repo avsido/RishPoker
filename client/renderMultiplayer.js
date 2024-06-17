@@ -38,16 +38,6 @@ function renderMultiplayer() {
     divDeck.appendChild(divImgDeck);
   }
 
-  buttCheckWin = document.createElement("button");
-  buttCheckWin.id = "buttCheckWin";
-  buttCheckWin.innerHTML = playedWildCard ? "flip!" : "ready to flip";
-  buttCheckWin.onclick = (ev) => {
-    divInfo.removeChild(ev.target);
-    hCardsleft.innerHTML = " ";
-    hStatus.innerHTML = "&middot; great, now wait for opponent response";
-    io_client.emit("client-ready-to-flip");
-  };
-
   //drawn card:
   let imgDrawnCard = document.createElement("img");
 
@@ -81,13 +71,6 @@ function renderMultiplayer() {
   divDeck.appendChild(imgDrawnCard);
   divInfo.append(divDeck, hCardsleft, hStatus);
   divMain.appendChild(divInfo);
-
-  if (
-    (!playedWildCard && currentGame.cardsLeft == 1) ||
-    currentGame.cardsLeft == 0
-  ) {
-    divInfo.appendChild(buttCheckWin);
-  }
 
   let hPlayerB = document.createElement("h2");
   hPlayerB.innerHTML = "Opponent";
@@ -186,7 +169,6 @@ function renderMultiplayer() {
                 document.body.removeChild(divOverlay);
                 cleanElement(divDeck);
                 divDeck.className = "divDeckFinal";
-
                 io_client.emit("place-wild-card", { hand: i, card: j });
               };
               buttCancel.onclick = () => {
@@ -210,6 +192,33 @@ function renderMultiplayer() {
     };
     divPlayerA.appendChild(cardDiv);
   }
+
   divPlayers.append(hPlayerB, divPlayerB, hPlayerA, divPlayerA);
   divMain.appendChild(divPlayers);
+
+  buttCheckWin = document.createElement("button");
+  buttCheckWin.id = "buttCheckWin";
+  buttCheckWin.innerHTML = playedWildCard ? "flip!" : "ready to flip";
+  buttCheckWin.onclick = (ev) => {
+    divInfo.removeChild(ev.target);
+    hCardsleft.innerHTML = " ";
+    hStatus.innerHTML = "&middot; great, now wait for opponent response";
+    io_client.emit("client-ready-to-flip");
+
+    let wildCards = Array.from(
+      document.getElementsByClassName("imgCardPlayerWild")
+    );
+
+    for (let i = 0; i < wildCards.length; i++) {
+      wildCards[i].onclick = null;
+      wildCards[i].classList.remove("imgCardPlayerWild");
+    }
+  };
+
+  if (
+    (!playedWildCard && currentGame.cardsLeft == 1) ||
+    currentGame.cardsLeft == 0
+  ) {
+    divInfo.appendChild(buttCheckWin);
+  }
 }

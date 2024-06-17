@@ -231,7 +231,6 @@ function startServer(server) {
         opponent = game.playerA;
       }
       if (opponentFlipReady) {
-        ////////////////////////////////////////////////
         for (let i = 0; i < 5; i++) {
           game.winArr.push(
             comparePokerHands(
@@ -240,8 +239,6 @@ function startServer(server) {
             )
           );
         }
-        console.log(game.winArr);
-        ////////////////////////////////////////////////
         currentGame.player = "a";
         io_server.to(game.playerA).emit("start-flippin", {
           currentGame,
@@ -254,6 +251,7 @@ function startServer(server) {
         });
       } else {
         io_server.to(opponent).emit("opponent-flip-ready", true);
+        io_server.to(player).emit("opponent-flip-ready", false);
       }
     });
   });

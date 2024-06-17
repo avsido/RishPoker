@@ -10,6 +10,7 @@ let divMain,
   divInfo,
   divPlayerAPickupCard,
   buttCheckWin;
+
 let soundOn = true;
 let data = {};
 let menuItems = {};
