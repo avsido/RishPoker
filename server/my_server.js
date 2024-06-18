@@ -6,6 +6,21 @@ const socketServer = require("./socket_server");
 
 function startServer(actions) {
   const server = http.createServer((req, res) => {
+    //////////////////////////////////////////////////////////////////
+    res.setHeader("Access-Control-Allow-Origin", "http://10.0.0.2:8080");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+    if (req.method === "OPTIONS") {
+      res.writeHead(204); // No Content
+      res.end();
+      return;
+    }
+    //////////////////////////////////////////////////////////////////
+
     let q = url.parse(req.url, true);
 
     if (q.pathname.startsWith("/api")) {
@@ -66,9 +81,9 @@ function startServer(actions) {
       });
     }
   });
-
   server.listen(8080);
   console.log("server is listening on PORT 8080");
   socketServer.startServer(server);
 }
+
 exports.startServer = startServer;

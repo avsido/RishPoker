@@ -1,4 +1,4 @@
-const io = require("socket.io");
+const { Server } = require("socket.io");
 const comparePokerHands = require("./comparePokerHands");
 const { LocalStorage } = require("node-localstorage");
 const RishPokMulti = require("./RishPokMulti");
@@ -22,7 +22,12 @@ if (localStorage.getItem("games")) {
 }
 
 function startServer(server) {
-  io_server = io(server);
+  io_server = new Server(server, {
+    cors: {
+      origin: "http://10.0.0.2:8080",
+      methods: ["GET", "POST"],
+    },
+  });
 
   io_server.on("connect", (socket) => {
     socket.on("game-request-from-user", (msg) => {
@@ -258,7 +263,7 @@ function startServer(server) {
 
   io_server.on("disconnect", (socket) => {
     socket.on("disconnecting", (msg) => {
-      console.log("User disconected " + msg);
+      console.log("User disconnected " + msg);
     });
   });
 }

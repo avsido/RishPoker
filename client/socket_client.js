@@ -1,6 +1,6 @@
 // import { io } from "socket.io-client";
 
-const io_client = io.connect("http://localhost:8080");
+const io_client = io.connect("http://10.0.0.2:8080");
 
 io_client.on("connect", function () {
   console.log("client connected to server");

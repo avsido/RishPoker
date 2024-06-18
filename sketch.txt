@@ -21,4 +21,7 @@ for CR w/Bar:
 3. data integrity
 4. effectiveness and actions I could spare
 5. sockets - am I doing it right?
+6. tips/recommendations
+7. 
 
+http://10.0.0.2:8080
