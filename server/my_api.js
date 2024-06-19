@@ -12,6 +12,7 @@ exports.getMenuItems = (req, res, q) => {
     { name: "about Rishpon poker", HttpRequest: "/get_info" },
     { name: "the rules", HttpRequest: "/get_rules" },
     { name: "get coins" },
+    { name: "poker hands rankings", HttpRequest: "none" },
     { name: "about us", HttpRequest: "/get_about_us_info" },
     { name: "contribute" },
     { name: "log in" },

@@ -290,23 +290,30 @@ function openSideMenu() {
         pMenu.className = "pMenu";
         pMenu.innerHTML = "> " + menuItems[i].name + "";
         pMenu.onclick = () => {
-          sendHttpGETReq("/api" + menuItems[i].HttpRequest, (res) => {
-            let content = JSON.parse(res);
-            document.body.removeChild(divMenu);
-            let contentBox = document.createElement("div");
-            contentBox.className = "divMenu";
-            contentBox.id = "contentBox";
-            let h3 = document.createElement("h3");
-            h3.innerHTML = content;
-            contentBox.appendChild(h3);
-            let buttEsc = document.createElement("button");
-            buttEsc.innerHTML = "X";
-            buttEsc.onclick = () => {
-              document.body.removeChild(contentBox);
-            };
-            contentBox.appendChild(buttEsc);
-            document.body.appendChild(contentBox);
-          });
+          if (menuItems[i].HttpRequest == "none") {
+            let pokerHands = document.createElement("img");
+            pokerHands.src = "images/poker_hands_rankings.jpg";
+            pokerHands.className = "pokerHands";
+            document.body.appendChild(pokerHands);
+          } else {
+            sendHttpGETReq("/api" + menuItems[i].HttpRequest, (res) => {
+              let content = JSON.parse(res);
+              document.body.removeChild(divMenu);
+              let contentBox = document.createElement("div");
+              contentBox.className = "divMenu";
+              contentBox.id = "contentBox";
+              let h3 = document.createElement("h3");
+              h3.innerHTML = content;
+              contentBox.appendChild(h3);
+              let buttEsc = document.createElement("button");
+              buttEsc.innerHTML = "X";
+              buttEsc.onclick = () => {
+                document.body.removeChild(contentBox);
+              };
+              contentBox.appendChild(buttEsc);
+              document.body.appendChild(contentBox);
+            });
+          }
         };
         divMenu.appendChild(pMenu);
       }
@@ -334,7 +341,8 @@ function cleanElement(element) {
 
 function chatWindow() {
   if (document.body.querySelector("#chatBox")) {
-    document.body.removeChild("#chatBox");
+    var chatBox = document.body.querySelector("#chatBox");
+    document.body.removeChild(chatBox);
     isChatOpen = false;
     return;
   } else {

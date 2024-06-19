@@ -46,6 +46,8 @@ function startServer(actions) {
         ".css": "text/css",
         ".js": "text/javascript",
         ".png": "image/png",
+        jpg: "image/jpg",
+        jpeg: "image/jpeg",
         ".gif": "image/gif",
         ".ogg": "audio/ogg",
         ".wav": "audio/wav",
