@@ -363,11 +363,11 @@ function chatWindow() {
     input.id = "inputChat";
     input.autocomplete = "off";
 
-    form.append(send, input);
-    chatBox.appendChild(form);
-
     messages.id = "messagesChat";
     chatBox.appendChild(messages);
+
+    form.append(send, input);
+    chatBox.appendChild(form);
 
     document.body.appendChild(chatBox);
   }
