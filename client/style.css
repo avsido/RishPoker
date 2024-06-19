@@ -140,16 +140,46 @@ h1, h2, h3, h4{
     border-radius: 150px;
     border: none;
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
 }
-
 .buttPlay:hover {
     color: gold;
-    transform: scale(1.05);
-    box-shadow: 0 12px 15px rgba(0, 0, 0, 0.5);
+}
+
+.buttStartChat{
+    position: absolute;
+    bottom: 40px;
+    right: 110px;
+}
+
+#chatBox{
+    position: absolute;
+    bottom: 77.5px;
+    right: 70px;
+    z-index: 999;
+    background-color: rgba(22, 21, 21, 0.473);
+    box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
+    border: 2.5px solid rgb(113 59 59);
+    border-radius: 7.5px;
+    min-width: 12.5%;
+    max-width: 15%;
+    height: auto;
+    min-height: 35%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+#formChat{
+    display: block;
+    position: relative;
+    top: 225px;
+}
+#messagesChat{
+    display: inline-block;
+}
+#messageDot{
+    z-index: 1;
+    
 }
 
 

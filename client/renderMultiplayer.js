@@ -5,6 +5,15 @@ function renderMultiplayer() {
   cleanElement(divPlayerA);
   cleanElement(divInfo);
 
+  chat = document.createElement("button");
+  chat.innerHTML = "Chat";
+  chat.className = "buttPlay buttStartChat";
+  document.body.appendChild(chat);
+
+  chat.onclick = () => {
+    chatWindow();
+  };
+
   divMain.style.flexDirection = "row";
 
   let playerCards;

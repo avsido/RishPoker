@@ -4,10 +4,15 @@ let fs = require("fs");
 let path = require("path");
 const socketServer = require("./socket_server");
 
+const ipLH = "localhost";
+const ipHome = "10.0.0.2";
+const ipWork = "10.0.0.219";
+const ipOfer = "";
+
 function startServer(actions) {
   const server = http.createServer((req, res) => {
     //////////////////////////////////////////////////////////////////
-    res.setHeader("Access-Control-Allow-Origin", "http://10.0.0.2:8080");
+    res.setHeader("Access-Control-Allow-Origin", "http://" + ipWork + ":8080");
     res.setHeader(
       "Access-Control-Allow-Methods",
       "GET, POST, PUT, DELETE, OPTIONS"
@@ -81,8 +86,9 @@ function startServer(actions) {
       });
     }
   });
-  server.listen(8080);
-  console.log("server is listening on PORT 8080");
+  server.listen(8080, "0.0.0.0", () => {
+    console.log("Server is listening on port 8080");
+  });
   socketServer.startServer(server);
 }
 

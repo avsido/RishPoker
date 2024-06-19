@@ -4,13 +4,18 @@ const { LocalStorage } = require("node-localstorage");
 const RishPokMulti = require("./RishPokMulti");
 const localStorage = new LocalStorage("./scratch");
 
-let io_server;
+const ipLH = "localhost";
+const ipHome = "10.0.0.2";
+const ipWork = "10.0.0.219";
+const ipOfer = "";
 
+let io_server;
 let pendingGames = {};
 let games;
 let game = {};
 let currentGame = {};
 let rishPok;
+let chatFriend;
 let drawnCard;
 let wildCardA;
 let wildCardB;
@@ -24,7 +29,7 @@ if (localStorage.getItem("games")) {
 function startServer(server) {
   io_server = new Server(server, {
     cors: {
-      origin: "http://10.0.0.2:8080",
+      origin: "http://" + ipWork + ":8080",
       methods: ["GET", "POST"],
     },
   });
@@ -69,14 +74,18 @@ function startServer(server) {
 
         currentGame.player = "a";
 
-        io_server
-          .to(game.playerA)
-          .emit("game-start", { currentGame, drawnCard });
+        io_server.to(game.playerA).emit("game-start", {
+          currentGame,
+          drawnCard,
+          chatFriend: game.playerB,
+        });
 
         currentGame.player = "b";
-        io_server
-          .to(game.playerB)
-          .emit("game-start", { currentGame, drawnCard: null });
+        io_server.to(game.playerB).emit("game-start", {
+          currentGame,
+          drawnCard: null,
+          chatFriend: game.playerA,
+        });
       }
     });
 
@@ -258,6 +267,10 @@ function startServer(server) {
         io_server.to(opponent).emit("opponent-flip-ready", true);
         io_server.to(player).emit("opponent-flip-ready", false);
       }
+    });
+
+    socket.on("chat-message", (msg, senderId) => {
+      io_server.emit("chat-message", msg, senderId);
     });
   });
 

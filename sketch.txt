@@ -7,12 +7,12 @@ near future TO DO:
 1. ending animation for player (multi) D~O~N~E
 2. disable 'wild card' when 'ready to flip' button is pressed (multi) D~O~N~E
 3. add sounds for multi D~O~N~E
-4. go over single player
-5. add chat? (multi)
+4. go over single player D~O~N~E
+5. add chat? (multi) 
 6. rule out PIN numbers already in 'games' (multi)
 7. add poker hands hierarchy in info
 8. make it so that player who quits game counts as loser (multi)
-9. re-think opening sound
+9. re-think opening sound D~O~N~E
 10. go through images/sounds folders and lose un-used files
 
 for CR w/Bar:
@@ -25,3 +25,9 @@ for CR w/Bar:
 7. 
 
 http://10.0.0.2:8080
+
+gpt steps to working on same LAN:
+1. Determine Your Local IP Address - 
+    - Command Prompt
+    - 'ipconfig'
+    - Look for the IP address associated with your active network interface

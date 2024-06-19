@@ -1,4 +1,5 @@
 // initializing variables
+
 let divMain,
   divPIN,
   buttMenu,
@@ -11,11 +12,14 @@ let divMain,
   divPlayerAPickupCard,
   buttCheckWin;
 
+let isChatOpen = false;
+let messages = document.createElement("ul");
+
 let soundOn = true;
 let data = {};
 let menuItems = {};
 let winArr = [];
-// let currentGameData, drawnCard;
+
 //initiating sounds:
 let placeCardSound = new Howl({
   src: ["sounds/card_place.ogg"],
@@ -325,5 +329,49 @@ function toggleSound() {
 function cleanElement(element) {
   while (element.lastElementChild) {
     element.removeChild(element.lastElementChild);
+  }
+}
+
+function chatWindow() {
+  if (document.body.querySelector("#chatBox")) {
+    document.body.removeChild(chatBox);
+    isChatOpen = false;
+    return;
+  } else {
+    if (chat.querySelector("#messageDot")) {
+      chat.removeChild(chat.querySelector("#messageDot"));
+    }
+    isChatOpen = true;
+    let chatBox = document.createElement("div");
+    chatBox.id = "chatBox";
+
+    let form = document.createElement("form");
+    form.id = "formChat";
+    form.action = "";
+
+    let send = document.createElement("button");
+    send.id = "sendButt";
+    send.type = "submit";
+    send.innerHTML = "Send";
+
+    send.onclick = (ev) => {
+      ev.preventDefault();
+      let msg = input.value;
+      if (msg == "") return;
+      io_client.emit("chat-message", { msg, senderId: io_client.id });
+      input.value = "";
+    };
+
+    let input = document.createElement("input");
+    input.id = "inputChat";
+    input.autocomplete = "off";
+
+    form.append(send, input);
+    chatBox.appendChild(form);
+
+    messages.id = "messagesChat";
+    chatBox.appendChild(messages);
+
+    document.body.appendChild(chatBox);
   }
 }
