@@ -3,7 +3,7 @@ const ipHome = "10.0.0.2";
 const ipWork = "10.0.0.219";
 const ipOfer = "";
 
-const io_client = io.connect("http://" + ipWork + ":8080");
+const io_client = io.connect("http://" + ipHome + ":8080");
 
 io_client.on("connect", function () {
   console.log("client connected to server");
@@ -76,8 +76,6 @@ io_client.on("chat-message", function (data) {
     chat.appendChild(messageDot);
   }
   const { msg, senderId } = data;
-  console.log(msg);
-  console.log(typeof msg);
   const messagePrefix = senderId === io_client.id ? "you: " : "opponent: ";
   appendMessage(`${messagePrefix}${msg}`);
 });

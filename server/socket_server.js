@@ -29,7 +29,7 @@ if (localStorage.getItem("games")) {
 function startServer(server) {
   io_server = new Server(server, {
     cors: {
-      origin: "http://" + ipWork + ":8080",
+      origin: "http://" + ipHome + ":8080",
       methods: ["GET", "POST"],
     },
   });

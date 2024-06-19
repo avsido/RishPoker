@@ -334,13 +334,10 @@ function cleanElement(element) {
 
 function chatWindow() {
   if (document.body.querySelector("#chatBox")) {
-    document.body.removeChild(chatBox);
+    document.body.removeChild("#chatBox");
     isChatOpen = false;
     return;
   } else {
-    if (chat.querySelector("#messageDot")) {
-      chat.removeChild(chat.querySelector("#messageDot"));
-    }
     isChatOpen = true;
     let chatBox = document.createElement("div");
     chatBox.id = "chatBox";

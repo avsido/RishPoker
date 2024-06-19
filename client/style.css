@@ -179,6 +179,16 @@ h1, h2, h3, h4{
 }
 #messageDot{
     z-index: 1;
+    min-width: 15px;
+    max-width: 15px;
+    min-height: 15px;
+    max-height: 15px;
+    border-radius: 7.5px;
+    background-color: #de1010;
+    border: none;
+    position: absolute;
+    top: -5px;
+    right: 10px;
     
 }
 
