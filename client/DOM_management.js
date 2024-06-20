@@ -344,8 +344,9 @@ function chatWindow() {
     var chatBox = document.body.querySelector("#chatBox");
     document.body.removeChild(chatBox);
     isChatOpen = false;
-    return;
+    return; // REMOVE RED DOT~!!!
   } else {
+    cleanElement(chat);
     isChatOpen = true;
     let chatBox = document.createElement("div");
     chatBox.id = "chatBox";
@@ -379,4 +380,9 @@ function chatWindow() {
 
     document.body.appendChild(chatBox);
   }
+}
+
+function elementExists(selector) {
+  let element = document.querySelector(selector);
+  return element !== null;
 }

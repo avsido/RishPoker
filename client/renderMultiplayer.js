@@ -6,13 +6,14 @@ function renderMultiplayer() {
   cleanElement(divInfo);
 
   chat = document.createElement("button");
+  chat.id = "chat";
   chat.innerHTML = "Chat";
   chat.className = "buttPlay buttStartChat";
-  document.body.appendChild(chat);
+  if (!elementExists("#" + chat.id)) {
+    document.body.appendChild(chat);
+  }
 
-  chat.onclick = () => {
-    chatWindow();
-  };
+  chat.onclick = chatWindow;
 
   divMain.style.flexDirection = "row";
 
