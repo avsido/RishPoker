@@ -54,7 +54,7 @@ function greet() {
   divMain.appendChild(img);
   let buttPlayVSComputer = document.createElement("button");
   buttPlayVSComputer.className = "buttPlay";
-  buttPlayVSComputer.innerHTML = "Play vs machine";
+  buttPlayVSComputer.innerHTML = "VS Computer";
   divMain.appendChild(buttPlayVSComputer);
   buttPlayVSComputer.onclick = () => {
     sendHttpGETReq("api/start_game_vs_computer", (res) => {
@@ -67,7 +67,7 @@ function greet() {
 
   let buttJoinMultiplayerGame = document.createElement("button");
   buttJoinMultiplayerGame.className = "buttPlay";
-  buttJoinMultiplayerGame.innerHTML = "join friend's game";
+  buttJoinMultiplayerGame.innerHTML = "join friend";
   divMain.appendChild(buttJoinMultiplayerGame);
   buttJoinMultiplayerGame.onclick = () => {
     if (divMain.querySelector(".divPIN")) {
@@ -111,7 +111,7 @@ function greet() {
 
   let buttCreateMultiplayerGame = document.createElement("button");
   buttCreateMultiplayerGame.className = "buttPlay";
-  buttCreateMultiplayerGame.innerHTML = "invite friend to play";
+  buttCreateMultiplayerGame.innerHTML = "invite friend";
   divMain.appendChild(buttCreateMultiplayerGame);
   buttCreateMultiplayerGame.onclick = () => {
     if (divMain.querySelector(".divPIN")) {

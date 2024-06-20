@@ -124,7 +124,7 @@ body{
 
 }
 h1, h2, h3, h4{
-    font-family: "Parisienne", cursive;
+    font-family: "Squada One", sans-serif;
     font-weight: 500;
     font-style: normal;
     color: white;
@@ -137,7 +137,7 @@ h1, h2, h3, h4{
     background-color: rgba(0, 0, 0, 0.805);
     color: white;
     font-size: 15px;
-    font-family: 'Franklin Gothic Medium', sans-serif;
+    font-family: "Secular One", sans-serif;
     border-radius: 150px;
     border: none;
     cursor: pointer;
@@ -165,13 +165,14 @@ h1, h2, h3, h4{
     box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
     border: 2.5px solid rgb(113, 59, 59);
     border-radius: 7.5px;
-    min-width: 12.5%;
-    max-width: 15%;
-    max-height: 50%;
-    min-height: 35%;
+    min-width: 235px;
+    max-width: 235px;
+    max-height: 275px;
+    min-height: 150px;
     padding: 2px;
     display: flex;
     flex-direction: column;
+    align-items:center;
 }
 #formChat{
     display: block;
@@ -187,8 +188,29 @@ h1, h2, h3, h4{
     overflow-x: hidden;
     list-style-type: none;
     max-height: calc(100% - 225px);
-    
 }
+#messagesChat li{
+    width: 235px;
+    font-family: "Spinnaker", sans-serif;
+    font-size: 12px;
+    background-color:#8080805e;
+    margin:1.5px;
+}
+#messagesChat li span{
+    color: gold;
+}
+ #messagesChat::-webkit-scrollbar {
+     width: 4px;
+ }
+
+#messagesChat::-webkit-scrollbar-thumb {      
+    background-color: #c4aaaa;
+    border-radius: 3px;
+}    
+#messagesChat::-webkit-scrollbar-thumb:hover {
+    background-color: #dc6c6c;
+}
+
 #messageDot{
     z-index: 1;
     min-width: 15px;
@@ -206,11 +228,11 @@ h1, h2, h3, h4{
 
 
 .buttGame{
-    width: 6vw;
-    height: 3vh;
+    width: 100px;
+    height: 26px;
     border:none;
     border-radius: 4vh;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: "Secular One", sans-serif;
     font-size: 15px;
     margin:0px 15px;
     display: flex; 
@@ -460,8 +482,10 @@ h1, h2, h3, h4{
     height: 20%;
 }
 .divCancel{
+    width: 30%;
     display: flex;
     align-items: center;
+    justify-content:space-between;
     margin: 5px 4px;
     padding: 15px;
 }

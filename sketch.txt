@@ -9,13 +9,14 @@ near future TO DO:
 3. add sounds for multi D~O~N~E
 4. go over single player D~O~N~E
 5. add chat? (multi)
-    - text font
-    - scroller
+    - text font D~O~N~E
+    - scroller D~O~N~E
     - send button
-    - reminder div (pink circle)
-    - chat butt
-    - clear history
+    - reminder div (pink circle) D~O~N~E 
+    - chat butt D~O~N~E
+    - clear history (?)
     - strange incident on Bar's computer - consult
+    - color first word
 6. rule out PIN numbers already in 'games' (multi)
 7. add poker hands hierarchy in info
 8. make it so that player who quits game counts as loser (multi)
@@ -33,8 +34,3 @@ for CR w/Bar:
 
 http://10.0.0.2:8080
 
-gpt steps to working on same LAN:
-1. Determine Your Local IP Address - 
-    - Command Prompt
-    - 'ipconfig'
-    - Look for the IP address associated with your active network interface
