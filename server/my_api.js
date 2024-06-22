@@ -4,7 +4,7 @@ let fs = require("fs");
 
 let data = {};
 let rp = {};
-let computerPlay = 3;
+// let computerPlay = 3;
 let playerBFinalCards = ["", "", "", "", ""];
 
 exports.getMenuItems = (req, res, q) => {
@@ -54,17 +54,6 @@ exports.startGameVSComputer = (req, res, q) => {
   res.end(JSON.stringify(data));
 };
 
-// exports.startGameVSRemotePlayer = () => {
-//   socketServer.on("connect", function () {});
-// };
-
-//// func to place player card on chosen hand.
-// will:
-// check if query is legit
-// check if wanted location is valid
-// if so, add card to corresponding arr
-// will activate local func computerTurn
-// will send next card for player to play
 exports.placeCard = (req, res, q) => {
   let wantedHand = q.query.i;
   if (isNaN(wantedHand)) {
@@ -175,21 +164,12 @@ exports.buttReplaceWildCard = (req, res, q) => {
 };
 
 exports.quit = (req, res, q) => {
-  // rp = new Game();
-  // ///
-  // data.computerCards = cp.computerCards;  // will probably cancel
-  // data.playerCards = cp.playerCards;
-  // data.drawnCard = cp.drawCard();
-  // data.cardsLeft = cp.deck.length;
-  // data.playerTurn = true;
-  // data.results = {};
-  // res.writeHead(200, { "Content-Type": "application/json" });
-  // res.end(JSON.stringify(data));
   rp = {};
   data = {};
-  res.end(JSON.stringify(data));
+  playerBFinalCards = ["", "", "", "", ""];
 };
 
+// DEPRECATED:
 function computerTurn() {
   if (computerPlay == 4) {
     computerPlay = 0;

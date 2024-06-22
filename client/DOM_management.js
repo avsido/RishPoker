@@ -1,5 +1,4 @@
 // initializing variables
-
 let divMain,
   divPIN,
   buttMenu,
@@ -12,6 +11,7 @@ let divMain,
   divPlayerAPickupCard,
   buttCheckWin;
 
+let game_mode;
 let isChatOpen = false;
 let messages = document.createElement("ul");
 
@@ -57,6 +57,7 @@ function greet() {
   buttPlayVSComputer.innerHTML = "VS Computer";
   divMain.appendChild(buttPlayVSComputer);
   buttPlayVSComputer.onclick = () => {
+    game_mode = "single";
     sendHttpGETReq("api/start_game_vs_computer", (res) => {
       data = JSON.parse(res);
       if (soundOn) openingSound.play();
@@ -67,8 +68,7 @@ function greet() {
 
   let buttJoinMultiplayerGame = document.createElement("button");
   buttJoinMultiplayerGame.className = "buttPlay";
-  buttJoinMultiplayerGame.innerHTML = "join friend";
-  divMain.appendChild(buttJoinMultiplayerGame);
+  buttJoinMultiplayerGame.innerHTML = "join game";
   buttJoinMultiplayerGame.onclick = () => {
     if (divMain.querySelector(".divPIN")) {
       divMain.removeChild(divPIN);
@@ -91,6 +91,7 @@ function greet() {
     buttAccept.src = "images/accept.png";
     buttAccept.onclick = () => {
       let pin = inputPIN.value;
+      game_mode = "double";
       io_client.emit("join-online-game", pin);
     };
 
@@ -113,6 +114,7 @@ function greet() {
   buttCreateMultiplayerGame.className = "buttPlay";
   buttCreateMultiplayerGame.innerHTML = "invite friend";
   divMain.appendChild(buttCreateMultiplayerGame);
+  divMain.appendChild(buttJoinMultiplayerGame);
   buttCreateMultiplayerGame.onclick = () => {
     if (divMain.querySelector(".divPIN")) {
       divMain.removeChild(divPIN);
@@ -160,15 +162,45 @@ function init() {
   cleanElement(divMain);
   let buttQuit = document.createElement("button");
   buttQuit.innerHTML = "quit";
+  buttQuit.id = "buttQuit";
   buttQuit.className = "buttGame";
   if (!document.body.contains(buttQuit)) document.body.appendChild(buttQuit);
   buttQuit.onclick = (ev) => {
-    sendHttpGETReq("api/quit", (res) => {
-      // data = JSON.parse(res);
-      document.body.removeChild(ev.target);
+    let quitDiv = document.createElement("div");
+    quitDiv.className = "divPop divPopQuit";
+    let h1 = document.createElement("h1");
+    h1.innerHTML = "Quit game?";
+    let buttY = document.createElement("button");
+    let buttN = document.createElement("button");
+    buttY.className = "buttGame";
+    buttN.className = "buttGame";
+    buttY.innerHTML = "Yes";
+    buttY.onclick = () => {
+      switch (game_mode) {
+        case "single":
+          sendHttpGETReq("api/quit");
+          break;
+        case "double":
+          io_client.emit("quit");
+          let chat = document.querySelector("#chat");
+          if (chat) {
+            document.body.removeChild(chat);
+          }
+          break;
+      }
+      document.body.removeChild(quitDiv);
+      document.body.removeChild(buttQuit);
       cleanElement(divMain);
       greet();
-    });
+    };
+    buttN.innerHTML = "No";
+    buttN.onclick = () => {
+      document.body.removeChild(quitDiv);
+    };
+    let pButts = document.createElement("p");
+    pButts.append(buttY, buttN);
+    quitDiv.append(h1, pButts);
+    document.body.appendChild(quitDiv);
   };
   divDeck = document.createElement("div");
   divDeck.id = "divDeck";

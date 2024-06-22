@@ -27,6 +27,7 @@ class RishPok {
     this.playerBPlayedWildCard = false;
     this.wildCardA = null;
     this.wildCardB = null;
+    this.gameMode = "double";
   }
   setDeck() {
     for (let i = 0; i < this.suits.length; i++) {

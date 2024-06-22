@@ -172,7 +172,7 @@ function render() {
         imgCard.classList.add("imgCardPlayerWild");
         imgCard.onclick = (ev) => {
           let divPop = document.createElement("div");
-          divPop.id = "divPop";
+          divPop.className = "divPop";
           let divPopLeft = document.createElement("div");
           divPopLeft.id = "divPopLeft";
           let hLeft = document.createElement("h1");
@@ -202,14 +202,14 @@ function render() {
           }
           let buttSwitch = document.createElement("button");
           buttSwitch.innerHTML = "Switch";
-          buttSwitch.className = "buttReset";
+          buttSwitch.className = "buttGame";
           let buttCancel = document.createElement("button");
           let divCancel = document.createElement("div");
           divCancel.className = "divCancel";
           let hOr = document.createElement("h1");
           hOr.innerHTML = "or ";
           buttCancel.innerHTML = "Cancel";
-          buttCancel.className = "buttReset";
+          buttCancel.className = "buttGame";
           divCancel.append(buttSwitch, hOr, buttCancel);
           divPopRight.append(hRight, innerDivPop, divCancel);
           divPop.append(divPopRight, divPopLeft); //IRONICALLY right is left and left is right.. dumb amirite..

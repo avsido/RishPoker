@@ -6,7 +6,7 @@ const localStorage = new LocalStorage("./scratch");
 
 const ipLH = "localhost";
 const ipHome = "10.0.0.2";
-const ipWork = "10.0.0.219";
+const ipWork = "10.0.0.205";
 const ipOfer = "";
 
 let io_server;
@@ -15,7 +15,6 @@ let games;
 let game = {};
 let currentGame = {};
 let rishPok;
-let chatFriend;
 let drawnCard;
 let wildCardA;
 let wildCardB;
@@ -29,7 +28,7 @@ if (localStorage.getItem("games")) {
 function startServer(server) {
   io_server = new Server(server, {
     cors: {
-      origin: "http://" + ipHome + ":8080",
+      origin: "*",
       methods: ["GET", "POST"],
     },
   });
@@ -57,6 +56,8 @@ function startServer(server) {
         localStorage.setItem("games", JSON.stringify(games));
 
         rishPok = new RishPokMulti();
+
+        game_mode = rishPok.gameMode;
 
         currentGame.playerACards = rishPok.playerACards;
         currentGame.playerBCards = rishPok.playerBCards;
@@ -271,6 +272,21 @@ function startServer(server) {
 
     socket.on("chat-message", (msg, senderId) => {
       io_server.emit("chat-message", msg, senderId);
+    });
+    socket.on("quit", () => {
+      let winner;
+      if (socket.id == game.playerA) {
+        winner = game.playerB;
+      } else {
+        winner = game.playerA;
+      }
+      io_server.to(winner).emit("opponent-quit");
+      game = {};
+      currentGame = {};
+      rishPok = {};
+      drawnCard = {};
+      wildCardA = {};
+      wildCardB = {};
     });
   });
 

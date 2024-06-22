@@ -24,6 +24,7 @@ class RishPok {
     this.shuffleDeck();
     this.dealHands();
     this.playerATurn = true;
+    this.gameMode = "single";
   }
   setDeck() {
     for (let i = 0; i < this.suits.length; i++) {

@@ -6,13 +6,13 @@ const socketServer = require("./socket_server");
 
 const ipLH = "localhost";
 const ipHome = "10.0.0.2";
-const ipWork = "10.0.0.219";
+const ipWork = "10.0.0.205";
 const ipOfer = "";
 
 function startServer(actions) {
   const server = http.createServer((req, res) => {
     //////////////////////////////////////////////////////////////////
-    res.setHeader("Access-Control-Allow-Origin", "http://" + ipHome + ":8080");
+    res.setHeader("Access-Control-Allow-Origin", "http://" + ipWork + ":8080");
     res.setHeader(
       "Access-Control-Allow-Methods",
       "GET, POST, PUT, DELETE, OPTIONS"
@@ -46,8 +46,8 @@ function startServer(actions) {
         ".css": "text/css",
         ".js": "text/javascript",
         ".png": "image/png",
-        jpg: "image/jpg",
-        jpeg: "image/jpeg",
+        ".jpg": "image/jpg",
+        ".jpeg": "image/jpeg",
         ".gif": "image/gif",
         ".ogg": "audio/ogg",
         ".wav": "audio/wav",

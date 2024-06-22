@@ -1,9 +1,9 @@
 const ipLH = "localhost";
 const ipHome = "10.0.0.2";
-const ipWork = "10.0.0.219";
+const ipWork = "10.0.0.205";
 const ipOfer = "";
 
-const io_client = io.connect("http://" + ipHome + ":8080");
+const io_client = io.connect("http://" + ipWork + ":8080");
 
 io_client.on("connect", function () {
   console.log("client connected to server");
@@ -77,12 +77,40 @@ io_client.on("chat-message", function (data) {
   }
   const { msg, senderId } = data;
   const messagePrefix = senderId === io_client.id ? "you: " : "opponent: ";
-  appendMessage(`${messagePrefix}${msg}`);
+  let span = document.createElement("span");
+  span.innerText = messagePrefix;
+  appendMessage(span, msg);
 });
 
-function appendMessage(message) {
+io_client.on("opponent-quit", () => {
+  let winDiv = document.createElement("div");
+  winDiv.className = "divPop divPopQuit";
+  let h1 = document.createElement("h1");
+  h1.innerHTML = "Opponent quit, You win!";
+  let okButt = document.createElement("button");
+  okButt.className = "buttGame";
+  okButt.innerHTML = "OK";
+  okButt.onclick = () => {
+    let chat = document.querySelector("#chat");
+    if (chat) {
+      document.body.removeChild(chat);
+    }
+    let buttQuit = document.querySelector("#buttQuit");
+    if (buttQuit) {
+      document.body.removeChild(buttQuit);
+    }
+    document.body.removeChild(winDiv);
+    cleanElement(divMain);
+    greet();
+  };
+  winDiv.append(h1, okButt);
+  document.body.appendChild(winDiv);
+});
+
+function appendMessage(name, msg) {
   const item = document.createElement("li");
-  item.textContent = message;
-  messages.appendChild(item);
+  item.style.display = "inline-block";
+  item.textContent = "~ " + msg;
+  messages.append(name, item);
   window.scrollTo(0, document.body.scrollHeight);
 }

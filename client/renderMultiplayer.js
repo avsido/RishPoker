@@ -131,7 +131,7 @@ function renderMultiplayer() {
             imgCard.classList.add("imgCardPlayerWild");
             imgCard.onclick = (ev) => {
               let divPop = document.createElement("div");
-              divPop.id = "divPop";
+              divPop.className = "divPop";
               let divPopLeft = document.createElement("div");
               divPopLeft.id = "divPopLeft";
               let hLeft = document.createElement("h1");

@@ -17,6 +17,7 @@ near future TO DO:
     - clear history (?)
     - strange incident on Bar's computer - consult
     - color first word
+    - LOOK INTO DOT RE-APPEARANCE
 6. rule out PIN numbers already in 'games' (multi)
 7. add poker hands hierarchy in info
 8. make it so that player who quits game counts as loser (multi)
