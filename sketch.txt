@@ -11,18 +11,19 @@ near future TO DO:
 5. add chat? (multi)
     - text font D~O~N~E
     - scroller D~O~N~E
-    - send button
+    - send button D~O~N~E
     - reminder div (pink circle) D~O~N~E 
     - chat butt D~O~N~E
     - clear history (?)
     - strange incident on Bar's computer - consult
-    - color first word
+    - color first word D~O~N~E
     - LOOK INTO DOT RE-APPEARANCE
-6. rule out PIN numbers already in 'games' (multi)
+6. make PIN numbers to be 3 digits and 3 letters and rule out PIN numbers already in 'games' (multi)
 7. add poker hands hierarchy in info
-8. make it so that player who quits game counts as loser (multi)
+8. make it so that player who quits game counts as loser (multi) D~O~N~E
 9. re-think opening sound D~O~N~E
-10. go through images/sounds folders and lose un-used files
+10. go through images/sounds folders and lose un-used files D~O~N~E
+11. make units uniform on all computer screens.
 
 for CR w/Bar:
 1. code readability, verbose-ness, sense-of-it-all

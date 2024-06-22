@@ -326,11 +326,18 @@ function openSideMenu() {
             let pokerHands = document.createElement("img");
             pokerHands.src = "images/poker_hands_rankings.jpg";
             pokerHands.className = "pokerHands";
+            let quitButt = document.createElement("button");
+            quitButt.innerHTML = "X";
+            quitButt.className = "buttGame buttPokerHands";
+            quitButt.onclick = (ev) => {
+              document.body.removeChild(ev.target);
+              document.body.removeChild(pokerHands);
+            };
+            document.body.appendChild(quitButt);
             document.body.appendChild(pokerHands);
           } else {
             sendHttpGETReq("/api" + menuItems[i].HttpRequest, (res) => {
               let content = JSON.parse(res);
-              document.body.removeChild(divMenu);
               let contentBox = document.createElement("div");
               contentBox.className = "divMenu";
               contentBox.id = "contentBox";
@@ -342,10 +349,12 @@ function openSideMenu() {
               buttEsc.onclick = () => {
                 document.body.removeChild(contentBox);
               };
+
               contentBox.appendChild(buttEsc);
               document.body.appendChild(contentBox);
             });
           }
+          document.body.removeChild(divMenu);
         };
         divMenu.appendChild(pMenu);
       }
