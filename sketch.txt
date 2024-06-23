@@ -25,6 +25,9 @@ near future TO DO:
 10. go through images/sounds folders and lose un-used files D~O~N~E
 11. make units uniform on all computer screens.
 
+
+
+
 for CR w/Bar:
 1. code readability, verbose-ness, sense-of-it-all
 2. server integrity -- fuckin attack it

@@ -1,6 +1,7 @@
 const ipLH = "localhost";
 const ipHome = "10.0.0.2";
 const ipWork = "10.0.0.205";
+const ipShakury = "192.168.50.81";
 const ipOfer = "";
 
 const io_client = io.connect("http://" + ipWork + ":8080");
@@ -73,6 +74,7 @@ io_client.on("chat-message", function (data) {
   if (!isChatOpen) {
     let messageDot = document.createElement("div");
     messageDot.id = "messageDot";
+    chatMessage.play();
     chat.appendChild(messageDot);
   }
   const { msg, senderId } = data;
@@ -91,14 +93,8 @@ io_client.on("opponent-quit", () => {
   okButt.className = "buttGame";
   okButt.innerHTML = "OK";
   okButt.onclick = () => {
-    let chat = document.querySelector("#chat");
-    if (chat) {
-      document.body.removeChild(chat);
-    }
-    let buttQuit = document.querySelector("#buttQuit");
-    if (buttQuit) {
-      document.body.removeChild(buttQuit);
-    }
+    removeElementByQuery("#chat");
+    removeElementByQuery("#buttQuit");
     document.body.removeChild(winDiv);
     cleanElement(divMain);
     greet();

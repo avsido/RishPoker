@@ -55,7 +55,7 @@ body{
 .buttNav:hover{
     box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
 }
-.divMenu{
+.menu{
     z-index: 999;
     background-color: rgba(22, 21, 21, 0.473);
     box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
@@ -73,7 +73,7 @@ body{
     flex-direction: column;
 }
 
-.divMenu p{
+.menu p{
     color: gold;
     font-size: 2.2vh;
     background-color: #35654d;
@@ -82,16 +82,16 @@ body{
     padding:5px;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
-.divMenu p:hover{
+.menu p:hover{
     background-color: rgba(176, 166, 166, 0.473);
     
 }
-.divMenu h3{
+.menu h3{
     color: gold;
     font-size: 2.2vh;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
-.divMenu button{
+.menu button{
     width: 20px;
     height: 20px;
     position:absolute;
@@ -103,7 +103,7 @@ body{
     border-radius: 2px;
     background-color: grey;
 }
-.divMenu button:hover{
+.menu button:hover{
     color: white;
 }
 #divMain{
@@ -649,15 +649,6 @@ h1, h2, h3, h4{
     margin: 0px;
     margin-top:-10px;
     padding: 0px;
-}
-
-.pokerHands{
-    position: absolute;
-    top: 65px;
-    left: 25px;
-    height: 85%; 
-    box-shadow: 15px 15px 5px rgba(0, 0, 0, 0.5);
-    border-radius: 20px;
 }
 
 .buttPokerHands{

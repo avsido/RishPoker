@@ -7,6 +7,7 @@ const socketServer = require("./socket_server");
 const ipLH = "localhost";
 const ipHome = "10.0.0.2";
 const ipWork = "10.0.0.205";
+const ipShakury = "192.168.50.81";
 const ipOfer = "";
 
 function startServer(actions) {

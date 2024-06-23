@@ -4,11 +4,6 @@ const { LocalStorage } = require("node-localstorage");
 const RishPokMulti = require("./RishPokMulti");
 const localStorage = new LocalStorage("./scratch");
 
-const ipLH = "localhost";
-const ipHome = "10.0.0.2";
-const ipWork = "10.0.0.205";
-const ipOfer = "";
-
 let io_server;
 let pendingGames = {};
 let games;

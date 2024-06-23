@@ -12,6 +12,7 @@ let divMain,
   buttCheckWin;
 
 let game_mode;
+let isSideMenuOpen = false;
 let isChatOpen = false;
 let messages = document.createElement("ul");
 
@@ -41,6 +42,9 @@ let wildCardSound = new Howl({
 });
 let openingSound = new Howl({
   src: ["sounds/opening.mp3"],
+});
+let chatMessage = new Howl({
+  src: ["sounds/chat_message.mp3"],
 });
 
 //greet screen func
@@ -160,11 +164,12 @@ function greet() {
 // init func
 function init() {
   cleanElement(divMain);
+  removeElementByQuery("buttQuit");
   let buttQuit = document.createElement("button");
   buttQuit.innerHTML = "quit";
   buttQuit.id = "buttQuit";
   buttQuit.className = "buttGame";
-  if (!document.body.contains(buttQuit)) document.body.appendChild(buttQuit);
+
   buttQuit.onclick = (ev) => {
     let quitDiv = document.createElement("div");
     quitDiv.className = "divPop divPopQuit";
@@ -182,10 +187,7 @@ function init() {
           break;
         case "double":
           io_client.emit("quit");
-          let chat = document.querySelector("#chat");
-          if (chat) {
-            document.body.removeChild(chat);
-          }
+          removeElementByQuery("#chat");
           break;
       }
       document.body.removeChild(quitDiv);
@@ -303,63 +305,61 @@ function renderInfoScore() {
 }
 
 function openSideMenu() {
-  let menuAlreadyOpen = document.body.querySelector("#divMenu");
-  let secondMenuAlreadyOpen = document.body.querySelector("#contentBox");
-  if (menuAlreadyOpen) {
-    document.body.removeChild(menuAlreadyOpen);
-  } else if (secondMenuAlreadyOpen) {
-    document.body.removeChild(secondMenuAlreadyOpen);
-  } else {
-    let divMenu = document.createElement("div");
-    divMenu.className = "divMenu";
-    divMenu.id = "divMenu";
-    document.body.appendChild(divMenu);
+  if (isSideMenuOpen) {
+    removeElementByQuery("divMenu");
+    removeElementByQuery("contentBox");
 
-    sendHttpGETReq("api/get_menu_items", (res) => {
-      menuItems = JSON.parse(res);
-      for (let i = 0; i < menuItems.length; i++) {
-        let pMenu = document.createElement("p");
-        pMenu.className = "pMenu";
-        pMenu.innerHTML = "> " + menuItems[i].name + "";
-        pMenu.onclick = () => {
-          if (menuItems[i].HttpRequest == "none") {
-            let pokerHands = document.createElement("img");
-            pokerHands.src = "images/poker_hands_rankings.jpg";
-            pokerHands.className = "pokerHands";
-            let quitButt = document.createElement("button");
-            quitButt.innerHTML = "X";
-            quitButt.className = "buttGame buttPokerHands";
-            quitButt.onclick = (ev) => {
-              document.body.removeChild(ev.target);
-              document.body.removeChild(pokerHands);
-            };
-            document.body.appendChild(quitButt);
-            document.body.appendChild(pokerHands);
-          } else {
-            sendHttpGETReq("/api" + menuItems[i].HttpRequest, (res) => {
-              let content = JSON.parse(res);
-              let contentBox = document.createElement("div");
-              contentBox.className = "divMenu";
-              contentBox.id = "contentBox";
-              let h3 = document.createElement("h3");
-              h3.innerHTML = content;
-              contentBox.appendChild(h3);
-              let buttEsc = document.createElement("button");
-              buttEsc.innerHTML = "X";
-              buttEsc.onclick = () => {
-                document.body.removeChild(contentBox);
-              };
-
-              contentBox.appendChild(buttEsc);
-              document.body.appendChild(contentBox);
-            });
-          }
-          document.body.removeChild(divMenu);
-        };
-        divMenu.appendChild(pMenu);
-      }
-    });
+    isSideMenuOpen = false;
+    return;
   }
+  isSideMenuOpen = true;
+  let divMenu = document.createElement("div");
+  divMenu.className = "menu";
+  divMenu.id = "divMenu";
+  document.body.appendChild(divMenu);
+
+  sendHttpGETReq("api/get_menu_items", (res) => {
+    menuItems = JSON.parse(res);
+    for (let i = 0; i < menuItems.length; i++) {
+      let pMenu = document.createElement("p");
+      pMenu.className = "pMenu";
+      pMenu.innerHTML = "> " + menuItems[i].name + "";
+      pMenu.onclick = () => {
+        let contentBox = document.createElement("div");
+        contentBox.className = "menu";
+        contentBox.id = "contentBox";
+        if (menuItems[i].HttpRequest == "none") {
+          let pokerHands = document.createElement("img");
+          pokerHands.src = "images/poker_hands_rankings.jpg";
+          pokerHands.id = "pokerHands";
+          let quitButt = document.createElement("button");
+          quitButt.innerHTML = "X";
+          quitButt.className = "buttGame buttPokerHands";
+          contentBox.append(pokerHands, quitButt);
+          quitButt.onclick = (ev) => {
+            removeElementByQuery("contentBox");
+          };
+        } else {
+          sendHttpGETReq("/api" + menuItems[i].HttpRequest, (res) => {
+            let content = JSON.parse(res);
+            let h3 = document.createElement("h3");
+            h3.innerHTML = content;
+            contentBox.appendChild(h3);
+            let buttEsc = document.createElement("button");
+            buttEsc.innerHTML = "X";
+            buttEsc.onclick = () => {
+              document.body.removeChild(contentBox);
+            };
+
+            contentBox.appendChild(buttEsc);
+          });
+        }
+        document.body.appendChild(contentBox);
+        document.body.removeChild(divMenu);
+      };
+      divMenu.appendChild(pMenu);
+    }
+  });
 }
 
 function toggleSound() {
@@ -374,56 +374,43 @@ function toggleSound() {
   imgButtSound.src = "images/sound_on.png";
 }
 
-function cleanElement(element) {
-  while (element.lastElementChild) {
-    element.removeChild(element.lastElementChild);
-  }
-}
-
 function chatWindow() {
-  if (document.body.querySelector("#chatBox")) {
-    var chatBox = document.body.querySelector("#chatBox");
-    document.body.removeChild(chatBox);
+  if (isChatOpen) {
     isChatOpen = false;
-    return; // REMOVE RED DOT~!!!
-  } else {
-    cleanElement(chat);
-    isChatOpen = true;
-    let chatBox = document.createElement("div");
-    chatBox.id = "chatBox";
-
-    let form = document.createElement("form");
-    form.id = "formChat";
-    form.action = "";
-
-    let send = document.createElement("button");
-    send.id = "sendButt";
-    send.type = "submit";
-    send.innerHTML = "Send";
-
-    send.onclick = (ev) => {
-      ev.preventDefault();
-      let msg = input.value;
-      if (msg == "") return;
-      io_client.emit("chat-message", { msg, senderId: io_client.id });
-      input.value = "";
-    };
-
-    let input = document.createElement("input");
-    input.id = "inputChat";
-    input.autocomplete = "off";
-
-    messages.id = "messagesChat";
-    chatBox.appendChild(messages);
-
-    form.append(send, input);
-    chatBox.appendChild(form);
-
-    document.body.appendChild(chatBox);
+    removeElementByQuery("chatBox");
+    return;
   }
-}
+  cleanElement(chat);
+  isChatOpen = true;
+  let chatBox = document.createElement("div");
+  chatBox.id = "chatBox";
 
-function elementExists(selector) {
-  let element = document.querySelector(selector);
-  return element !== null;
+  let form = document.createElement("form");
+  form.id = "formChat";
+  form.action = "";
+
+  let send = document.createElement("button");
+  send.id = "sendButt";
+  send.type = "submit";
+  send.innerHTML = "Send";
+
+  send.onclick = (ev) => {
+    ev.preventDefault();
+    let msg = input.value;
+    if (msg == "") return;
+    io_client.emit("chat-message", { msg, senderId: io_client.id });
+    input.value = "";
+  };
+
+  let input = document.createElement("input");
+  input.id = "inputChat";
+  input.autocomplete = "off";
+
+  messages.id = "messagesChat";
+  chatBox.appendChild(messages);
+
+  form.append(send, input);
+  chatBox.appendChild(form);
+
+  document.body.appendChild(chatBox);
 }
