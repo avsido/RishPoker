@@ -4,7 +4,7 @@ const ipWork = "10.0.0.205";
 const ipShakury = "192.168.50.81";
 const ipOfer = "";
 
-const io_client = io.connect("http://" + ipWork + ":8080");
+const io_client = io.connect("http://" + ipHome + ":8080");
 
 io_client.on("connect", function () {
   console.log("client connected to server");
