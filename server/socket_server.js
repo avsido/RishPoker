@@ -1,8 +1,11 @@
 const { Server } = require("socket.io");
-const comparePokerHands = require("./comparePokerHands");
 const { LocalStorage } = require("node-localstorage");
-const RishPokMulti = require("./RishPokMulti");
+const comparePokerHands = require("./comparePokerHands");
 const generatePIN = require("./generatePin");
+const isValidCardPlacement = require("./isValidCardPlacement");
+const changeAnons = require("./changeAnons");
+const RishPokMulti = require("./RishPokMulti");
+
 const localStorage = new LocalStorage("./scratch");
 
 let io_server;
@@ -303,34 +306,3 @@ module.exports = {
   startServer,
   getIo,
 };
-
-function isValidCardPlacement(cardsToCheck, wantedHand) {
-  if (isNaN(wantedHand)) {
-    return false;
-  }
-  wantedHand = parseInt(wantedHand);
-
-  if (!Number.isInteger(wantedHand)) {
-    return false;
-  }
-  if (wantedHand < 0 || wantedHand > 4) {
-    return false;
-  }
-
-  let temp = cardsToCheck[wantedHand].length;
-  for (let i = 0; i < cardsToCheck.length; i++) {
-    if (temp > cardsToCheck[i].length) {
-      return false;
-    }
-  }
-  return true;
-}
-
-function changeAnons(cardsListOpponent) {
-  for (let i = 0; i < cardsListOpponent.length; i++) {
-    if (cardsListOpponent[i].length > 4) {
-      cardsListOpponent[i].pop();
-      cardsListOpponent[i].push({ name: "anon_card" });
-    }
-  }
-}
