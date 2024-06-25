@@ -2,6 +2,7 @@ const { Server } = require("socket.io");
 const comparePokerHands = require("./comparePokerHands");
 const { LocalStorage } = require("node-localstorage");
 const RishPokMulti = require("./RishPokMulti");
+const generatePIN = require("./generatePin");
 const localStorage = new LocalStorage("./scratch");
 
 let io_server;
@@ -30,9 +31,8 @@ function startServer(server) {
 
   io_server.on("connect", (socket) => {
     socket.on("game-request-from-user", (msg) => {
-      let pin = parseInt(localStorage.getItem("lastGamePIN")) + 1;
+      let pin = generatePIN();
       pendingGames[pin + ""] = socket.id;
-      localStorage.setItem("lastGamePIN", pin);
       io_server.emit("game-request-response", pin);
     });
 

@@ -119,6 +119,7 @@ function greet() {
   buttCreateMultiplayerGame.innerHTML = "invite friend";
   divMain.appendChild(buttCreateMultiplayerGame);
   divMain.appendChild(buttJoinMultiplayerGame);
+  ///////////////////////////////////////////////////////////////////////////////////////
   buttCreateMultiplayerGame.onclick = () => {
     if (divMain.querySelector(".divPIN")) {
       divMain.removeChild(divPIN);

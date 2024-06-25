@@ -1,5 +1,5 @@
 overall TO DO:
-1. REACT NATIVE mobile app
+1. REACT NATIVE(?) mobile app
 2. add user+passwrd mechanism, with option to go over past games
 3. 
 
@@ -17,7 +17,7 @@ near future TO DO:
     - clear history (?)
     - strange incident on Bar's computer - consult
     - color first word D~O~N~E
-    - LOOK INTO DOT RE-APPEARANCE
+    - LOOK INTO DOT RE-APPEARANCE D~O~N~E
 6. make PIN numbers to be 3 digits and 3 letters and rule out PIN numbers already in 'games' (multi)
 7. add poker hands hierarchy in info
 8. make it so that player who quits game counts as loser (multi) D~O~N~E
