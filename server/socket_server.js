@@ -277,7 +277,7 @@ function startServer(server) {
       if (socket.id == game.playerA) {
         winner = game.playerB;
       } else {
-        winner = game.playerA;
+        winner = socket.id;
       }
       io_server.to(winner).emit("opponent-quit");
       game = {};

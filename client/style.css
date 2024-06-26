@@ -44,8 +44,8 @@ body{
     padding: 0.5vh;
     border: 2.5px solid rgb(113 59 59);
     border-radius: 7.5px;
-    width: 2vh;
-    height: 2vh;
+    width: 25px;
+    height: 25px;
     min-width: 2vw;
     min-height: 2vw;
     background-size: cover; 
@@ -137,7 +137,7 @@ h1, h2, h3, h4{
 }
 .buttPlay {
     height: auto;
-    width: 10vw;
+    width: 125px;
     padding: 7.5px;
     margin-top: 10px;
     background-color: rgba(0, 0, 0, 0.805);
@@ -154,9 +154,9 @@ h1, h2, h3, h4{
 }
 
 .buttStartChat{
-    position: absolute;
+    position: relative;
     bottom: 40px;
-    right: 110px;
+    left: 575px;
 }
 
 

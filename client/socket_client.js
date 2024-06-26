@@ -113,5 +113,5 @@ function appendMessage(name, msg) {
   item.style.display = "inline-block";
   item.textContent = "~ " + msg;
   messages.append(name, item);
-  window.scrollTo(0, document.body.scrollHeight);
+  messages.scrollTop = messages.scrollHeight;
 }

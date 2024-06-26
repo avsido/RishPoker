@@ -35,7 +35,7 @@ for CR w/Bar:
 4. effectiveness and actions I could spare
 5. sockets - am I doing it right?
 6. tips/recommendations
-7. 
+7. I'm having some trouble with resetting the game when player clicks 'quit', can you look into that?
 
 http://10.0.0.2:8080
 

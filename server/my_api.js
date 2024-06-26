@@ -3,7 +3,6 @@ const comparePokerHands = require("./comparePokerHands");
 let fs = require("fs");
 
 let playerBFinalCards = ["", "", "", "", ""];
-
 let data = {};
 let rp = {};
 // let computerPlay = 3;
@@ -166,8 +165,6 @@ exports.buttReplaceWildCard = (req, res, q) => {
 
 exports.quit = (req, res, q) => {
   rp = {};
-  data = {};
-  playerBFinalCards = ["", "", "", "", ""];
 };
 
 function computerTurnGPT(rp, data) {

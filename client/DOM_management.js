@@ -189,11 +189,15 @@ function init() {
       removeElementByQuery("chat");
       switch (game_mode) {
         case "single":
+          arrPlayerBHandMessages = [];
+          arrPlayerAHandMessages = [];
+          winArr = [];
           sendHttpGETReq("api/quit");
           break;
         case "double":
           io_client.emit("quit");
-          console.log(chat);
+          break;
+        default:
           break;
       }
       document.body.removeChild(divOverlay);
