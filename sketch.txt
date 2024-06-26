@@ -14,12 +14,12 @@ near future TO DO:
     - send button D~O~N~E
     - reminder div (pink circle) D~O~N~E 
     - chat butt D~O~N~E
-    - clear history (?)
+    - clear history (?) D~O~N~E
     - strange incident on Bar's computer - consult
     - color first word D~O~N~E
     - LOOK INTO DOT RE-APPEARANCE D~O~N~E
-6. make PIN numbers to be 3 digits and 3 letters and rule out PIN numbers already in 'games' (multi)
-7. add poker hands hierarchy in info
+6. make PIN numbers to be 3 digits and 3 letters and rule out PIN numbers already in 'games' (multi) D~O~N~E
+7. add poker hands hierarchy in info D~O~N~E
 8. make it so that player who quits game counts as loser (multi) D~O~N~E
 9. re-think opening sound D~O~N~E
 10. go through images/sounds folders and lose un-used files D~O~N~E

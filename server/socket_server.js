@@ -271,6 +271,7 @@ function startServer(server) {
     socket.on("chat-message", (msg, senderId) => {
       io_server.emit("chat-message", msg, senderId);
     });
+
     socket.on("quit", () => {
       let winner;
       if (socket.id == game.playerA) {

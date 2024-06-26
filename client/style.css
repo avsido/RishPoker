@@ -494,7 +494,7 @@ h1, h2, h3, h4{
     background-size: cover;                   
     background-repeat: no-repeat;                   
 }
-#divOverlay{
+.divOverlay{
     position: fixed;
     top: 0;
     left: 0;

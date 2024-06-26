@@ -170,8 +170,12 @@ function init() {
   buttQuit.innerHTML = "quit";
   buttQuit.id = "buttQuit";
   buttQuit.className = "buttGame";
+  document.body.appendChild(buttQuit);
 
   buttQuit.onclick = (ev) => {
+    let divOverlay = document.createElement("div");
+    divOverlay.className = "divOverlay";
+    document.body.appendChild(divOverlay);
     let quitDiv = document.createElement("div");
     quitDiv.className = "divPop divPopQuit";
     let h1 = document.createElement("h1");
@@ -182,22 +186,25 @@ function init() {
     buttN.className = "buttGame";
     buttY.innerHTML = "Yes";
     buttY.onclick = () => {
+      removeElementByQuery("chat");
       switch (game_mode) {
         case "single":
           sendHttpGETReq("api/quit");
           break;
         case "double":
           io_client.emit("quit");
-          removeElementByQuery("#chat");
+          console.log(chat);
           break;
       }
+      document.body.removeChild(divOverlay);
       document.body.removeChild(quitDiv);
-      document.body.removeChild(buttQuit);
+      document.body.removeChild(ev.target);
       cleanElement(divMain);
       greet();
     };
     buttN.innerHTML = "No";
     buttN.onclick = () => {
+      document.body.removeChild(divOverlay);
       document.body.removeChild(quitDiv);
     };
     let pButts = document.createElement("p");

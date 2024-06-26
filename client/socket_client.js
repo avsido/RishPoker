@@ -4,7 +4,7 @@ const ipWork = "10.0.0.205";
 const ipShakury = "192.168.50.81";
 const ipOfer = "";
 
-const io_client = io.connect("http://" + ipHome + ":8080");
+const io_client = io.connect("http://" + ipWork + ":8080");
 
 io_client.on("connect", function () {
   console.log("client connected to server");
@@ -85,6 +85,9 @@ io_client.on("chat-message", function (data) {
 });
 
 io_client.on("opponent-quit", () => {
+  let divOverlay = document.createElement("div");
+  divOverlay.className = "divOverlay";
+
   let winDiv = document.createElement("div");
   winDiv.className = "divPop divPopQuit";
   let h1 = document.createElement("h1");
@@ -92,15 +95,17 @@ io_client.on("opponent-quit", () => {
   let okButt = document.createElement("button");
   okButt.className = "buttGame";
   okButt.innerHTML = "OK";
+  winDiv.append(h1, okButt);
+  document.body.appendChild(divOverlay);
+  document.body.appendChild(winDiv);
   okButt.onclick = () => {
-    removeElementByQuery("#chat");
-    removeElementByQuery("#buttQuit");
+    removeElementByQuery("chat");
+    removeElementByQuery("buttQuit");
+    document.body.removeChild(divOverlay);
     document.body.removeChild(winDiv);
     cleanElement(divMain);
     greet();
   };
-  winDiv.append(h1, okButt);
-  document.body.appendChild(winDiv);
 });
 
 function appendMessage(name, msg) {

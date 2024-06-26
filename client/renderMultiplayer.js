@@ -148,7 +148,7 @@ function renderMultiplayer() {
               let innerDivPop = document.createElement("div");
               innerDivPop.id = "innerDivPop";
               let divOverlay = document.createElement("div");
-              divOverlay.id = "divOverlay";
+              divOverlay.className = "divOverlay";
               for (let k = 0; k < playerCards[i].length; k++) {
                 let img = document.createElement("img");
 
