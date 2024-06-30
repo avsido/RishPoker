@@ -1,6 +1,6 @@
 const ipLH = "localhost";
 const ipHome = "10.0.0.2";
-const ipWork = "10.0.0.205";
+const ipWork = "10.0.0.217";
 const ipShakury = "192.168.50.81";
 const ipOfer = "";
 
@@ -61,8 +61,7 @@ io_client.on("opponent-flip-ready", (opponentReadyToFlip) => {
 
 io_client.on("start-flippin", (data) => {
   ({ currentGame, socketWinArr } = data);
-  let arrPlayerBHandMessages = [];
-  let arrPlayerAHandMessages = [];
+
   for (let i = 0; i < 5; i++) {
     setTimeout(() => {
       renderWinMultiplayer(i);

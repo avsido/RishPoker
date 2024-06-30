@@ -11,15 +11,17 @@ let divMain,
   divPlayerAPickupCard,
   buttCheckWin;
 
-let game_mode;
+let gameMode;
 let isSideMenuOpen = false;
 let isChatOpen = false;
 let messages = document.createElement("ul");
-
 let soundOn = true;
 let data = {};
 let menuItems = {};
-let winArr = [];
+let winArr;
+
+let arrPlayerBHandMessages = [];
+let arrPlayerAHandMessages = [];
 
 //initiating sounds:
 let placeCardSound = new Howl({
@@ -61,10 +63,10 @@ function greet() {
   buttPlayVSComputer.innerHTML = "VS Computer";
   divMain.appendChild(buttPlayVSComputer);
   buttPlayVSComputer.onclick = () => {
-    game_mode = "single";
     sendHttpGETReq("api/start_game_vs_computer", (res) => {
       data = JSON.parse(res);
       if (soundOn) openingSound.play();
+      winArr = [];
       init();
       render();
     });
@@ -72,7 +74,7 @@ function greet() {
 
   let buttJoinMultiplayerGame = document.createElement("button");
   buttJoinMultiplayerGame.className = "buttPlay";
-  buttJoinMultiplayerGame.innerHTML = "join game";
+  buttJoinMultiplayerGame.innerHTML = "join friend";
   buttJoinMultiplayerGame.onclick = () => {
     if (divMain.querySelector(".divPIN")) {
       divMain.removeChild(divPIN);
@@ -95,7 +97,6 @@ function greet() {
     buttAccept.src = "images/accept.png";
     buttAccept.onclick = () => {
       let pin = inputPIN.value;
-      game_mode = "double";
       io_client.emit("join-online-game", pin);
     };
 
@@ -185,21 +186,27 @@ function init() {
     buttY.className = "buttGame";
     buttN.className = "buttGame";
     buttY.innerHTML = "Yes";
+    /////////////////////////////////////////////////////
     buttY.onclick = () => {
-      removeElementByQuery("chat");
-      switch (game_mode) {
+      switch (gameMode) {
         case "single":
-          arrPlayerBHandMessages = [];
-          arrPlayerAHandMessages = [];
-          winArr = [];
-          sendHttpGETReq("api/quit");
+          sendHttpGETReq("api/quit", (res) => {
+            if (res == "ok") {
+              arrPlayerBHandMessages = [];
+              arrPlayerAHandMessages = [];
+              cleanElement(divMain);
+              greet();
+            }
+          });
+
           break;
         case "double":
+          removeElementByQuery("chat");
           io_client.emit("quit");
           break;
-        default:
-          break;
       }
+
+      /////////////////////////////////////////////////////
       document.body.removeChild(divOverlay);
       document.body.removeChild(quitDiv);
       document.body.removeChild(ev.target);
@@ -232,11 +239,9 @@ function init() {
   divHeaders.id = "divHeaders";
 }
 
-let arrPlayerBHandMessages = [];
-let arrPlayerAHandMessages = [];
-
 function renderInfoScore() {
   cleanElement(divInfo);
+
   let handPlayerBName = data.results.handPlayerBName;
   let handPlayerAName = data.results.handPlayerAName;
   if (handPlayerBName.startsWith("Two Pairs")) {

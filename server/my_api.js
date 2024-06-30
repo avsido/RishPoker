@@ -2,9 +2,9 @@ const RishPok = require("./RishPok");
 const comparePokerHands = require("./comparePokerHands");
 let fs = require("fs");
 
-let playerBFinalCards = ["", "", "", "", ""];
-let data = {};
-let rp = {};
+let playerBFinalCards;
+let data;
+let rp;
 // let computerPlay = 3;
 
 exports.getMenuItems = (req, res, q) => {
@@ -42,14 +42,18 @@ exports.getAboutUsInfo = (req, res, q) => {
 // creates instance of game, and sends the player their starting hand and starting card
 // also sends computer's opening cards for presentation
 exports.startGameVSComputer = (req, res, q) => {
+  data = {};
   rp = new RishPok();
   ///
+  data.gameMode = rp.gameMode;
+  playerBFinalCards = ["", "", "", "", ""];
   data.playerBCards = rp.playerBCards;
   data.playerACards = rp.playerACards;
   data.drawnCard = rp.drawCard();
   data.cardsLeft = rp.deck.length;
   data.playerATurn = rp.playerATurn;
   data.results = {};
+
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
 };
@@ -164,7 +168,8 @@ exports.buttReplaceWildCard = (req, res, q) => {
 };
 
 exports.quit = (req, res, q) => {
-  rp = {};
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("ok");
 };
 
 function computerTurnGPT(rp, data) {

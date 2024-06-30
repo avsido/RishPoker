@@ -11,8 +11,8 @@ const localStorage = new LocalStorage("./scratch");
 let io_server;
 let pendingGames = {};
 let games;
-let game = {};
-let currentGame = {};
+let game;
+let currentGame;
 let rishPok;
 let drawnCard;
 let wildCardA;
@@ -43,6 +43,7 @@ function startServer(server) {
       if (!pendingGames[pin]) {
         io_server.emit("game-start", "invalid");
       } else {
+        game = {};
         game.playerA = pendingGames[pin]; //socketID for player A
         game.playerB = socket.id; //socketID for player B
         game.playerAFlipReady = false;
@@ -55,8 +56,8 @@ function startServer(server) {
 
         rishPok = new RishPokMulti();
 
-        game_mode = rishPok.gameMode;
-
+        currentGame = {};
+        currentGame.gameMode = rishPok.gameMode;
         currentGame.playerACards = rishPok.playerACards;
         currentGame.playerBCards = rishPok.playerBCards;
 
@@ -273,19 +274,19 @@ function startServer(server) {
     });
 
     socket.on("quit", () => {
-      let winner;
       if (socket.id == game.playerA) {
-        winner = game.playerB;
+        game.winner = game.playerB;
       } else {
-        winner = socket.id;
+        game.winner = game.playerA;
       }
-      io_server.to(winner).emit("opponent-quit");
-      game = {};
-      currentGame = {};
-      rishPok = {};
-      drawnCard = {};
-      wildCardA = {};
-      wildCardB = {};
+
+      io_server.to(game.winner).emit("opponent-quit");
+      // game = {};
+      // currentGame = {};
+      // rishPok = {};
+      // drawnCard = {};
+      // wildCardA = {};
+      // wildCardB = {};
     });
   });
 

@@ -1,4 +1,5 @@
 function render() {
+  gameMode = data.gameMode;
   cleanElement(divDeck);
   cleanElement(divPlayers);
   cleanElement(divPlayerB);
@@ -167,7 +168,7 @@ function render() {
           }
         }
       }
-
+      ///////////////////////////////////////////////////////
       if (data.cardsLeft == 1 && data.playerATurn && j == 4) {
         imgCard.classList.add("imgCardPlayerWild");
         imgCard.onclick = (ev) => {
@@ -192,7 +193,7 @@ function render() {
           divOverlay.className = "divOverlay";
           for (let k = 0; k < data.playerACards[i].length; k++) {
             let img = document.createElement("img");
-
+            ///////////////////////////////////////////////////////
             img.src =
               "images/" + data.playerACards[i][k].name.toLowerCase() + ".png";
             if (k == 4) {
@@ -232,6 +233,7 @@ function render() {
           buttCancel.onclick = () => {
             document.body.removeChild(divPop);
             document.body.removeChild(divOverlay);
+            render();
           };
         };
       }

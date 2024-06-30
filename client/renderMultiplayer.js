@@ -1,4 +1,5 @@
 function renderMultiplayer() {
+  gameMode = currentGame.gameMode;
   cleanElement(divDeck);
   cleanElement(divPlayers);
   cleanElement(divPlayerB);
