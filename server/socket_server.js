@@ -282,20 +282,28 @@ function startServer(server) {
     });
 
     socket.on("quit", () => {
+      let gameOver = {
+        msg: "opponent-quit, you won!",
+        type: 1, // type: opponent-quit
+      };
       if (socket.id == game.playerA) {
         game.winner = game.playerB;
       } else {
         game.winner = game.playerA;
       }
 
-      io_server.to(game.winner).emit("opponent-quit");
+      // io_server.to(game.winner).emit("opponent-quit");
+      io_server.to(game.winner).emit("game-ver", gameOver);
     });
 
     socket.on("game-over-show-winner", () => {
+      let winMsg = "you win!";
+      let loseMsg = "you lose!";
+      let tieMsg = "It's a tie";
+      let gameOverType = 0;
       if (game.resolution != 0) {
         let loser;
-        let winMsg = "you win!";
-        let loseMsg = "you lose!";
+
         if (game.resolution == 1) {
           game.winner = game.playerA;
           loser = game.playerB;
@@ -303,10 +311,12 @@ function startServer(server) {
           game.winner = game.playerB;
           loser = game.playerA;
         }
-        io_server.to(game.winner).emit("game-over", winMsg);
-        io_server.to(loser).emit("game-over", loseMsg);
+        io_server
+          .to(game.winner)
+          .emit("game-over", { msg: winMsg, gameOverType });
+        io_server.to(loser).emit("game-over", { msg: loseMsg, gameOverType });
       } else {
-        io_server.emit("game-over", "it's a tie");
+        io_server.emit("game-over", { msg: tieMsg, gameOverType });
       }
     });
   });

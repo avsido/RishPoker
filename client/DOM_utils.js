@@ -17,3 +17,9 @@ function removeElementByQuery(name, element = document.body) {
     elementToRemove.parentNode.removeChild(elementToRemove);
   }
 }
+
+function emptyArray(arr) {
+  while (arr.length > 0) {
+    arr.pop();
+  }
+}

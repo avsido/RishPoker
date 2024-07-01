@@ -83,31 +83,8 @@ io_client.on("chat-message", function (data) {
   appendMessage(span, msg);
 });
 
-io_client.on("opponent-quit", () => {
-  let divOverlay = document.createElement("div");
-  divOverlay.className = "divOverlay";
-
-  let winDiv = document.createElement("div");
-  winDiv.className = "divPop divPopQuit";
-  let h1 = document.createElement("h1");
-  h1.innerHTML = "Opponent quit, You win!";
-  let okButt = document.createElement("button");
-  okButt.className = "buttGame";
-  okButt.innerHTML = "OK";
-  winDiv.append(h1, okButt);
-  document.body.appendChild(divOverlay);
-  document.body.appendChild(winDiv);
-  okButt.onclick = () => {
-    removeElementByQuery("chat");
-    removeElementByQuery("buttQuit");
-    document.body.removeChild(divOverlay);
-    document.body.removeChild(winDiv);
-    cleanElement(divMain);
-    greet();
-  };
-});
-
-io_client.on("game-over", (msg) => {
+io_client.on("game-over", (gameOver) => {
+  ({ msg, gameOverType } = gameOver);
   let divOverlay = document.createElement("div");
   divOverlay.className = "divOverlay";
 
@@ -130,8 +107,8 @@ io_client.on("game-over", (msg) => {
     document.body.removeChild(winDiv);
     cleanElement(divMain);
     greet();
-    arrPlayerBHandMessages = [];
-    arrPlayerAHandMessages = [];
+    emptyArray(arrPlayerAHandMessages);
+    emptyArray(arrPlayerBHandMessages);
   };
 });
 

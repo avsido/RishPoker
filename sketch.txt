@@ -39,3 +39,5 @@ for CR w/Bar:
 
 http://10.0.0.2:8080
 
+1.7 good react lesson
+
