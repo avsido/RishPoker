@@ -67,7 +67,7 @@ function renderWinMultiplayer(index) {
         } else {
           // This will happen in the NEXT iteration of i
           if (socketWinArr[i].winner == lose && index > i) {
-            // if hand loses at all
+            // if hand loses AT ALL
             imgCard.src =
               "images/" + opponentCards[i][j].name.toLowerCase() + ".png";
             cardDiv.classList.add("cardDivPlayerBLostFinal");
@@ -156,7 +156,6 @@ function renderWinMultiplayer(index) {
   hHandPlayerA.innerHTML = "You got:";
   hHandPlayerA.style.color = "darkgrey";
   divInfoPlayerA.appendChild(hHandPlayerA);
-
   for (let i = 0; i < arrPlayerBHandMessages.length; i++) {
     let h2 = document.createElement("h2");
     h2.innerHTML = "&middot; " + arrPlayerBHandMessages[i];
@@ -172,6 +171,7 @@ function renderWinMultiplayer(index) {
   for (let i = 0; i < arrPlayerAHandMessages.length; i++) {
     let h2 = document.createElement("h2");
     h2.innerHTML = "&middot; " + arrPlayerAHandMessages[i];
+
     if (socketWinArr[i].winner == lose) {
       h2.style.color = "white";
     }
@@ -194,16 +194,20 @@ function renderWinMultiplayer(index) {
     for (let q = 0; q < socketWinArr.length; q++) {
       checkArr.push(socketWinArr[q].winner);
     }
-    if (countOnesAndMinusOnes(checkArr) == lose) {
+    let factor = countOnesAndMinusOnes(checkArr);
+    if (factor == lose) {
       hBottomLine.innerHTML = "You Lose..";
       if (soundOn) loseSound.play();
-    } else if (countOnesAndMinusOnes(checkArr) == win) {
+    } else if (factor == win) {
       hBottomLine.innerHTML = "You Win!";
       if (soundOn) winSound.play();
     } else {
       if (soundOn) tieSound.play();
       hBottomLine.innerHTML = "It's a tie.";
     }
+    setTimeout(() => {
+      io_client.emit("game-over-show-winner");
+    }, 1500);
   }
   divInfo.append(divInfoPlayerB, divInfoPlayerA, hBottomLine);
 }

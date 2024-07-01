@@ -14,6 +14,10 @@ io_client.on("disconnect", function () {
   console.log("client disconnected from server");
 });
 
+io_client.on("server-created-online-game", function (pin) {
+  console.log("in client manager >> PIN received from server:", pin);
+});
+
 io_client.on("game-start", (data) => {
   if (data == "invalid") {
     alert(data + " PIN number");
@@ -34,10 +38,6 @@ io_client.on("player-played", (data) => {
     if (soundOn) placeCardSound.play();
     renderMultiplayer();
   }
-});
-
-io_client.on("server-created-online-game", function (pin) {
-  console.log("in client manager >> PIN received from server:", pin);
 });
 
 io_client.on("player-played-wild-card", (data) => {
@@ -104,6 +104,32 @@ io_client.on("opponent-quit", () => {
     document.body.removeChild(winDiv);
     cleanElement(divMain);
     greet();
+  };
+});
+
+io_client.on("game-over", (msg) => {
+  let divOverlay = document.createElement("div");
+  divOverlay.className = "divOverlay";
+
+  let winDiv = document.createElement("div");
+  winDiv.className = "divPop divPopQuit";
+  let h1 = document.createElement("h1");
+  h1.innerHTML = msg;
+  let okButt = document.createElement("button");
+  okButt.className = "buttGame";
+  okButt.innerHTML = "OK";
+  winDiv.append(h1, okButt);
+  document.body.appendChild(divOverlay);
+  document.body.appendChild(winDiv);
+  okButt.onclick = () => {
+    removeElementByQuery("chat");
+    removeElementByQuery("buttQuit");
+    document.body.removeChild(divOverlay);
+    document.body.removeChild(winDiv);
+    cleanElement(divMain);
+    greet();
+    arrPlayerBHandMessages = [];
+    arrPlayerAHandMessages = [];
   };
 });
 

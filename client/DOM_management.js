@@ -203,6 +203,7 @@ function init() {
         case "double":
           removeElementByQuery("chat");
           io_client.emit("quit");
+          greet();
           break;
       }
 

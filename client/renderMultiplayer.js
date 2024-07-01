@@ -21,16 +21,19 @@ function renderMultiplayer() {
   let playerCards;
   let opponentCards;
   let playedWildCard;
+  let readyToFlip;
 
   if (currentGame.player == "a") {
     playerCards = currentGame.playerACards;
     opponentCards = currentGame.playerBCards;
     playedWildCard = currentGame.playerAPlayedWildCard;
+    readyToFlip = currentGame.playerAFlipReady;
   }
   if (currentGame.player == "b") {
     playerCards = currentGame.playerBCards;
     opponentCards = currentGame.playerACards;
     playedWildCard = currentGame.playerBPlayedWildCard;
+    readyToFlip = currentGame.playerBFlipReady;
   }
 
   let hStatus = document.createElement("h1");
@@ -226,10 +229,7 @@ function renderMultiplayer() {
     }
   };
 
-  if (
-    (!playedWildCard && currentGame.cardsLeft == 1) ||
-    currentGame.cardsLeft == 0
-  ) {
+  if (currentGame.cardsLeft <= 1) {
     divInfo.appendChild(buttCheckWin);
   }
 }

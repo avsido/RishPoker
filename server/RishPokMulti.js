@@ -23,8 +23,6 @@ class RishPok {
     this.setDeck();
     this.shuffleDeck();
     this.dealHands();
-    this.playerAPlayedWildCard = false;
-    this.playerBPlayedWildCard = false;
     this.wildCardA = null;
     this.wildCardB = null;
     this.gameMode = "double";

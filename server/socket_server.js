@@ -32,7 +32,7 @@ function startServer(server) {
     },
   });
 
-  io_server.on("connect", (socket) => {
+  io_server.on("connection", (socket) => {
     socket.on("game-request-from-user", (msg) => {
       let pin = generatePIN();
       pendingGames[pin + ""] = socket.id;
@@ -46,8 +46,7 @@ function startServer(server) {
         game = {};
         game.playerA = pendingGames[pin]; //socketID for player A
         game.playerB = socket.id; //socketID for player B
-        game.playerAFlipReady = false;
-        game.playerBFlipReady = false;
+
         game.winArr = [];
         game.winner = null;
         games[pin] = game;
@@ -61,8 +60,10 @@ function startServer(server) {
         currentGame.playerACards = rishPok.playerACards;
         currentGame.playerBCards = rishPok.playerBCards;
 
-        currentGame.playerAPlayedWildCard = rishPok.playerAPlayedWildCard;
-        currentGame.playerBPlayedWildCard = rishPok.playerBPlayedWildCard;
+        currentGame.playerAPlayedWildCard = false;
+        currentGame.playerBPlayedWildCard = false;
+        currentGame.playerAFlipReady = false;
+        currentGame.playerBFlipReady = false;
 
         let wildCards = rishPok.getWildCards();
         wildCardA = wildCards[0];
@@ -189,9 +190,11 @@ function startServer(server) {
       }
       if (currentGame.player == "a") {
         currentGame.playerAPlayedWildCard = true;
+        // currentGame.playerAFlipReady = true;
       }
       if (currentGame.player == "b") {
         currentGame.playerBPlayedWildCard = true;
+        // currentGame.playerBFlipReady = true;
       }
       playerCards[hand].splice(card, 1, drawnCard);
 
@@ -234,13 +237,15 @@ function startServer(server) {
     socket.on("client-ready-to-flip", () => {
       let player, opponent, opponentFlipReady;
       if (socket.id == game.playerA) {
-        game.playerAFlipReady = true;
-        opponentFlipReady = game.playerBFlipReady;
+        currentGame.playerAFlipReady = true;
+        // currentGame.playerAPlayedWildCard = true;
+        opponentFlipReady = currentGame.playerBFlipReady;
         player = game.playerA;
         opponent = game.playerB;
       } else {
-        game.playerBFlipReady = true;
-        opponentFlipReady = game.playerAFlipReady;
+        currentGame.playerBFlipReady = true;
+        // currentGame.playerBPlayedWildCard = true;
+        opponentFlipReady = currentGame.playerAFlipReady;
         player = game.playerB;
         opponent = game.playerA;
       }
@@ -253,6 +258,7 @@ function startServer(server) {
             )
           );
         }
+        game.winner = countOnesAndMinusOnes(game.winArr);
         currentGame.player = "a";
         io_server.to(game.playerA).emit("start-flippin", {
           currentGame,
@@ -263,6 +269,8 @@ function startServer(server) {
           currentGame,
           socketWinArr: game.winArr,
         });
+        ////////////////////////////////
+        ////////////////////////////////
       } else {
         io_server.to(opponent).emit("opponent-flip-ready", true);
         io_server.to(player).emit("opponent-flip-ready", false);
@@ -281,12 +289,25 @@ function startServer(server) {
       }
 
       io_server.to(game.winner).emit("opponent-quit");
-      // game = {};
-      // currentGame = {};
-      // rishPok = {};
-      // drawnCard = {};
-      // wildCardA = {};
-      // wildCardB = {};
+    });
+
+    socket.on("game-over-show-winner", () => {
+      if (game.winner != 0) {
+        let loser;
+        let winMsg = "you win!";
+        let loseMsg = "you lose!";
+        if (game.winner == 1) {
+          game.winner = game.playerA;
+          loser = game.playerB;
+        } else {
+          game.winner = game.playerB;
+          loser = game.playerA;
+        }
+        io_server.to(game.winner).emit("game-over", winMsg);
+        io_server.to(loser).emit("game-over", loseMsg);
+      } else {
+        io_server.emit("game-over", "it's a tie");
+      }
     });
   });
 
@@ -308,3 +329,16 @@ module.exports = {
   startServer,
   getIo,
 };
+
+function countOnesAndMinusOnes(winArr) {
+  let counter = 0;
+  let counterMinus = 0;
+  for (let i = 0; i < winArr.length; i++) {
+    if (winArr[i].winner == 1) counter += 1;
+    else if (winArr[i].winner == -1) counterMinus += 1;
+  }
+  if (counter > counterMinus) {
+    return -1;
+  } else if (counter < counterMinus) return 1;
+  return 0;
+}
