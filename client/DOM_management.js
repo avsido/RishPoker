@@ -55,7 +55,7 @@ function greet() {
   divMain = document.getElementById("divMain");
   divMain.style.flexDirection = "column";
   let img = document.createElement("img");
-  img.src = "images/flush.png";
+  img.src = "images/lemmy.png";
   img.id = "flush";
   divMain.appendChild(img);
   let buttPlayVSComputer = document.createElement("button");

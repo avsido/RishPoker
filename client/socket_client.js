@@ -4,7 +4,7 @@ const ipWork = "10.0.0.217";
 const ipShakury = "192.168.50.81";
 const ipOfer = "";
 
-const io_client = io.connect("http://" + ipWork + ":8080");
+const io_client = io.connect("http://" + ipHome + ":8080");
 
 io_client.on("connect", function () {
   console.log("client connected to server");
@@ -113,6 +113,7 @@ io_client.on("game-over", (msg) => {
 
   let winDiv = document.createElement("div");
   winDiv.className = "divPop divPopQuit";
+
   let h1 = document.createElement("h1");
   h1.innerHTML = msg;
   let okButt = document.createElement("button");
@@ -122,6 +123,7 @@ io_client.on("game-over", (msg) => {
   document.body.appendChild(divOverlay);
   document.body.appendChild(winDiv);
   okButt.onclick = () => {
+    console.log("quit");
     removeElementByQuery("chat");
     removeElementByQuery("buttQuit");
     document.body.removeChild(divOverlay);

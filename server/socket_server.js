@@ -258,7 +258,7 @@ function startServer(server) {
             )
           );
         }
-        game.winner = countOnesAndMinusOnes(game.winArr);
+        game.resolution = countOnesAndMinusOnes(game.winArr);
         currentGame.player = "a";
         io_server.to(game.playerA).emit("start-flippin", {
           currentGame,
@@ -292,11 +292,11 @@ function startServer(server) {
     });
 
     socket.on("game-over-show-winner", () => {
-      if (game.winner != 0) {
+      if (game.resolution != 0) {
         let loser;
         let winMsg = "you win!";
         let loseMsg = "you lose!";
-        if (game.winner == 1) {
+        if (game.resolution == 1) {
           game.winner = game.playerA;
           loser = game.playerB;
         } else {
