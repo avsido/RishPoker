@@ -1,5 +1,10 @@
 body{
-    background-color: #35654d;
+    /* background-color: #35654d; */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4)), url("images/bg/3.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh; 
+    margin: 0;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -34,7 +39,7 @@ body{
     font-weight: 400;
     font-style: normal;
     font-weight: bolder;
-    color: rgb(112, 22, 22);
+    color: rgb(94, 9, 9);
 }
 .topButts{
     display: flex;
@@ -42,12 +47,13 @@ body{
 .topButt{
     margin: 0.5vh;
     padding: 0.5vh;
-    border: 2.5px solid rgb(113 59 59);
+    border: 2.5px solid rgb(94, 9, 9);
     border-radius: 7.5px;
     width: 25px;
     height: 25px;
     min-width: 2vw;
     min-height: 2vw;
+    background-color: #032c18;
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat;
@@ -57,7 +63,7 @@ body{
     width:100%;
 }
 .topButt:hover{
-    box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
+    box-shadow:2.5px 2.5px 2px rgb(255 255 255 / 50%);
 }
 .menu{
     z-index: 999;
@@ -114,7 +120,7 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 10px solid rgb(113 59 59);
+    border: 10px solid rgb(153 0 0 / 39%);
     border-radius: 20px;
     width: 50vw;
     min-width: 800px;
@@ -148,7 +154,7 @@ h1, h2, h3, h4{
     border-radius: 3vh;
     border: none;
     cursor: pointer;
-    box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 2.5px rgba(255, 255, 255, 0.5);
 }
 .buttPlay:hover {
     color: gold;
@@ -168,7 +174,7 @@ h1, h2, h3, h4{
     z-index: 999;
     background-color: rgba(22, 21, 21, 0.473);
     box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
-    border: 2.5px solid rgb(113, 59, 59);
+    border: 2.5px solid rgb(153 0 0 / 39%);
     border-radius: 7.5px;
     min-width: 235px;
     max-width: 235px;
@@ -267,7 +273,7 @@ h1, h2, h3, h4{
     color: white;
 }
 #divInfo{
-    border-right: 4px solid rgb(113 59 59);
+    border-right: 4px solid rgb(153 0 0 / 39%);
     padding: 5px;
     padding-right:25px;
     text-align:center;
@@ -279,8 +285,8 @@ h1, h2, h3, h4{
     font-size: 12px;
 }
 #divDeck{
-    background-color: #21523a;
-    border: 4px solid rgb(113 59 59);
+    background-color: #032c18;
+    border: 4px solid rgb(153 0 0 / 57%);
     border-radius: 7.5px;
     display: flex;
     flex-direction: row;
@@ -358,7 +364,7 @@ h1, h2, h3, h4{
     justify-content: space-around;
 }
 .cardDiv{
-    background-color: #21523a;
+    background-color: #032c18;
     border: 1px solid rgba(219, 216, 216, 0.33);
     border-radius: 4px;
     height: 95%;
@@ -387,7 +393,7 @@ h1, h2, h3, h4{
     box-shadow: 0 0 0 0 transparent;
 }
 .cardDivPlayerAPlay:hover{
-    box-shadow: 0px 5px 12px silver;
+    box-shadow: 0px 5px 3px 1.5px #e36161;
 }
 .cardDivPlayerA > *:nth-child(n+2){
     margin-top: -60px;
