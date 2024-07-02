@@ -45,7 +45,7 @@ function startServer(server) {
         !pendingGames[pin] ||
         (game.hasOwnProperty("occupied") && game.occupied)
       ) {
-        io_server.emit("game-start", "invalid");
+        io_server.to(socket.id).emit("game-start", "invalid");
       } else {
         game.playerA = pendingGames[pin]; //socketID for player A
         game.playerB = socket.id; //socketID for player B
