@@ -160,7 +160,7 @@ function renderWinMultiplayer(index) {
     let h2 = document.createElement("h2");
     h2.innerHTML = "&middot; " + arrPlayerBHandMessages[i];
     if (socketWinArr[i].winner == lose) {
-      h2.style.color = "black";
+      h2.style.color = "grey";
     }
     if (socketWinArr[i].winner == win) {
       h2.style.color = "white";
@@ -176,7 +176,7 @@ function renderWinMultiplayer(index) {
       h2.style.color = "white";
     }
     if (socketWinArr[i].winner == win) {
-      h2.style.color = "black";
+      h2.style.color = "grey";
     }
     divInfoPlayerA.appendChild(h2);
   }
@@ -197,6 +197,7 @@ function renderWinMultiplayer(index) {
     let factor = countOnesAndMinusOnes(checkArr);
     if (factor == lose) {
       hBottomLine.innerHTML = "You Lose..";
+
       if (soundOn) loseSound.play();
     } else if (factor == win) {
       hBottomLine.innerHTML = "You Win!";

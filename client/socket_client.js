@@ -84,11 +84,15 @@ io_client.on("chat-message", function (data) {
 });
 
 io_client.on("game-over", (gameOver) => {
+  if (document.body.contains(document.getElementById("winDiv"))) {
+    return;
+  }
   ({ msg, gameOverType } = gameOver);
   let divOverlay = document.createElement("div");
   divOverlay.className = "divOverlay";
 
   let winDiv = document.createElement("div");
+  winDiv.id = "winDiv";
   winDiv.className = "divPop divPopQuit";
 
   let h1 = document.createElement("h1");
@@ -97,19 +101,19 @@ io_client.on("game-over", (gameOver) => {
   okButt.className = "buttGame";
   okButt.innerHTML = "OK";
   winDiv.append(h1, okButt);
-  document.body.appendChild(divOverlay);
-  document.body.appendChild(winDiv);
-  okButt.onclick = () => {
+  okButt.addEventListener("click", () => {
     console.log("quit");
     removeElementByQuery("chat");
     removeElementByQuery("buttQuit");
-    document.body.removeChild(divOverlay);
-    document.body.removeChild(winDiv);
     cleanElement(divMain);
     greet();
     emptyArray(arrPlayerAHandMessages);
     emptyArray(arrPlayerBHandMessages);
-  };
+    document.body.removeChild(divOverlay);
+    document.body.removeChild(winDiv);
+  });
+  // document.body.appendChild(divOverlay);
+  // document.body.appendChild(winDiv);
 });
 
 function appendMessage(name, msg) {

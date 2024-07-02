@@ -331,6 +331,7 @@ h1, h2, h3, h4{
     margin-right: -25px;
     width:25%;
     height: auto;
+    filter: hue-rotate(140deg);
 }
 #imgDeck{
     width: 25%;
@@ -352,7 +353,7 @@ h1, h2, h3, h4{
     color: gold;
 }
 #divPlayers > div{
-    border: 2px solid grey;
+    border: 1px solid #c0c0c057;
     border-radius: 7.5px;
     display: flex;
     flex-direction: row;
@@ -364,8 +365,8 @@ h1, h2, h3, h4{
     justify-content: space-around;
 }
 .cardDiv{
-    background-color: #032c18;
-    border: 1px solid rgba(219, 216, 216, 0.33);
+    background-color: #4f796436;
+    border: 0px solid rgba(219, 216, 216, 0.33);
     border-radius: 4px;
     height: 95%;
     margin:2px;
@@ -375,7 +376,7 @@ h1, h2, h3, h4{
     width: 60px;
 }
 .imgCardPlayerWild:hover{
-    box-shadow: 0 0 10px 5px gold!important;
+    box-shadow: 0 0 5px 4px gold!important;
 }
 .cardDivPlayerB{
     display: flex;
@@ -383,7 +384,7 @@ h1, h2, h3, h4{
 }
 .cardDivPlayerB > *:nth-child(n+2){
     margin-bottom: -60px;
-    box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 1px 5px 15px rgba(0, 0, 0, 0.5);
 }
 .cardDivPlayerA{
     display: flex;
@@ -393,7 +394,7 @@ h1, h2, h3, h4{
     box-shadow: 0 0 0 0 transparent;
 }
 .cardDivPlayerAPlay:hover{
-    box-shadow: 0px 5px 3px 1.5px #e36161;
+    box-shadow: 0px 0px 5px 4px #a31212;;
 }
 .cardDivPlayerA > *:nth-child(n+2){
     margin-top: -60px;

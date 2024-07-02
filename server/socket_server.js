@@ -293,14 +293,14 @@ function startServer(server) {
       }
 
       // io_server.to(game.winner).emit("opponent-quit");
-      io_server.to(game.winner).emit("game-ver", gameOver);
+      io_server.to(game.winner).emit("game-over", gameOver);
     });
 
     socket.on("game-over-show-winner", () => {
       let winMsg = "you win!";
       let loseMsg = "you lose!";
       let tieMsg = "It's a tie";
-      let gameOverType = 0;
+      let gameOverType = 0; // type: game-over
       if (game.resolution != 0) {
         let loser;
 
