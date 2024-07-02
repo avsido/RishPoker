@@ -47,7 +47,7 @@ body{
 .topButt{
     margin: 0.5vh;
     padding: 0.5vh;
-    border: 2.5px solid rgb(94, 9, 9);
+    border: 2.5px solid rgb(153 0 0);
     border-radius: 7.5px;
     width: 25px;
     height: 25px;
@@ -69,7 +69,7 @@ body{
     z-index: 999;
     background-color: rgba(22, 21, 21, 0.473);
     box-shadow: 0 7.5px 10px rgba(0, 0, 0, 0.5);
-    border: 2.5px solid rgb(113 59 59);
+    border: 2.5px solid rgb(153 0 0);
     border-radius: 7.5px;
     min-width: 12.5%;
     max-width: 15%;
@@ -77,8 +77,8 @@ body{
     min-height: 35%;
     position: fixed;
     padding: 1vh;
-    top: 8vh;
-    left: 0.5vh;
+    top: 12vh;
+    left: 1vh;
     display: flex;
     flex-direction: column;
 }
@@ -424,7 +424,7 @@ h1, h2, h3, h4{
 .divPop{
     box-shadow: 15px 15px 5px rgba(0, 0, 0, 0.5);
     background-color: #35654d;
-    border: 7.5px solid rgb(179 37 37);
+    border: 7.5px solid rgb(153 0 0);
     border-radius: 20px;
     display: flex;
     flex-direction: row;
@@ -460,7 +460,7 @@ h1, h2, h3, h4{
     margin:0px;
     padding:5px 25px;
     padding-bottom:20px;
-    border-left: 4px solid rgb(179 37 37);
+    border-left: 4px solid rgb(153 0 0);
 }
 #divPopLeft img{
     width:100%;
@@ -588,7 +588,7 @@ h1, h2, h3, h4{
     text-align:center;
 }
 .divInfoPlayers h1{
-    background-color: rgb(113 59 59);
+    background-color: rgb(153 0 0 / 39%);
     font-size:23px;
     width:100%;
   
@@ -623,7 +623,7 @@ h1, h2, h3, h4{
     max-height:100px;
     box-shadow: 15px 15px 5px rgba(0, 0, 0, 0.5);
     background-color: #21523a;
-    border: 7.5px solid rgb(179 37 37);
+    border: 7.5px solid rgb(153 0 0);
     border-radius: 15px;
     text-align: center;
     margin: 15px;

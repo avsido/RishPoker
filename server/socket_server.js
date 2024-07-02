@@ -282,18 +282,32 @@ function startServer(server) {
     });
 
     socket.on("quit", () => {
-      let gameOver = {
-        msg: "opponent-quit, you won!",
-        type: 1, // type: opponent-quit
-      };
+      let winMsg = "opponent quit, you win!";
+      let loseMsg = "you lose";
+      let gameOverType = 1; // type: opponent-quit
+      let loser;
       if (socket.id == game.playerA) {
         game.winner = game.playerB;
+        loser = game.playerA;
       } else {
         game.winner = game.playerA;
+        loser = game.playerB;
       }
+      io_server
+        .to(game.winner)
+        .emit("game-over", { msg: winMsg, gameOverType });
+      io_server.to(loser).emit("game-over", { msg: loseMsg, gameOverType });
+      // let gameOver = {
+      //   msg: "opponent-quit, you won!",
+      //   type: 1, // type: opponent-quit
+      // };
+      // if (socket.id == game.playerA) {
+      //   game.winner = game.playerB;
+      // } else {
+      //   game.winner = game.playerA;
+      // }
 
-      // io_server.to(game.winner).emit("opponent-quit");
-      io_server.to(game.winner).emit("game-over", gameOver);
+      // io_server.to(game.winner).emit("game-over", gameOver);
     });
 
     socket.on("game-over-show-winner", () => {

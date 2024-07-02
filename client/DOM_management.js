@@ -19,6 +19,7 @@ let soundOn = true;
 let data = {};
 let menuItems = {};
 let winArr;
+let renderInfo;
 
 let arrPlayerBHandMessages = [];
 let arrPlayerAHandMessages = [];
@@ -51,6 +52,7 @@ let chatMessage = new Howl({
 
 //greet screen func
 function greet() {
+  renderInfo = true;
   buttMenu = document.getElementById("buttMenu");
   divMain = document.getElementById("divMain");
   divMain.style.flexDirection = "column";
@@ -182,12 +184,14 @@ function init() {
     let h1 = document.createElement("h1");
     h1.innerHTML = "Quit game?";
     let buttY = document.createElement("button");
+    buttY.id = "buttY";
     let buttN = document.createElement("button");
     buttY.className = "buttGame";
     buttN.className = "buttGame";
     buttY.innerHTML = "Yes";
     /////////////////////////////////////////////////////
     buttY.onclick = () => {
+      renderInfo = false;
       switch (gameMode) {
         case "single":
           sendHttpGETReq("api/quit", (res) => {
@@ -279,7 +283,7 @@ function renderInfoScore() {
     let h2 = document.createElement("h2");
     h2.innerHTML = "&middot; " + arrPlayerBHandMessages[i];
     if (winArr[i] == -1) {
-      h2.style.color = "black";
+      h2.style.color = "grey";
     }
     if (winArr[i] == 1) {
       h2.style.color = "white";
@@ -294,7 +298,7 @@ function renderInfoScore() {
       h2.style.color = "white";
     }
     if (winArr[i] == 1) {
-      h2.style.color = "black";
+      h2.style.color = "grey";
     }
     divInfoPlayerA.appendChild(h2);
   }

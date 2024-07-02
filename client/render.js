@@ -23,10 +23,12 @@ function render() {
       for (let i = 0; i < data.playerBCards.length; i++) {
         setTimeout(() => {
           sendHttpGETReq("api/check_win?cardIndex=" + i, (res) => {
-            data = JSON.parse(res);
-            winArr.push(data.results.winner);
-            render();
-            renderInfoScore();
+            if (renderInfo) {
+              data = JSON.parse(res);
+              winArr.push(data.results.winner);
+              render();
+              renderInfoScore();
+            }
           });
         }, 2000 * i); //1750
       }

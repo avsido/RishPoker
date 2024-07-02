@@ -6,6 +6,9 @@ const ipOfer = "";
 
 const io_client = io.connect("http://" + ipHome + ":8080");
 
+let startFliipinActive = false;
+let gameOverActive = false;
+
 io_client.on("connect", function () {
   console.log("client connected to server");
 });
@@ -63,31 +66,28 @@ io_client.on("start-flippin", (data) => {
   ({ currentGame, socketWinArr } = data);
 
   for (let i = 0; i < 5; i++) {
-    setTimeout(() => {
-      renderWinMultiplayer(i);
-    }, 2000 * i);
+    if (!gameOverActive) {
+      setTimeout(() => {
+        if (!gameOverActive) {
+          renderWinMultiplayer(i);
+        }
+      }, 2000 * i);
+    }
   }
-});
-
-io_client.on("chat-message", function (data) {
-  if (!isChatOpen) {
-    let messageDot = document.createElement("div");
-    messageDot.id = "messageDot";
-    chatMessage.play();
-    chat.appendChild(messageDot);
-  }
-  const { msg, senderId } = data;
-  const messagePrefix = senderId === io_client.id ? "you: " : "opponent: ";
-  let span = document.createElement("span");
-  span.innerText = messagePrefix;
-  appendMessage(span, msg);
 });
 
 io_client.on("game-over", (gameOver) => {
   if (document.body.contains(document.getElementById("winDiv"))) {
     return;
   }
+  gameOverActive = true;
+
+  setTimeout(() => {
+    gameOverActive = true;
+  }, 150);
+
   ({ msg, gameOverType } = gameOver);
+
   let divOverlay = document.createElement("div");
   divOverlay.className = "divOverlay";
 
@@ -112,8 +112,22 @@ io_client.on("game-over", (gameOver) => {
     document.body.removeChild(divOverlay);
     document.body.removeChild(winDiv);
   });
-  // document.body.appendChild(divOverlay);
-  // document.body.appendChild(winDiv);
+  document.body.appendChild(divOverlay);
+  document.body.appendChild(winDiv);
+});
+
+io_client.on("chat-message", function (data) {
+  if (!isChatOpen) {
+    let messageDot = document.createElement("div");
+    messageDot.id = "messageDot";
+    chatMessage.play();
+    chat.appendChild(messageDot);
+  }
+  const { msg, senderId } = data;
+  const messagePrefix = senderId === io_client.id ? "you: " : "opponent: ";
+  let span = document.createElement("span");
+  span.innerText = messagePrefix;
+  appendMessage(span, msg);
 });
 
 function appendMessage(name, msg) {
