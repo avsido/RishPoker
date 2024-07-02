@@ -1,6 +1,6 @@
 body{
     /* background-color: #35654d; */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4)), url("images/bg/3.jpg");
+    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4)), url("images/bg/5.jpg");
     background-size: cover;
     background-position: center;
     height: 100vh; 
@@ -53,7 +53,7 @@ body{
     height: 25px;
     min-width: 2vw;
     min-height: 2vw;
-    background-color: #032c18;
+    background-color: #3580385e;
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat;
@@ -86,11 +86,12 @@ body{
 .menu p{
     color: gold;
     font-size: 2.2vh;
-    background-color: #35654d;
+    background-color: #4f796436;
+    cursor:pointer;
     border-radius: 2px;
     margin: 8px;
     padding: 5px;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: sans-serif;
 }
 .menu p:hover{
     background-color: rgba(176, 166, 166, 0.473);
@@ -384,7 +385,7 @@ h1, h2, h3, h4{
 }
 .cardDivPlayerB > *:nth-child(n+2){
     margin-bottom: -60px;
-    box-shadow: 1px 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 2px 4px rgb(0 0 0);
 }
 .cardDivPlayerA{
     display: flex;
@@ -398,7 +399,7 @@ h1, h2, h3, h4{
 }
 .cardDivPlayerA > *:nth-child(n+2){
     margin-top: -60px;
-    box-shadow: 1px -2px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px -2px 4px rgb(0 0 0);
 }
 #buttCheckWin{
     width: 80px;
@@ -413,17 +414,18 @@ h1, h2, h3, h4{
     position: relative;
     overflow: hidden;
     background-color:  gold;
-    box-shadow: 2px 2px 0px rgb(112, 22, 22), 0 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 10px 3px rgb(112, 22, 22), 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 #buttCheckWin:hover{
     color:red;
+    box-shadow: 0px 0px 10px 8px rgb(112, 22, 22), 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 #buttFlip:hover {
     transform: scale(1.15);
 }
 .divPop{
     box-shadow: 15px 15px 5px rgba(0, 0, 0, 0.5);
-    background-color: #35654d;
+    background-color: #032c18;
     border: 7.5px solid rgb(153 0 0);
     border-radius: 20px;
     display: flex;
@@ -487,12 +489,12 @@ h1, h2, h3, h4{
     width: 15%;
     height: 0%;
     margin: 2px 5px;
-    box-shadow: 5px 5px 5px #0e050594; 
-    filter: brightness(70%);
+    box-shadow: 5px 5px 4px 1px #0e0505cc; 
+    filter: brightness(40%);
     
 }
 #innerDivPop img:nth-child(5) {
-    box-shadow: 3px 3px 5px #ffd7008f;
+    box-shadow: 5px 5px 4px 1px #000000;
     width:19.5%;
     filter: brightness(100%);
     

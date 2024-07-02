@@ -19,7 +19,7 @@ let soundOn = true;
 let data = {};
 let menuItems = {};
 let winArr;
-let renderInfo;
+let renderInfo = true;
 
 let arrPlayerBHandMessages = [];
 let arrPlayerAHandMessages = [];
@@ -52,7 +52,6 @@ let chatMessage = new Howl({
 
 //greet screen func
 function greet() {
-  renderInfo = true;
   buttMenu = document.getElementById("buttMenu");
   divMain = document.getElementById("divMain");
   divMain.style.flexDirection = "column";
@@ -66,6 +65,7 @@ function greet() {
   divMain.appendChild(buttPlayVSComputer);
   buttPlayVSComputer.onclick = () => {
     sendHttpGETReq("api/start_game_vs_computer", (res) => {
+      renderInfo = true;
       data = JSON.parse(res);
       if (soundOn) openingSound.play();
       winArr = [];
@@ -191,9 +191,9 @@ function init() {
     buttY.innerHTML = "Yes";
     /////////////////////////////////////////////////////
     buttY.onclick = () => {
-      renderInfo = false;
       switch (gameMode) {
         case "single":
+          renderInfo = false;
           sendHttpGETReq("api/quit", (res) => {
             if (res == "ok") {
               arrPlayerBHandMessages = [];
@@ -271,7 +271,7 @@ function renderInfoScore() {
   divInfoPlayerB.className = "divInfoPlayers";
   let hHandPlayerB = document.createElement("h1");
   hHandPlayerB.innerHTML = "Opponent got:";
-  hHandPlayerB.style.color = "darkgrey";
+  hHandPlayerB.style.color = "silver";
   divInfoPlayerB.appendChild(hHandPlayerB);
   let divInfoPlayerA = document.createElement("div");
   divInfoPlayerA.className = "divInfoPlayers";

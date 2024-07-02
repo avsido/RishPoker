@@ -24,7 +24,7 @@ near future TO DO:
 9. re-think opening sound D~O~N~E
 10. go through images/sounds folders and lose un-used files D~O~N~E
 11. make units uniform on all computer screens.
-12. quitting while finale sequence wont stop render execution - fix
+12. quitting while finale sequence wont stop render execution - fix  D~O~N~E
 
 
 
