@@ -13,7 +13,7 @@ const ipOfer = "";
 function startServer(actions) {
   const server = http.createServer((req, res) => {
     //////////////////////////////////////////////////////////////////
-    res.setHeader("Access-Control-Allow-Origin", "http://" + ipHome + ":8080");
+    res.setHeader("Access-Control-Allow-Origin", "http://" + ipWork + ":8080");
     res.setHeader(
       "Access-Control-Allow-Methods",
       "GET, POST, PUT, DELETE, OPTIONS"

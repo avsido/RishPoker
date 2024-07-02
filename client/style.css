@@ -14,14 +14,13 @@ body{
     min-width: 100%;
 }
 .title{
-    width: 100%;
+    width: 95%;
     height: 8vh;
     display: flex;
     flex-direction: row;
-    margin-top: 0.5vh;
 }
 #mainTitle{
-    margin-left:-5vw;
+    margin-left:-8vw;
     display: flex;
     flex-direction: row;
     text-align: center;
@@ -47,7 +46,7 @@ body{
 .topButt{
     margin: 0.5vh;
     padding: 0.5vh;
-    border: 2.5px solid rgb(153 0 0);
+    border: 3px solid rgb(255 0 0 / 40%);
     border-radius: 7.5px;
     width: 25px;
     height: 25px;

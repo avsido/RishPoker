@@ -36,17 +36,20 @@ function startServer(server) {
     socket.on("game-request-from-user", (msg) => {
       let pin = generatePIN();
       pendingGames[pin + ""] = socket.id;
+      game = {};
       io_server.emit("game-request-response", pin);
     });
 
     socket.on("join-online-game", (pin) => {
-      if (!pendingGames[pin]) {
+      if (
+        !pendingGames[pin] ||
+        (game.hasOwnProperty("occupied") && game.occupied)
+      ) {
         io_server.emit("game-start", "invalid");
       } else {
-        game = {};
         game.playerA = pendingGames[pin]; //socketID for player A
         game.playerB = socket.id; //socketID for player B
-
+        game.occupied = true;
         game.winArr = [];
         game.winner = null;
         games[pin] = game;
