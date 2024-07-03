@@ -62,6 +62,7 @@ function greet() {
   let buttPlayVSComputer = document.createElement("button");
   buttPlayVSComputer.className = "buttPlay";
   buttPlayVSComputer.innerHTML = "VS Computer";
+  buttPlayVSComputer.id = "start_game_butt";
   divMain.appendChild(buttPlayVSComputer);
   buttPlayVSComputer.onclick = () => {
     sendHttpGETReq("api/start_game_vs_computer", (res) => {
