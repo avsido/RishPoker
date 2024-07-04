@@ -5,8 +5,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 import time
 
+ipLH = "localhost"
+ipHome = "10.0.0.2"
+ipWork = "10.0.0.217"
+ipShakury = "192.168.50.81"
+ipOfer = ""
+
 driver = webdriver.Chrome()
-driver.get("http://10.0.0.217:8080")
+driver.get("http://" +ipHome+ ":8080")
 
 try:
     def retry_click(element, max_attempts=5):
