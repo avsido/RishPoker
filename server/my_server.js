@@ -7,14 +7,25 @@ const socketServer = require("./socket_server");
 const ipLH = "localhost";
 const ipHome = "10.0.0.2";
 const ipHome2 = "10.0.0.6";
-const ipWork = "10.0.0.217";
 const ipShakury = "192.168.50.81";
 const ipOfer = "";
+const ipWork = "10.0.0.225";
+
+// process.env.NODE_ENV = "development";
+// process.env.NODE_ENV = "production";
+process.env.NODE_ENV = "test";
 
 function startServer(actions) {
   const server = http.createServer((req, res) => {
     //////////////////////////////////////////////////////////////////
-    res.setHeader("Access-Control-Allow-Origin", "http://" + ipHome2 + ":8080");
+    // res.setHeader("Access-Control-Allow-Origin", "*");
+    // res.setHeader("Access-Control-Allow-Origin", "http://" + ipWork + ":8080");
+    const allowedOrigin =
+      process.env.NODE_ENV === "test"
+        ? "https://rishponpoker.netlify.app/"
+        : "http://" + ipWork + ":8080";
+    res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+
     res.setHeader(
       "Access-Control-Allow-Methods",
       "GET, POST, PUT, DELETE, OPTIONS"

@@ -6,7 +6,7 @@ from selenium.common.exceptions import StaleElementReferenceException, TimeoutEx
 import time
 
 ipLH = "localhost"
-ipHome = "10.0.0.2"
+ipHome = "10.0.0.6"
 ipWork = "10.0.0.217"
 ipShakury = "192.168.50.81"
 ipOfer = ""

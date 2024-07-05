@@ -1,11 +1,12 @@
 const ipLH = "localhost";
 const ipHome = "10.0.0.2";
 const ipHome2 = "10.0.0.6";
-const ipWork = "10.0.0.217";
 const ipShakury = "192.168.50.81";
 const ipOfer = "";
+const ipWork = "10.0.0.225";
 
-const io_client = io.connect("http://" + ipHome2 + ":8080");
+// const io_client = io.connect("http://" + ipWork + ":8080");
+const io_client = io.connect("/");
 
 let startFliipinActive = false;
 let gameOverActive = false;
