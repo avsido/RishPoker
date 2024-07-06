@@ -8,7 +8,6 @@ const ipWork = "10.0.0.225";
 // const io_client = io.connect("http://" + ipWork + ":8080");
 const io_client = io.connect("/");
 
-let startFliipinActive = false;
 let gameOverActive = false;
 
 io_client.on("connect", function () {
