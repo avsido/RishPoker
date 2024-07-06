@@ -22,7 +22,7 @@ function startServer(actions) {
     // res.setHeader("Access-Control-Allow-Origin", "http://" + ipWork + ":8080");
     const allowedOrigin =
       process.env.NODE_ENV === "test"
-        ? "https://rishponpoker.netlify.app/"
+        ? "https://https://rishpoker.onrender.com/"
         : "http://" + ipWork + ":8080";
     res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
 
@@ -92,19 +92,6 @@ function startServer(actions) {
       }
       fs.readFile(filename, (err, data) => {
         if (err) {
-          if (err.code == "ENOENT") {
-            fs.readFile(
-              path.join(__dirname, "../client", "404.html", (err, data) => {
-                res.writeHead(404, { "Content-Type": "text/html" });
-                res.end(content, "utf8");
-                return;
-              })
-            );
-          } else {
-            res.writeHead(500);
-            res.end("Sorry, there was a problem: " + error.code + " ..\n");
-            return;
-          }
           res.writeHead(404, { "Content-Type": "text/plain" });
           res.end("file not found 404");
           return;
