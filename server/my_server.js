@@ -1,31 +1,17 @@
-let http = require("http");
-let url = require("url");
-let fs = require("fs");
-let path = require("path");
+const http = require("http");
+const url = require("url");
+const fs = require("fs");
+const path = require("path");
 const socketServer = require("./socket_server");
-
-const ipLH = "localhost";
-const ipHome = "10.0.0.2";
-const ipHome2 = "10.0.0.6";
-const ipShakury = "192.168.50.81";
-const ipOfer = "";
-const ipWork = "10.0.0.225";
-
-// process.env.NODE_ENV = "development";
-// process.env.NODE_ENV = "production";
-process.env.NODE_ENV = "test";
 
 function startServer(actions) {
   const server = http.createServer((req, res) => {
-    //////////////////////////////////////////////////////////////////
-    // res.setHeader("Access-Control-Allow-Origin", "*");
-    // res.setHeader("Access-Control-Allow-Origin", "http://" + ipWork + ":8080");
     const allowedOrigin =
       process.env.NODE_ENV === "test"
-        ? "https://https://rishpoker.onrender.com/"
-        : "http://" + ipWork + ":8080";
-    res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+        ? "http://https://rishpoker.onrender.com"
+        : "*";
 
+    res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
     res.setHeader(
       "Access-Control-Allow-Methods",
       "GET, POST, PUT, DELETE, OPTIONS"
@@ -37,12 +23,11 @@ function startServer(actions) {
       res.end();
       return;
     }
-    //////////////////////////////////////////////////////////////////
 
     let q = url.parse(req.url, true);
 
     if (q.pathname.startsWith("/api")) {
-      //dynamic content:
+      // Handle API requests
       let action = q.pathname.substring(4);
 
       if (!actions[action]) {
@@ -53,13 +38,13 @@ function startServer(actions) {
 
       actions[action](req, res, q);
     } else {
-      //static file:
-      let allowedContentTypes = {
+      // Serve static files
+      const allowedContentTypes = {
         ".html": "text/html",
         ".css": "text/css",
         ".js": "text/javascript",
         ".png": "image/png",
-        ".jpg": "image/jpg",
+        ".jpg": "image/jpeg",
         ".jpeg": "image/jpeg",
         ".gif": "image/gif",
         ".ogg": "audio/ogg",
@@ -67,44 +52,44 @@ function startServer(actions) {
         ".mp3": "audio/mp3",
       };
 
-      // Construct the path to the file
-      filename = null;
-      if (q.pathname == "/") {
-        filename = path.join(__dirname, "..", "client", "index.html");
-      } else {
-        filename = path.join(__dirname, "..", "client", q.pathname);
-      }
+      let filename = path.join(__dirname, "..", "client", q.pathname);
 
-      let indexOfDot = filename.lastIndexOf(".");
-      if (indexOfDot == -1) {
-        res.writeHead(400, { "Content-Type": "text/plain" });
-        res.end("bad file name **BAD-REQUEST**");
-        return;
-      }
-      let extension = filename.substring(indexOfDot);
-      let contentType = null;
-      if (allowedContentTypes[extension]) {
-        contentType = allowedContentTypes[extension];
-      } else {
-        res.writeHead(400, { "Content-Type": "text/plain" });
-        res.end("bad extension **BAD-REQUEST**");
-        return;
-      }
-      fs.readFile(filename, (err, data) => {
+      // Check if the file exists
+      fs.access(filename, fs.constants.F_OK, (err) => {
         if (err) {
           res.writeHead(404, { "Content-Type": "text/plain" });
           res.end("file not found 404");
           return;
         }
-        res.writeHead(200, { "Content-Type": contentType });
-        res.end(data);
+
+        let extension = path.extname(filename);
+        let contentType =
+          allowedContentTypes[extension] || "application/octet-stream";
+
+        fs.readFile(filename, (err, data) => {
+          if (err) {
+            res.writeHead(500, { "Content-Type": "text/plain" });
+            res.end("internal server error");
+            return;
+          }
+          res.writeHead(200, { "Content-Type": contentType });
+          res.end(data);
+        });
       });
     }
   });
+
   const PORT = process.env.PORT || 8080;
+
+  //for render.com purposes
   server.listen(PORT, () => {
-    console.log("Server is listening on port 8080");
+    console.log(`Server is listening on port ${PORT}`);
   });
+
+  // server.listen(PORT, () => {
+  //   console.log(`Server is listening on port ${PORT}`);
+  // });
+
   socketServer.startServer(server);
 }
 
