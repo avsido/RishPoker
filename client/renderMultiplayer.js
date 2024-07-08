@@ -21,19 +21,15 @@ function renderMultiplayer() {
   let playerCards;
   let opponentCards;
   let playedWildCard;
-  let readyToFlip;
 
+  console.log("render says: " + iAmFlipReady);
   if (currentGame.player == "a") {
     playerCards = currentGame.playerACards;
     opponentCards = currentGame.playerBCards;
-    playedWildCard = currentGame.playerAPlayedWildCard;
-    readyToFlip = currentGame.playerAFlipReady;
   }
   if (currentGame.player == "b") {
     playerCards = currentGame.playerBCards;
     opponentCards = currentGame.playerACards;
-    playedWildCard = currentGame.playerBPlayedWildCard;
-    readyToFlip = currentGame.playerBFlipReady;
   }
 
   let hStatus = document.createElement("h1");
@@ -61,7 +57,7 @@ function renderMultiplayer() {
       imgDrawnCard.id = "drawnCard";
       if (currentGame.cardsLeft == 1 || currentGame.cardsLeft == 0) {
         imgDrawnCard.style.marginLeft = "75px";
-        hStatus.innerHTML = "&middot; play wild card or flip";
+        hStatus.innerHTML = "&middot; play wild card or pass";
         if (currentGame.cardsLeft == 0) {
           imgDrawnCard.style.animation = "none";
           imgDrawnCard.style.width = "30%";
@@ -179,11 +175,19 @@ function renderMultiplayer() {
               document.body.appendChild(divOverlay);
               document.body.appendChild(divPop);
               buttSwitch.onclick = () => {
+                ///////////////////////////////////////////////////////////////////
                 document.body.removeChild(divPop);
                 document.body.removeChild(divOverlay);
                 cleanElement(divDeck);
                 divDeck.className = "divDeckFinal";
+
                 io_client.emit("place-wild-card", { hand: i, card: j });
+                if (iAmFlipReady) {
+                  io_client.emit("client-ready-to-flip");
+                }
+
+                iAmFlipReady = true;
+                ///////////////////////////////////////////////////////////////////
               };
               buttCancel.onclick = () => {
                 document.body.removeChild(divPop);
@@ -210,26 +214,28 @@ function renderMultiplayer() {
   divPlayers.append(hPlayerB, divPlayerB, hPlayerA, divPlayerA);
   divMain.appendChild(divPlayers);
 
-  buttCheckWin = document.createElement("button");
-  buttCheckWin.id = "buttCheckWin";
-  buttCheckWin.innerHTML = playedWildCard ? "flip!" : "ready to flip";
-  buttCheckWin.onclick = (ev) => {
+  buttPass = document.createElement("button");
+  buttPass.id = "buttCheckWin";
+  buttPass.innerHTML = "PASS";
+  buttPass.onclick = (ev) => {
+    ///////////////////////////////////////////////////////////////////
     divInfo.removeChild(ev.target);
     hCardsleft.innerHTML = " ";
     hStatus.innerHTML = "&middot; great, now wait for opponent response";
-    io_client.emit("client-ready-to-flip");
-
     let wildCards = Array.from(
       document.getElementsByClassName("imgCardPlayerWild")
     );
-
     for (let i = 0; i < wildCards.length; i++) {
       wildCards[i].onclick = null;
       wildCards[i].classList.remove("imgCardPlayerWild");
     }
+    iAmFlipReady = true;
+    io_client.emit("client-ready-to-flip");
+
+    ///////////////////////////////////////////////////////////////////
   };
 
-  if (currentGame.cardsLeft <= 1) {
-    divInfo.appendChild(buttCheckWin);
+  if (currentGame.cardsLeft <= 1 && !iAmFlipReady) {
+    divInfo.appendChild(buttPass);
   }
 }

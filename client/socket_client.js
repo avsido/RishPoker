@@ -30,6 +30,7 @@ io_client.on("game-start", (data) => {
     ({ currentGame, drawnCard, chatFriend } = data);
     init();
     renderMultiplayer();
+    console.log("client-socket says: " + iAmFlipReady);
   }
 });
 
@@ -54,13 +55,14 @@ io_client.on("player-played-wild-card", (data) => {
   }
 });
 
-io_client.on("opponent-flip-ready", (opponentReadyToFlip) => {
-  if (opponentReadyToFlip) {
-    let hOpponentReady = document.createElement("h1");
-    hOpponentReady.innerHTML = "&middot; your opponent is ready to flip";
-    hOpponentReady.className = "hOpponentReady";
-    divInfo.appendChild(hOpponentReady);
-  }
+io_client.on("opponent-flip-ready", () => {
+  let hOpponentReady = document.createElement("h1");
+  hOpponentReady.innerHTML = "&middot; your opponent is ready to flip";
+  hOpponentReady.className = "hOpponentReady";
+  divInfo.appendChild(hOpponentReady);
+  // if (opponentReadyToFlip) {
+
+  // }
 });
 
 io_client.on("start-flippin", (data) => {
@@ -84,8 +86,8 @@ io_client.on("game-over", (gameOver) => {
   gameOverActive = true;
 
   setTimeout(() => {
-    gameOverActive = true;
-  }, 150);
+    gameOverActive = false;
+  }, 5000);
 
   ({ msg, gameOverType } = gameOver);
 

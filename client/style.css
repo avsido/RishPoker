@@ -4,7 +4,6 @@ body{
     background-size: cover;
     background-position: center;
     height: 100vh; 
-    margin: 0;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -425,7 +424,7 @@ h1, h2, h3, h4{
 }
 
 .cardDivPlayerAPlay:hover{
-    box-shadow: 0px 0px 5px 4px #a31212;;
+    box-shadow: 0px 0px 5px 4px #ada9df;;
 }
 
 .cardDivPlayerA > *:nth-child(n+2){

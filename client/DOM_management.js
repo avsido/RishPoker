@@ -9,8 +9,9 @@ let divMain,
   divPlayerA,
   divInfo,
   divPlayerAPickupCard,
-  buttCheckWin;
+  buttPass;
 
+let iAmFlipReady;
 let gameMode;
 let isSideMenuOpen = false;
 let isChatOpen = false;
@@ -97,10 +98,12 @@ function greet() {
       inputPIN.style.color = "black";
     };
     let buttAccept = document.createElement("img");
+    buttAccept.className = "startDoubleGame";
     buttAccept.src = "images/accept.png";
     buttAccept.onclick = () => {
       let pin = inputPIN.value;
       io_client.emit("join-online-game", pin);
+      iAmFlipReady = false;
     };
 
     let buttCancel = document.createElement("img");
@@ -161,6 +164,7 @@ function greet() {
     divMain.appendChild(divPIN);
     io_client.emit("game-request-from-user");
     io_client.on("game-request-response", (pin) => {
+      iAmFlipReady = false;
       pPIN.innerHTML = pin;
     });
   };

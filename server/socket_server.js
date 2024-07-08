@@ -8,6 +8,7 @@ const RishPokMulti = require("./RishPokMulti");
 
 const localStorage = new LocalStorage("./scratch");
 
+let twoToTango;
 let io_server;
 let pendingGames = {};
 let games;
@@ -36,6 +37,7 @@ function startServer(server) {
     socket.on("game-request-from-user", (msg) => {
       let pin = generatePIN();
       pendingGames[pin + ""] = socket.id;
+      twoToTango = 0;
       game = {};
       io_server.emit("game-request-response", pin);
     });
@@ -47,6 +49,7 @@ function startServer(server) {
       ) {
         io_server.to(socket.id).emit("game-start", "invalid");
       } else {
+        twoToTango = 0;
         game.playerA = pendingGames[pin]; //socketID for player A
         game.playerB = socket.id; //socketID for player B
         game.occupied = true;
@@ -57,16 +60,10 @@ function startServer(server) {
         localStorage.setItem("games", JSON.stringify(games));
 
         rishPok = new RishPokMulti();
-
         currentGame = {};
         currentGame.gameMode = rishPok.gameMode;
         currentGame.playerACards = rishPok.playerACards;
         currentGame.playerBCards = rishPok.playerBCards;
-
-        currentGame.playerAPlayedWildCard = false;
-        currentGame.playerBPlayedWildCard = false;
-        currentGame.playerAFlipReady = false;
-        currentGame.playerBFlipReady = false;
 
         let wildCards = rishPok.getWildCards();
         wildCardA = wildCards[0];
@@ -130,7 +127,6 @@ function startServer(server) {
             .to(player)
             .emit("player-played", { currentGame: pseudoObj, drawnCard: null });
         }
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (currentGame.player == "a") {
           currentGame.player = "b";
         } else if (currentGame.player == "b") {
@@ -154,6 +150,7 @@ function startServer(server) {
 
     socket.on("place-wild-card", (data) => {
       // serious kefel kod ahead, couldnt shake it..
+
       let hand = data.hand;
       let card = data.card;
 
@@ -191,14 +188,7 @@ function startServer(server) {
         io_server.to(player).emit("player-played-wild-card", "invalid");
         return;
       }
-      if (currentGame.player == "a") {
-        currentGame.playerAPlayedWildCard = true;
-        // currentGame.playerAFlipReady = true;
-      }
-      if (currentGame.player == "b") {
-        currentGame.playerBPlayedWildCard = true;
-        // currentGame.playerBFlipReady = true;
-      }
+
       playerCards[hand].splice(card, 1, drawnCard);
 
       currentGame.cardsLeft = rishPok.deck.length;
@@ -210,6 +200,7 @@ function startServer(server) {
       } else {
         handsToPatch = pseudoObj.playerACards;
       }
+
       changeAnons(handsToPatch);
 
       io_server.to(player).emit("player-played-wild-card", {
@@ -235,48 +226,30 @@ function startServer(server) {
         currentGame: pseudoObj,
         drawnCard: drawnCardOpponent,
       });
+      twoToTango += 1;
+      if (twoToTango == 2) {
+        console.log("final seq from place-wild-card. counter: " + twoToTango);
+        return emitFinalSequence();
+      }
     });
 
     socket.on("client-ready-to-flip", () => {
-      let player, opponent, opponentFlipReady;
+      let player, opponent;
       if (socket.id == game.playerA) {
-        currentGame.playerAFlipReady = true;
-        // currentGame.playerAPlayedWildCard = true;
-        opponentFlipReady = currentGame.playerBFlipReady;
         player = game.playerA;
         opponent = game.playerB;
       } else {
-        currentGame.playerBFlipReady = true;
-        // currentGame.playerBPlayedWildCard = true;
-        opponentFlipReady = currentGame.playerAFlipReady;
         player = game.playerB;
         opponent = game.playerA;
       }
-      if (opponentFlipReady) {
-        for (let i = 0; i < 5; i++) {
-          game.winArr.push(
-            comparePokerHands(
-              currentGame.playerBCards[i],
-              currentGame.playerACards[i]
-            )
-          );
-        }
-        game.resolution = countOnesAndMinusOnes(game.winArr);
-        currentGame.player = "a";
-        io_server.to(game.playerA).emit("start-flippin", {
-          currentGame,
-          socketWinArr: game.winArr,
-        });
-        currentGame.player = "b";
-        io_server.to(game.playerB).emit("start-flippin", {
-          currentGame,
-          socketWinArr: game.winArr,
-        });
-        ////////////////////////////////
-        ////////////////////////////////
+      twoToTango += 1;
+      if (twoToTango == 2) {
+        console.log(
+          "final seq from client-ready-to-flip. counter: " + twoToTango
+        );
+        emitFinalSequence();
       } else {
-        io_server.to(opponent).emit("opponent-flip-ready", true);
-        io_server.to(player).emit("opponent-flip-ready", false);
+        io_server.to(opponent).emit("opponent-flip-ready");
       }
     });
 
@@ -300,17 +273,6 @@ function startServer(server) {
         .to(game.winner)
         .emit("game-over", { msg: winMsg, gameOverType });
       io_server.to(loser).emit("game-over", { msg: loseMsg, gameOverType });
-      // let gameOver = {
-      //   msg: "opponent-quit, you won!",
-      //   type: 1, // type: opponent-quit
-      // };
-      // if (socket.id == game.playerA) {
-      //   game.winner = game.playerB;
-      // } else {
-      //   game.winner = game.playerA;
-      // }
-
-      // io_server.to(game.winner).emit("game-over", gameOver);
     });
 
     socket.on("game-over-show-winner", () => {
@@ -368,4 +330,26 @@ function countOnesAndMinusOnes(winArr) {
     return -1;
   } else if (counter < counterMinus) return 1;
   return 0;
+}
+
+function emitFinalSequence() {
+  for (let i = 0; i < 5; i++) {
+    game.winArr.push(
+      comparePokerHands(
+        currentGame.playerBCards[i],
+        currentGame.playerACards[i]
+      )
+    );
+  }
+  game.resolution = countOnesAndMinusOnes(game.winArr);
+  currentGame.player = "a";
+  io_server.to(game.playerA).emit("start-flippin", {
+    currentGame,
+    socketWinArr: game.winArr,
+  });
+  currentGame.player = "b";
+  io_server.to(game.playerB).emit("start-flippin", {
+    currentGame,
+    socketWinArr: game.winArr,
+  });
 }

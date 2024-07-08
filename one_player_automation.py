@@ -12,7 +12,8 @@ ipShakury = "192.168.50.81"
 ipOfer = ""
 
 driver = webdriver.Chrome()
-driver.get("http://" +ipHome+ ":8080")
+# driver.get("http://" +ipHome+ ":8080")
+driver.get("/")
 
 try:
     def retry_click(element, max_attempts=5):
