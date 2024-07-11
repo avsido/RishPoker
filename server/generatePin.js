@@ -1,3 +1,7 @@
+/*
+  provided by GPT - produces and returns a PIN with template '#-letter-letter-letter-digit-digit-digit'
+*/
+
 const generatedStrings = new Set();
 
 function generateUniqueString() {

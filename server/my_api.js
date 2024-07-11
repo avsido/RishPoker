@@ -176,7 +176,7 @@ function computerTurnGPT(rp, data) {
   let cardsArrayA = data.playerACards;
   let cardsArrayB = data.playerBCards;
   let drawnCard = rp.drawCard();
-  // Helper function to calculate the rank value of the drawn card, considering Ace's value for straights
+  // Helper function to calculate the rank value of the drawn card, considering Ace's value for straights (either 1 or 14)
   function calculateDrawnCardRankValue(drawnCard, hand) {
     if (drawnCard.rank === "Ace") {
       // If Ace is needed for a lower straight, its rank value is 1

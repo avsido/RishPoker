@@ -1,3 +1,7 @@
+/*
+  main server utility, stores acceptable actions, mostly for single mode, but also for side menu
+*/
+
 let myServer = require("./my_server.js");
 let myApi = require("./my_api.js");
 

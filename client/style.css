@@ -1,3 +1,7 @@
+
+/*
+    this is just basically a big mess
+*/
 body{
     /* background-color: #35654d; */
     background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4)), url("images/bg/5.jpg");
@@ -58,7 +62,8 @@ body{
     background-position: center;             
     background-repeat: no-repeat;           
     position: relative;       
-    z-index: 1;        
+    z-index: 1;      
+      
 }        
 .hidden-text {            
     visibility: hidden;                                              
@@ -96,14 +101,26 @@ body{
     border-radius: 7.5px;
     min-width: 12.5%;
     max-width: 15%;
-    height: auto;
-    min-height: 35%;
+    max-height: 80%;
+    min-height: auto;
     position: fixed;
     padding: 1vh;
     top: 12vh;
-    left: 1vh;
+    left: 4vh;
     display: flex;
     flex-direction: column;
+    overflow: auto;
+}
+.menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.menu::-webkit-scrollbar-thumb {      
+   background-color: #c4aaaa;
+   border-radius: 3px;
+}    
+.menu::-webkit-scrollbar-thumb:hover {
+   background-color: #dc6c6c;
 }
 
 .menu p{
@@ -115,6 +132,7 @@ body{
     margin: 8px;
     padding: 5px;
     font-family: sans-serif;
+    font-weight: lighter;
 }
 .menu p:hover{
     background-color: rgba(176, 166, 166, 0.473);
@@ -122,8 +140,9 @@ body{
 }
 .menu h3{
     color: gold;
-    font-size: 2.2vh;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 1.8vh;
+    font-family: sans-serif;
+    font-weight: lighter;
 }
 .menu button{
     width: 3vh;
@@ -192,7 +211,6 @@ h1, h2, h3, h4{
     left: 575px;
 }
 
-
 #chatBox{
     position: absolute;
     bottom: 77.5px;
@@ -240,9 +258,9 @@ h1, h2, h3, h4{
     padding-left: 2px;
     color: gold;
 }
- #messagesChat::-webkit-scrollbar {
+#messagesChat::-webkit-scrollbar {
      width: 4px;
- }
+}
 
 #messagesChat::-webkit-scrollbar-thumb {      
     background-color: #c4aaaa;

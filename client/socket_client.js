@@ -1,14 +1,6 @@
-const ipLH = "localhost";
-const ipHome = "10.0.0.2";
-const ipHome2 = "10.0.0.6";
-const ipShakury = "192.168.50.81";
-const ipOfer = "";
-const ipWork = "10.0.0.225";
-
-// const io_client = io.connect("http://" + ipWork + ":8080");
 const io_client = io.connect("/");
 
-let gameOverActive = false;
+let gameOverActive = false; // while game still on, this should be false.
 
 io_client.on("connect", function () {
   console.log("client connected to server");
@@ -18,34 +10,36 @@ io_client.on("disconnect", function () {
   console.log("client disconnected from server");
 });
 
-io_client.on("server-created-online-game", function (pin) {
-  console.log("in client manager >> PIN received from server:", pin);
-});
-
 io_client.on("game-start", (data) => {
+  // instigated by server when game 'joiner' enters valid PIN number
   if (data == "invalid") {
     alert(data + " PIN number");
   } else {
     if (soundOn) openingSound.play();
-    ({ currentGame, drawnCard, chatFriend } = data);
-    init();
+    ({ currentGame, drawnCard } = data);
+    // currentGame is the game data, mainly the cards
+    // drawnCard is the card to play and will be a card object for active player and null for inactive player
+    init(); // initial vars definition
     renderMultiplayer();
-    console.log("client-socket says: " + iAmFlipReady);
   }
 });
 
 io_client.on("player-played", (data) => {
+  // this event is sent by server when a player played, prompting DOM to re-render screen
   if (data == "invalid") {
     console.log(data + "card placement");
     return;
   } else {
     ({ currentGame, drawnCard } = data);
+    // currentGame is the game data, mainly the cards
+    // drawnCard is the card to play and will be a card object for active player and null for inactive player
     if (soundOn) placeCardSound.play();
     renderMultiplayer();
   }
 });
 
 io_client.on("player-played-wild-card", (data) => {
+  // this event is sent by server when a player played the Wild Card, prompting DOM to re-render screen
   if (data == "invalid") {
     alert(data + " card placement");
   } else {
@@ -56,16 +50,16 @@ io_client.on("player-played-wild-card", (data) => {
 });
 
 io_client.on("opponent-flip-ready", () => {
+  // this event is sent from server when one of the players either played his 'Wild Card' or pressed the 'PASS' button
+  // to inform other player that everybody's waiting for him
   let hOpponentReady = document.createElement("h1");
   hOpponentReady.innerHTML = "&middot; your opponent is ready to flip";
   hOpponentReady.className = "hOpponentReady";
   divInfo.appendChild(hOpponentReady);
-  // if (opponentReadyToFlip) {
-
-  // }
 });
 
 io_client.on("start-flippin", (data) => {
+  // this event starts the ending sequence (aka the 'animation')
   ({ currentGame, socketWinArr } = data);
 
   for (let i = 0; i < 5; i++) {
@@ -80,6 +74,8 @@ io_client.on("start-flippin", (data) => {
 });
 
 io_client.on("game-over", (gameOver) => {
+  // this event basically concludes the game.
+  // takes win/lose message from server and displays it
   if (document.body.contains(document.getElementById("winDiv"))) {
     return;
   }
@@ -120,6 +116,8 @@ io_client.on("game-over", (gameOver) => {
 });
 
 io_client.on("chat-message", function (data) {
+  // new chatbox msg
+  // adds the fresh msg to the ul element
   if (!isChatOpen) {
     let messageDot = document.createElement("div");
     messageDot.id = "messageDot";
@@ -134,6 +132,7 @@ io_client.on("chat-message", function (data) {
 });
 
 function appendMessage(name, msg) {
+  // inner-use utility func that appends last message to messages body
   const item = document.createElement("li");
   item.style.display = "inline-block";
   item.textContent = "~ " + msg;

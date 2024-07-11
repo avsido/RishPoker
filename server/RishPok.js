@@ -1,3 +1,12 @@
+/*
+  game class for single player
+  creates deck
+  shuffles it
+  sets starter cards for each player
+  shoots current drawn cards to players in their turn
+  in single player scenario this will also say if it's the player's turn or computer's
+*/
+
 class RishPok {
   constructor() {
     this.suits = ["Hearts", "Spades", "Clubs", "Diamonds"];

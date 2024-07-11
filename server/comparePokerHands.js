@@ -1,3 +1,8 @@
+/*
+  this func takes 2 poker hands and determines who is the better
+  provided by GPT after several attempts, I am not fluent in what goes on here and it may have issues
+*/
+
 function comparePokerHands(handPlayerB, handPlayerA) {
   const pokerHands = [
     "High Card",

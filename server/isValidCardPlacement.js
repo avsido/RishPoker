@@ -1,3 +1,7 @@
+/*
+  takes i (hand) and j (card) and validates hand for play. used in double mode server socket manager
+*/
+
 function isValidCardPlacement(cardsToCheck, wantedHand) {
   if (isNaN(wantedHand)) {
     return false;

@@ -1,4 +1,4 @@
-// GET request
+// GET request as taught in school
 function sendHttpGETReq(url, callback) {
   let httpRequest = new XMLHttpRequest();
   httpRequest.onreadystatechange = function () {
@@ -11,4 +11,3 @@ function sendHttpGETReq(url, callback) {
   httpRequest.open("GET", url, true);
   httpRequest.send();
 }
-

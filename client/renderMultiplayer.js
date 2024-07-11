@@ -1,4 +1,9 @@
 function renderMultiplayer() {
+  /*
+    very similar to single player render. http requests converted to fit sockets
+    here the 'flip!' button is called 'PASS'
+    here playing the wild card and pushing the 'PASS' butt both end the participation of the player
+  */
   gameMode = currentGame.gameMode;
   cleanElement(divDeck);
   cleanElement(divPlayers);
@@ -7,6 +12,7 @@ function renderMultiplayer() {
   cleanElement(divInfo);
   removeElementByQuery("chat");
 
+  // 'chat' button exists only on double mode
   let chat = document.createElement("button");
   chat.id = "chat";
   chat.innerHTML = "Chat";
@@ -22,7 +28,11 @@ function renderMultiplayer() {
   let opponentCards;
   let playedWildCard;
 
-  console.log("render says: " + iAmFlipReady);
+  /* question to determine orientation of cards
+    "a" and "b" are given by the server
+    "a" will be the game solicitor and "b" the game joiner
+    "a" goes first.
+  */
   if (currentGame.player == "a") {
     playerCards = currentGame.playerACards;
     opponentCards = currentGame.playerBCards;
@@ -52,7 +62,8 @@ function renderMultiplayer() {
   let imgDrawnCard = document.createElement("img");
 
   if (drawnCard) {
-    if (!playedWildCard) {
+    // if drawnCard is null or not, basically asking if its the players turn or opponents turn
+    if (!iAmFlipReady) {
       imgDrawnCard.src = "images/" + drawnCard.name + ".png";
       imgDrawnCard.id = "drawnCard";
       if (currentGame.cardsLeft == 1 || currentGame.cardsLeft == 0) {
@@ -127,7 +138,7 @@ function renderMultiplayer() {
       let imgCard = document.createElement("img");
       if (j == 4) {
         if (currentGame.cardsLeft <= 1) {
-          if (!playedWildCard && drawnCard) {
+          if (!iAmFlipReady && drawnCard) {
             imgCard.classList.add("imgCardPlayerWild");
             imgCard.onclick = (ev) => {
               let divPop = document.createElement("div");
@@ -175,7 +186,6 @@ function renderMultiplayer() {
               document.body.appendChild(divOverlay);
               document.body.appendChild(divPop);
               buttSwitch.onclick = () => {
-                ///////////////////////////////////////////////////////////////////
                 document.body.removeChild(divPop);
                 document.body.removeChild(divOverlay);
                 cleanElement(divDeck);
@@ -187,7 +197,6 @@ function renderMultiplayer() {
                 }
 
                 iAmFlipReady = true;
-                ///////////////////////////////////////////////////////////////////
               };
               buttCancel.onclick = () => {
                 document.body.removeChild(divPop);
@@ -218,7 +227,6 @@ function renderMultiplayer() {
   buttPass.id = "buttCheckWin";
   buttPass.innerHTML = "PASS";
   buttPass.onclick = (ev) => {
-    ///////////////////////////////////////////////////////////////////
     divInfo.removeChild(ev.target);
     hCardsleft.innerHTML = " ";
     hStatus.innerHTML = "&middot; great, now wait for opponent response";
@@ -226,13 +234,12 @@ function renderMultiplayer() {
       document.getElementsByClassName("imgCardPlayerWild")
     );
     for (let i = 0; i < wildCards.length; i++) {
+      // removes clicking properties from player A cardDivs
       wildCards[i].onclick = null;
       wildCards[i].classList.remove("imgCardPlayerWild");
     }
     iAmFlipReady = true;
     io_client.emit("client-ready-to-flip");
-
-    ///////////////////////////////////////////////////////////////////
   };
 
   if (currentGame.cardsLeft <= 1 && !iAmFlipReady) {

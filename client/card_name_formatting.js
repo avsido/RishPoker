@@ -1,5 +1,5 @@
-
 function formatCardPair(str) {
+  // returns name of pair (i.e 'Kings', '2's' etc.)
   const words = str.split(" ");
 
   words.splice(0, 2);
@@ -10,6 +10,7 @@ function formatCardPair(str) {
 }
 
 function formatCard2Pairs(str) {
+  // returns name of 2 pairs (i.e 'Kings and Queens', '2's and Jacks' etc.)
   const cardPart = str.substring("".length);
 
   const cardRanks = cardPart
@@ -34,6 +35,8 @@ function formatCard2Pairs(str) {
 }
 
 function countOnesAndMinusOnes(winArr) {
+  // takes an array with 5 values ranging that can be either -1, 0 or 1
+  // counts the values and returns winner
   let counter = 0;
   let counterMinus = 0;
   for (let i = 0; i < winArr.length; i++) {
@@ -45,5 +48,3 @@ function countOnesAndMinusOnes(winArr) {
   } else if (counter < counterMinus) return 1;
   return 0;
 }
-
-

@@ -1,3 +1,14 @@
+/*
+  game class for single player
+  creates deck
+  shuffles it
+  sets starter cards for each player
+  shoots current drawn cards to players in their turn
+  in double player scenario this will 'reserve' (make a copy of) last 2 cards in the deck (wild cards) because I concluded
+  that if a player chooses to play his/her Wild Card, the Wild Card must be re-sent to the player, and this was a problem,
+  because the first time 'pops' it out of the cards array. so 'reserving' them solves it. (getWildCards() method)
+*/
+
 class RishPok {
   constructor() {
     this.suits = ["Hearts", "Spades", "Clubs", "Diamonds"];

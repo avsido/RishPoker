@@ -1,25 +1,21 @@
+/*
+  overall standartd server as taught in school
+*/
+
 let http = require("http");
 let url = require("url");
 let fs = require("fs");
 let path = require("path");
 const socketServer = require("./socket_server");
 
-const ipLH = "localhost";
-const ipHome = "10.0.0.2";
-const ipHome2 = "10.0.0.6";
-const ipShakury = "192.168.50.81";
-const ipOfer = "";
-const ipWork = "10.0.0.225";
-
+// some utils for the render.com website:
 // process.env.NODE_ENV = "development";
 // process.env.NODE_ENV = "production";
 process.env.NODE_ENV = "test";
 
 function startServer(actions) {
   const server = http.createServer((req, res) => {
-    //////////////////////////////////////////////////////////////////
-    // res.setHeader("Access-Control-Allow-Origin", "*");
-    // res.setHeader("Access-Control-Allow-Origin", "http://" + ipWork + ":8080");
+    // some CORS policy nuisance
     const allowedOrigin =
       process.env.NODE_ENV === "test"
         ? "https://https://rishpoker.onrender.com/"
@@ -37,7 +33,6 @@ function startServer(actions) {
       res.end();
       return;
     }
-    //////////////////////////////////////////////////////////////////
 
     let q = url.parse(req.url, true);
 
@@ -107,9 +102,7 @@ function startServer(actions) {
   server.listen(PORT, () => {
     console.log("Server is listening on port 8080");
   });
-  // server.listen(PORT, 0.0.0.0, () => {
-  //   console.log("Server is listening on port 8080");
-  // });
+
   socketServer.startServer(server);
 }
 
