@@ -148,13 +148,13 @@ function renderWinMultiplayer(index) {
   divInfoPlayerB.className = "divInfoPlayers";
   let hHandPlayerB = document.createElement("h1");
   hHandPlayerB.innerHTML = "Opponent got:";
-  hHandPlayerB.style.color = "darkgrey";
+  // hHandPlayerB.style.color = "transparent";
   divInfoPlayerB.appendChild(hHandPlayerB);
   let divInfoPlayerA = document.createElement("div");
   divInfoPlayerA.className = "divInfoPlayers";
   let hHandPlayerA = document.createElement("h1");
   hHandPlayerA.innerHTML = "You got:";
-  hHandPlayerA.style.color = "darkgrey";
+  // hHandPlayerA.style.color = "darkgrey";
   divInfoPlayerA.appendChild(hHandPlayerA);
   for (let i = 0; i < arrPlayerBHandMessages.length; i++) {
     let h2 = document.createElement("h2");

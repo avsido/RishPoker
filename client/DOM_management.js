@@ -15,6 +15,7 @@ let divMain,
 let iAmFlipReady; // for double mode. this is used to prevent display of 'PASS' button when player already pressed it (if renderMultiplayer is called again)
 let gameMode; // will be passed from game obj
 let isSideMenuOpen = false; // will help with opening/closing of side menu
+let isLogInMenuOpen = false;
 let isChatOpen = false; // will help with opening/closing of chat
 let messages = document.createElement("ul"); // actual chat container
 let soundOn = true;
@@ -491,4 +492,12 @@ function chatWindow() {
   document.body.appendChild(chatBox);
 }
 
-function openLogInMenu() {}
+function openLogInMenu() {
+  // if (isLogInMenuOpen) {
+  //   isLogInMenuOpen = false;
+  //   removeElementByQuery("loginBox");
+  //   return;
+  // }
+  // let loginBox = document.createElement("div");
+  // loginBox.className = "menu";
+}

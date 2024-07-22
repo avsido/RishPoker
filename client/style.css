@@ -299,7 +299,6 @@ h1, h2, h3, h4{
     margin-left: 2px;
 }
 
-
 .buttGame{
     width: 100px;
     height: 25px;
@@ -660,12 +659,17 @@ h1, h2, h3, h4{
     flex-direction: column;
     align-items:center;
     text-align:center;
+
+    
 }
 
 .divInfoPlayers h1{
     background-color: rgb(153 0 0 / 39%);
     font-size:23px;
     width:100%;
+    /* color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text; */
   
 }
 
