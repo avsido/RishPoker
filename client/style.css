@@ -4,9 +4,9 @@
 */
 body{
     /* background-color: #35654d; */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4)), url("images/bg/5.jpg");
+    /* background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4)), url("images/bg/5.jpg");
     background-size: cover;
-    background-position: center;
+    background-position: center; */
     height: 100vh; 
     align-items: center;
     justify-content: center;
@@ -15,6 +15,19 @@ body{
     margin: 0;
     padding: 0;
     min-width: 100%;
+}
+video {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100vw;
+    min-height: 100vh;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+    filter: brightness(0.6); /* Adjusts video brightness */
+    object-fit: cover; /* Ensures video covers the area */
 }
 .title{
     width: 95%;
