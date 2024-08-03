@@ -60,6 +60,7 @@ function startServer(actions) {
         ".ogg": "audio/ogg",
         ".wav": "audio/wav",
         ".mp3": "audio/mp3",
+        ".mp4": "video/mp4",
       };
 
       // Construct the path to the file
