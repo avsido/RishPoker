@@ -64,9 +64,8 @@ function greet() {
   img.id = "flush";
   divMain.appendChild(img);
   let buttPlayVSComputer = document.createElement("button");
-  buttPlayVSComputer.className = "buttPlay";
-  buttPlayVSComputer.innerHTML = "VS Computer";
-  buttPlayVSComputer.id = "start_game_butt";
+  buttPlayVSComputer.className = "buttPlay";buttPlayVSComputer.innerHTML = "VS. pc";
+  buttPlayVSComputer.innerHTML = "VS. PC";
   divMain.appendChild(buttPlayVSComputer);
 
   buttPlayVSComputer.onclick = () => {
@@ -87,7 +86,7 @@ function greet() {
   // PIN management for both game game solicitor and taker
   let buttJoinMultiplayerGame = document.createElement("button");
   buttJoinMultiplayerGame.className = "buttPlay";
-  buttJoinMultiplayerGame.innerHTML = "join friend";
+  buttJoinMultiplayerGame.innerHTML = "JOIN";
   buttJoinMultiplayerGame.onclick = () => {
     if (divMain.querySelector(".divPIN")) {
       divMain.removeChild(divPIN);
@@ -132,7 +131,7 @@ function greet() {
 
   let buttCreateMultiplayerGame = document.createElement("button");
   buttCreateMultiplayerGame.className = "buttPlay";
-  buttCreateMultiplayerGame.innerHTML = "invite friend";
+  buttCreateMultiplayerGame.innerHTML = "INVITE";
   divMain.appendChild(buttCreateMultiplayerGame);
   divMain.appendChild(buttJoinMultiplayerGame);
   buttCreateMultiplayerGame.onclick = () => {
@@ -186,7 +185,7 @@ function init() {
   cleanElement(divMain);
   removeElementByQuery("buttQuit");
   let buttQuit = document.createElement("button");
-  buttQuit.innerHTML = "quit";
+  buttQuit.innerHTML = "QUIT";
   buttQuit.id = "buttQuit";
   buttQuit.className = "buttGame";
   document.body.appendChild(buttQuit);
@@ -337,18 +336,18 @@ function renderInfoScore() {
   // concusion for each hands pair (hwo wins current round)
   hBottomLine.innerHTML =
     data.results.winner == 1
-      ? "hand lost."
+      ? "Hand lost."
       : data.results.winner == -1
-      ? "hand won."
-      : "a tie.";
+      ? "Hand won."
+      : "A tie.";
   if (winArr.length >= 5) {
     // countOnesAndMinusOnes() refrenced from file
     // countOnesAndMinusOnes() determines who is overall winner after counting 1's and -1's, or declares tie
     if (countOnesAndMinusOnes(winArr) == -1) {
-      hBottomLine.innerHTML = "You Lose..";
+      hBottomLine.innerHTML = "You lost..";
       if (soundOn) loseSound.play();
     } else if (countOnesAndMinusOnes(winArr) == 1) {
-      hBottomLine.innerHTML = "You Win!";
+      hBottomLine.innerHTML = "You won!";
       if (soundOn) winSound.play();
     } else {
       hBottomLine.innerHTML = "It's a tie.";

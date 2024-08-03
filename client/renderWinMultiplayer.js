@@ -185,10 +185,10 @@ function renderWinMultiplayer(index) {
   hBottomLine.className = "hBottomLine";
   hBottomLine.innerHTML =
     socketWinArr[index].winner == win
-      ? "hand lost."
+      ? "Hand lost."
       : socketWinArr[index].winner == lose
-      ? "hand won."
-      : "a tie.";
+      ? "Hand won."
+      : "A tie.";
   if (index == 4) {
     let checkArr = [];
     for (let q = 0; q < socketWinArr.length; q++) {

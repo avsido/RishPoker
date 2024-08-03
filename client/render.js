@@ -17,7 +17,7 @@ function render() {
   if (data.cardsLeft == 1) {
     // case for final card to play, 'wild card', including button to 'flip' with/without it
     hStatus.innerHTML = data.playerATurn
-      ? "&middot; play wild card or flip"
+      ? "&middot; Play wild card or flip"
       : "&middot; NOW -";
     buttCheckWin = document.createElement("button");
     buttCheckWin.id = "buttCheckWin";
@@ -45,11 +45,11 @@ function render() {
   } else {
     // for all cases other than last card:
     hStatus.innerHTML = data.playerATurn
-      ? "&middot; your turn to place card"
-      : "&middot; opponent's turn, please wait";
+      ? "&middot; Your turn to place card"
+      : "&middot; Opponent's turn, please wait";
   }
   let hCardsleft = document.createElement("h1");
-  hCardsleft.innerHTML = "&middot; deck count: " + data.cardsLeft;
+  hCardsleft.innerHTML = "&middot; Deck count: " + data.cardsLeft;
 
   //deck image:
   let imgDeck = document.createElement("img");
@@ -89,9 +89,9 @@ function render() {
   */
   divPlayers.append(divPlayerB, divPlayerA);
   divMain.appendChild(divPlayers);
-  let hPlayerB = document.createElement("h2");
+  let hPlayerB = document.createElement("h1");
   hPlayerB.innerHTML = "Opponent";
-  let hPlayerA = document.createElement("h2");
+  let hPlayerA = document.createElement("h1");
   hPlayerA.innerHTML = "You";
   /*
     cards computer
