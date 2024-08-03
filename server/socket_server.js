@@ -284,8 +284,8 @@ function startServer(server) {
       /*
         this event is taken whenever a player uses the 'quit' butt, setting himself as the game loser
       */
-      let winMsg = "opponent quit, you win!";
-      let loseMsg = "you lose";
+      let winMsg = "Opponent quit, you won!";
+      let loseMsg = "You lost";
       let gameOverType = 1; // type: opponent-quit
       let loser;
       if (socket.id == game.playerA) {
@@ -303,8 +303,8 @@ function startServer(server) {
 
     socket.on("game-over-show-winner", () => {
       // this event is taken after all final-sequence animation is done, prompting the server to send final winner message
-      let winMsg = "you win!";
-      let loseMsg = "you lose!";
+      let winMsg = "You won!";
+      let loseMsg = "You lost..";
       let tieMsg = "It's a tie";
       let gameOverType = 0; // type: game-over
       if (game.resolution != 0) {

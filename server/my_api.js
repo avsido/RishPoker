@@ -9,13 +9,13 @@ let rp;
 
 exports.getMenuItems = (req, res, q) => {
   menuItems = [
-    { name: "about Rishpon poker", HttpRequest: "/get_info" },
-    { name: "the rules", HttpRequest: "/get_rules" },
-    { name: "get coins" },
-    { name: "poker hands rankings", HttpRequest: "none" },
-    { name: "about us", HttpRequest: "/get_about_us_info" },
-    { name: "contribute" },
-    { name: "log in" },
+    { name: "ABOUT", HttpRequest: "/get_info" },
+    { name: "THE RULES", HttpRequest: "/get_rules" },
+    { name: "GET COINS" },
+    { name: "RANKINGS", HttpRequest: "none" },
+    { name: "ABOUT", HttpRequest: "/get_about_us_info" },
+    { name: "CONTRIBUTE" },
+    { name: "LOG IN" },
   ];
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(menuItems));

@@ -45,7 +45,7 @@ function renderMultiplayer() {
   let hStatus = document.createElement("h1");
   let hCardsleft = document.createElement("h1");
 
-  hCardsleft.innerHTML = "&middot; deck count: " + currentGame.cardsLeft;
+  hCardsleft.innerHTML = "&middot; Deck count: " + currentGame.cardsLeft;
 
   let imgDeck = document.createElement("img");
   imgDeck.src = "images/deck.png";
@@ -68,22 +68,22 @@ function renderMultiplayer() {
       imgDrawnCard.id = "drawnCard";
       if (currentGame.cardsLeft == 1 || currentGame.cardsLeft == 0) {
         imgDrawnCard.style.marginLeft = "75px";
-        hStatus.innerHTML = "&middot; play wild card or pass";
+        hStatus.innerHTML = "&middot; Play wild card or pass";
         if (currentGame.cardsLeft == 0) {
           imgDrawnCard.style.animation = "none";
           imgDrawnCard.style.width = "30%";
         }
       } else {
-        hStatus.innerHTML = "&middot; your turn to place card";
+        hStatus.innerHTML = "&middot; Tour turn to place card";
       }
     } else {
-      hStatus.innerHTML = "&middot; played wild card";
+      hStatus.innerHTML = "&middot; Played wild card";
     }
   } else {
     if (currentGame.cardsLeft == 0) {
-      hStatus.innerHTML = "&middot; played wild card";
+      hStatus.innerHTML = "&middot; Played wild card";
     } else {
-      hStatus.innerHTML = "&middot; opponent's turn, please wait";
+      hStatus.innerHTML = "&middot; Opponent's turn, please wait...";
       imgDrawnCard.id = "waitGif";
       imgDrawnCard.src = "images/5.gif";
     }
@@ -93,9 +93,9 @@ function renderMultiplayer() {
   divInfo.append(divDeck, hCardsleft, hStatus);
   divMain.appendChild(divInfo);
 
-  let hPlayerB = document.createElement("h2");
+  let hPlayerB = document.createElement("h1");
   hPlayerB.innerHTML = "Opponent";
-  let hPlayerA = document.createElement("h2");
+  let hPlayerA = document.createElement("h1");
   hPlayerA.innerHTML = "You";
 
   //opponent cards
@@ -146,7 +146,7 @@ function renderMultiplayer() {
               let divPopLeft = document.createElement("div");
               divPopLeft.id = "divPopLeft";
               let hLeft = document.createElement("h1");
-              hLeft.innerHTML = "wild card:";
+              hLeft.innerHTML = "Wild card:";
               let cardImgWildCard = document.createElement("img");
               cardImgWildCard.src =
                 "images/" + drawnCard.name.toLowerCase() + ".png";
@@ -154,7 +154,7 @@ function renderMultiplayer() {
               let divPopRight = document.createElement("div");
               divPopRight.id = "divcPopRight";
               let hRight = document.createElement("h1");
-              hRight.innerHTML = "your switch card:";
+              hRight.innerHTML = "Your switch card:";
               divPopRight.id = "divPopRight";
               let innerDivPop = document.createElement("div");
               innerDivPop.id = "innerDivPop";
@@ -229,7 +229,7 @@ function renderMultiplayer() {
   buttPass.onclick = (ev) => {
     divInfo.removeChild(ev.target);
     hCardsleft.innerHTML = " ";
-    hStatus.innerHTML = "&middot; great, now wait for opponent response";
+    hStatus.innerHTML = "&middot; Great! now wait for opponent's response...";
     let wildCards = Array.from(
       document.getElementsByClassName("imgCardPlayerWild")
     );
