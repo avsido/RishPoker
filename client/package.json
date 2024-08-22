@@ -1,0 +1,19 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description":  "Client app for my game",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \\\"No specified tests\\\"",
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production"
+  },
+  "author": "moi",
+  "license": "ISC",
+  "dependencies": {
+    "socket.io-client": "^4.3.2",
+    "howler": "^2.2.4"
+  }
+}
+
+

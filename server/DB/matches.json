@@ -1,0 +1,405 @@
+[
+  {
+    "id": "2f43cd17f8415a9ddfb54c49c17de80c",
+    "pin": "8885",
+    "pot": 200,
+    "guest": null
+  },
+  {
+    "id": "afde83bd83c3a8343bf10759f284d4d5",
+    "pin": null,
+    "pot": 200,
+    "host": "522f1af44d82598b0a055918c9f065ca",
+    "guest": "be2fd1dd6f14e2782cd72a57f4c42f6d",
+    "cards": {
+      "host": [
+        [
+          {
+            "suit": "Clubs",
+            "rank": "5",
+            "rankValue": 5,
+            "name": "5_of_Clubs"
+          },
+          {
+            "suit": "Spades",
+            "rank": "King",
+            "rankValue": 13,
+            "name": "King_of_Spades"
+          },
+          {
+            "suit": "Diamonds",
+            "rank": "King",
+            "rankValue": 13,
+            "name": "King_of_Diamonds"
+          },
+          {
+            "suit": "Diamonds",
+            "rank": "8",
+            "rankValue": 8,
+            "name": "8_of_Diamonds"
+          },
+          {
+            "suit": "Hearts",
+            "rank": "7",
+            "rankValue": 7,
+            "name": "7_of_Hearts"
+          }
+        ],
+        [
+          {
+            "suit": "Clubs",
+            "rank": "2",
+            "rankValue": 2,
+            "name": "2_of_Clubs"
+          },
+          {
+            "suit": "Clubs",
+            "rank": "Queen",
+            "rankValue": 12,
+            "name": "Queen_of_Clubs"
+          },
+          {
+            "suit": "Hearts",
+            "rank": "9",
+            "rankValue": 9,
+            "name": "9_of_Hearts"
+          },
+          {
+            "suit": "Spades",
+            "rank": "4",
+            "rankValue": 4,
+            "name": "4_of_Spades"
+          },
+          {
+            "suit": "Spades",
+            "rank": "9",
+            "rankValue": 9,
+            "name": "9_of_Spades"
+          }
+        ],
+        [
+          {
+            "suit": "Spades",
+            "rank": "2",
+            "rankValue": 2,
+            "name": "2_of_Spades"
+          },
+          {
+            "suit": "Spades",
+            "rank": "Jack",
+            "rankValue": 11,
+            "name": "Jack_of_Spades"
+          },
+          {
+            "suit": "Spades",
+            "rank": "5",
+            "rankValue": 5,
+            "name": "5_of_Spades"
+          },
+          {
+            "suit": "Diamonds",
+            "rank": "10",
+            "rankValue": 10,
+            "name": "10_of_Diamonds"
+          },
+          {
+            "suit": "Clubs",
+            "rank": "Jack",
+            "rankValue": 11,
+            "name": "Jack_of_Clubs"
+          }
+        ],
+        [
+          {
+            "suit": "Diamonds",
+            "rank": "Queen",
+            "rankValue": 12,
+            "name": "Queen_of_Diamonds"
+          },
+          {
+            "suit": "Hearts",
+            "rank": "5",
+            "rankValue": 5,
+            "name": "5_of_Hearts"
+          },
+          {
+            "suit": "Hearts",
+            "rank": "3",
+            "rankValue": 3,
+            "name": "3_of_Hearts"
+          },
+          {
+            "suit": "Clubs",
+            "rank": "8",
+            "rankValue": 8,
+            "name": "8_of_Clubs"
+          },
+          {
+            "suit": "Clubs",
+            "rank": "Ace",
+            "rankValue": 14,
+            "name": "Ace_of_Clubs"
+          }
+        ],
+        [
+          {
+            "suit": "Spades",
+            "rank": "8",
+            "rankValue": 8,
+            "name": "8_of_Spades"
+          },
+          {
+            "suit": "Hearts",
+            "rank": "2",
+            "rankValue": 2,
+            "name": "2_of_Hearts"
+          },
+          {
+            "suit": "Hearts",
+            "rank": "8",
+            "rankValue": 8,
+            "name": "8_of_Hearts"
+          },
+          {
+            "suit": "Clubs",
+            "rank": "4",
+            "rankValue": 4,
+            "name": "4_of_Clubs"
+          },
+          {
+            "suit": "Clubs",
+            "rank": "7",
+            "rankValue": 7,
+            "name": "7_of_Clubs"
+          }
+        ]
+      ],
+      "guest": [
+        [
+          {
+            "suit": "Spades",
+            "rank": "6",
+            "rankValue": 6,
+            "name": "6_of_Spades"
+          },
+          {
+            "suit": "Diamonds",
+            "rank": "Ace",
+            "rankValue": 14,
+            "name": "Ace_of_Diamonds"
+          },
+          {
+            "suit": "Clubs",
+            "rank": "10",
+            "rankValue": 10,
+            "name": "10_of_Clubs"
+          },
+          {
+            "suit": "Hearts",
+            "rank": "Queen",
+            "rankValue": 12,
+            "name": "Queen_of_Hearts"
+          },
+          {
+            "suit": "Diamonds",
+            "rank": "7",
+            "rankValue": 7,
+            "name": "7_of_Diamonds"
+          }
+        ],
+        [
+          {
+            "suit": "Spades",
+            "rank": "3",
+            "rankValue": 3,
+            "name": "3_of_Spades"
+          },
+          {
+            "suit": "Clubs",
+            "rank": "9",
+            "rankValue": 9,
+            "name": "9_of_Clubs"
+          },
+          {
+            "suit": "Diamonds",
+            "rank": "6",
+            "rankValue": 6,
+            "name": "6_of_Diamonds"
+          },
+          {
+            "suit": "Clubs",
+            "rank": "3",
+            "rankValue": 3,
+            "name": "3_of_Clubs"
+          },
+          {
+            "suit": "Hearts",
+            "rank": "6",
+            "rankValue": 6,
+            "name": "6_of_Hearts"
+          }
+        ],
+        [
+          {
+            "suit": "Diamonds",
+            "rank": "4",
+            "rankValue": 4,
+            "name": "4_of_Diamonds"
+          },
+          {
+            "suit": "Diamonds",
+            "rank": "5",
+            "rankValue": 5,
+            "name": "5_of_Diamonds"
+          },
+          {
+            "suit": "Spades",
+            "rank": "Ace",
+            "rankValue": 14,
+            "name": "Ace_of_Spades"
+          },
+          {
+            "suit": "Diamonds",
+            "rank": "Jack",
+            "rankValue": 11,
+            "name": "Jack_of_Diamonds"
+          },
+          {
+            "suit": "Clubs",
+            "rank": "King",
+            "rankValue": 13,
+            "name": "King_of_Clubs"
+          }
+        ],
+        [
+          {
+            "suit": "Hearts",
+            "rank": "4",
+            "rankValue": 4,
+            "name": "4_of_Hearts"
+          },
+          {
+            "suit": "Hearts",
+            "rank": "Jack",
+            "rankValue": 11,
+            "name": "Jack_of_Hearts"
+          },
+          {
+            "suit": "Spades",
+            "rank": "10",
+            "rankValue": 10,
+            "name": "10_of_Spades"
+          },
+          {
+            "suit": "Diamonds",
+            "rank": "3",
+            "rankValue": 3,
+            "name": "3_of_Diamonds"
+          },
+          {
+            "suit": "Spades",
+            "rank": "Queen",
+            "rankValue": 12,
+            "name": "Queen_of_Spades"
+          }
+        ],
+        [
+          {
+            "suit": "Hearts",
+            "rank": "King",
+            "rankValue": 13,
+            "name": "King_of_Hearts"
+          },
+          {
+            "suit": "Diamonds",
+            "rank": "2",
+            "rankValue": 2,
+            "name": "2_of_Diamonds"
+          },
+          {
+            "suit": "Hearts",
+            "rank": "Ace",
+            "rankValue": 14,
+            "name": "Ace_of_Hearts"
+          },
+          {
+            "suit": "Clubs",
+            "rank": "6",
+            "rankValue": 6,
+            "name": "6_of_Clubs"
+          },
+          {
+            "suit": "Diamonds",
+            "rank": "9",
+            "rankValue": 9,
+            "name": "9_of_Diamonds"
+          }
+        ]
+      ],
+      "deck": [
+        {
+          "suit": "Spades",
+          "rank": "7",
+          "rankValue": 7,
+          "name": "7_of_Spades"
+        },
+        {
+          "suit": "Hearts",
+          "rank": "10",
+          "rankValue": 10,
+          "name": "10_of_Hearts"
+        }
+      ],
+      "drawn": null
+    },
+    "bets": {
+      "host": 0,
+      "guest": 0,
+      "checked": null
+    },
+    "turn": "host",
+    "first": "host",
+    "results": [
+      {
+        "winner": "guest",
+        "hands": {
+          "host": "High Card Ace",
+          "guest": "Pair of Kings"
+        }
+      },
+      {
+        "winner": "host",
+        "hands": {
+          "host": "Two Pair (6s and 3s)",
+          "guest": "Pair of 9s"
+        }
+      },
+      {
+        "winner": "guest",
+        "hands": {
+          "host": "High Card Ace",
+          "guest": "Pair of Jacks"
+        }
+      },
+      {
+        "winner": "guest",
+        "hands": {
+          "host": "High Card Queen",
+          "guest": "High Card Ace"
+        }
+      },
+      {
+        "winner": "guest",
+        "hands": {
+          "host": "High Card Ace",
+          "guest": "Pair of 8s"
+        }
+      }
+    ],
+    "winner": "guest",
+    "share": {
+      "guest": 185,
+      "host": 15
+    }
+  }
+]

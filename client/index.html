@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Secular+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Squada+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Spinnaker&family=Squada+One&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
+    <script src="modules/popup.js"></script>
+    <script src="modules/userBox.js"></script>
+    <script src="modules/game.js"></script>
+    <script src="modules/loginform.js"></script>
+    <script src="modules/gamepot.js"></script>
+
+    <script src="send_http_request.js"></script>
+    <script src="card_name_formatting.js"></script>
+    <script src="socket_client.js"></script>
+    <!-- <script src="render.js"></script> -->
+    <script src="DOM_utils.js"></script>
+    <!-- <script src="renderMultiplayer.js"></script> -->
+    <!-- <script src="renderWinMultiplayer.js"></script> -->
+    <script src="DOM_management.js"></script>
+    <link rel="icon" href="/images/ext.png" type="image/png">
+    <link rel="stylesheet" href="dice.css">
+    <link rel="stylesheet" href="style.css">
+    <title>RainManPoker</title>
+</head>
+<body>
+    <div class="title">
+        <!-- <div class="topButts">
+            <div class="topButt" onclick="openSideMenu()"><p class="hidden-text">open menu</p><img id="" src="images/poker-chip.png"></div>
+            <div class="topButt" onclick="toggleSound()"><p class="hidden-text">toggle sound</p><img id="imgButtSound" src="images/sound_on.png"></div>
+            <div class="topButt" onclick="openLogInMenu()"><p class="hidden-text">log in</p><img id="buttLogInMenu" src="images/log-in.png"></div>
+        </div> -->
+        <div id="mainTitle">
+            <img src="images/for_header.png">
+            <h1 style="font-family: 'Righteous', sans-serif">&middot; Rain Man Poker &middot;</h1>
+            <img src="images/for_header.png">
+        </div>
+    </div>
+    <div id="mainWrapper">
+        <div id="divMain"></div>
+        <button id="buttQuit" class="buttGame">quit</button>
+        <div id="pot-container"></div>
+    </div>
+    <script>
+    window.addEventListener('DOMContentLoaded',function () {
+        new loginform();
+    });
+    </script>
+</body>
+</html>

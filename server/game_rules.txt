@@ -1,0 +1,23 @@
+1) the game is played with a standard 52 cards deck. 
+
+2) each player places their bet and a shared pot is created.
+
+3) each player gets 5 cards. each card starts an eventual 5 cards hand.
+
+4) each hand competes with the opposing hand, according to poker hands hierarchy.
+
+5) each in their turn, the players take a card from the deck, and decide on which hand to place it.
+
+6) a player can only place a card on an "available" hand, meaning that if all hands have an equal amount of cards, the player can put his card wherever he decides, but once a hand has more cards than the others, he must place the card on other hands until all hands have the same number of cards again. 
+
+7) when a row is filled (and all hands have the same number of cards), bets can be placed. 
+
+8) for the first row filled, only the player that played second can bet or check. for the rest of the rows, both players can choose to bet.
+
+9) a bet can be answered with 'call', 'raise' or 'quit' (the quitter automatically loses). a 'raise' can be answered with 'call' or 'quit'.  
+
+10) when it is time for the last hands row to be filled, the players will replace their cards upside-down.
+
+11) the cards are revealed and the player with more better hands wins.
+
+12) the pot is shared between the winner and loser. a 3:2 win will get you 65% of the pot. a 4:1 win will get you 85% of the pot. and 5 winning hands will get you 100% of the pot  
