@@ -25,3 +25,20 @@ function emptyArray(arr) {
     arr.pop();
   }
 }
+
+// takes element id and time factor (ms) and delays the element's load for the time passed to the func
+function showDivAfterDelay(elementId, delay) {
+  // console.log("inside showDivAfterDelay");
+  const element = document.getElementById(elementId);
+
+  if (!element) {
+    console.error(`Element with ID "${elementId}" not found.`);
+    return;
+  }
+
+  element.style.display = "none";
+
+  setTimeout(function () {
+    element.style.display = "block";
+  }, delay);
+}

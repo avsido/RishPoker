@@ -1,141 +1,159 @@
 const io_client = io.connect("/");
+app.game = null;
+let gamePotObj = null;
 
 let gameOverActive = false; // while game still on, this should be false.
 
 io_client.on("connect", function () {
   console.log("client connected to server");
 });
-
 io_client.on("disconnect", function () {
   console.log("client disconnected from server");
 });
-
-io_client.on("game-start", (data) => {
-  // instigated by server when game 'joiner' enters valid PIN number
-  if (data == "invalid") {
-    alert(data + " PIN number");
-  } else {
-    if (soundOn) openingSound.play();
-    ({ currentGame, drawnCard } = data);
-    // currentGame is the game data, mainly the cards
-    // drawnCard is the card to play and will be a card object for active player and null for inactive player
-    init(); // initial vars definition
-    renderMultiplayer();
-  }
+io_client.on("game-start", (currentGame) => {
+  console.log(currentGame);
+  let message = currentGame.turn == "player" ? "You start" : "Opponent starts";
+  cleanElement(divMain);
+  Dice.roll(currentGame.dice.player, "dice1");
+  Dice.roll(currentGame.dice.opponent, "dice2",message,()=>{
+    setTimeout(() => {
+      if (soundOn) openingSound.play();
+      app.game = new game(currentGame);
+    }, 2500);
+  });
 });
 
-io_client.on("player-played", (data) => {
-  // this event is sent by server when a player played, prompting DOM to re-render screen
-  if (data == "invalid") {
-    console.log(data + "card placement");
-    return;
-  } else {
-    ({ currentGame, drawnCard } = data);
-    // currentGame is the game data, mainly the cards
-    // drawnCard is the card to play and will be a card object for active player and null for inactive player
-    if (soundOn) placeCardSound.play();
-    renderMultiplayer();
-  }
+io_client.on("player-played", (currentGame) => {
+  console.log(currentGame);
+  app.game.update(currentGame);
 });
 
-io_client.on("player-played-wild-card", (data) => {
-  // this event is sent by server when a player played the Wild Card, prompting DOM to re-render screen
-  if (data == "invalid") {
-    alert(data + " card placement");
-  } else {
-    ({ currentGame, drawnCard } = data);
-    if (soundOn) wildCardSound.play();
-    renderMultiplayer();
-  }
+io_client.on("player-left", (data) => {
+  //console.log(window.userBox);
+  ({ matchId, current_user } = data);
+  //console.log(data);
+  app.user = current_user;
+
+  app.game.resolveAfterOpponentQuit(matchId);
 });
 
-io_client.on("opponent-flip-ready", () => {
-  // this event is sent from server when one of the players either played his 'Wild Card' or pressed the 'PASS' button
-  // to inform other player that everybody's waiting for him
-  let hOpponentReady = document.createElement("h1");
-  hOpponentReady.innerHTML = "&middot; your opponent is ready to flip";
-  hOpponentReady.className = "hOpponentReady";
-  divInfo.appendChild(hOpponentReady);
-});
 
-io_client.on("start-flippin", (data) => {
-  // this event starts the ending sequence (aka the 'animation')
-  ({ currentGame, socketWinArr } = data);
-
-  for (let i = 0; i < 5; i++) {
-    if (!gameOverActive) {
-      setTimeout(() => {
-        if (!gameOverActive) {
-          renderWinMultiplayer(i);
-        }
-      }, 2000 * i);
-    }
+/*
+function createDiceElement(diceId, sides) {
+  let diceDiv = document.createElement("div");
+  diceDiv.id = diceId;
+  if (diceId == "dice2") {
+    diceDiv.style.top = "100px";
   }
-});
 
-io_client.on("game-over", (gameOver) => {
-  // this event basically concludes the game.
-  // takes win/lose message from server and displays it
-  if (document.body.contains(document.getElementById("winDiv"))) {
-    return;
+  diceDiv.className = "dice dice-one";
+
+  sides.forEach((side) => {
+    let sideDiv = document.createElement("div");
+    sideDiv.id = side.id;
+    sideDiv.className = side.class;
+
+    side.dots.forEach((dotClass) => {
+      let dotDiv = document.createElement("div");
+      dotDiv.className = `dot ${dotClass}`;
+      sideDiv.appendChild(dotDiv);
+    });
+
+    diceDiv.appendChild(sideDiv);
+  });
+
+  return diceDiv;
+}
+
+function rollOnTheDice(digit, diceId, msg = null, callback) {
+  // Check if the dice container already exists
+  let gameDiv = document.querySelector(".game");
+  if (!gameDiv) {
+    // Create elements if they do not exist
+    gameDiv = document.createElement("div");
+    gameDiv.className = "game";
+
+    gameDiv.classList.add("rotate");
+
+    let containerDiv = document.createElement("div");
+    containerDiv.className = "container";
+    gameDiv.appendChild(containerDiv);
+    document.body.appendChild(gameDiv);
   }
-  gameOverActive = true;
+
+  let starterMsg = document.createElement("h1");
+  starterMsg.className = "starterMsg break-line";
+  starterMsg.innerHTML = msg ? msg : "";
 
   setTimeout(() => {
-    gameOverActive = false;
-  }, 5000);
+    gameDiv.appendChild(starterMsg);
+    if (typeof callback == "function") {
+      callback();
+    }
+  }, 2500);
 
-  ({ msg, gameOverType } = gameOver);
+  // Create dice if not already present
+  let diceDiv = document.getElementById(diceId);
 
-  let divOverlay = document.createElement("div");
-  divOverlay.className = "divOverlay";
+  if (!diceDiv) {
+    const sides = [
+      { id: `${diceId}-side-one`, class: "side one", dots: ["one-1"] },
+      { id: `${diceId}-side-two`, class: "side two", dots: ["two-1", "two-2"] },
+      {
+        id: `${diceId}-side-three`,
+        class: "side three",
+        dots: ["three-1", "three-2", "three-3"],
+      },
+      {
+        id: `${diceId}-side-four`,
+        class: "side four",
+        dots: ["four-1", "four-2", "four-3", "four-4"],
+      },
+      {
+        id: `${diceId}-side-five`,
+        class: "side five",
+        dots: ["five-1", "five-2", "five-3", "five-4", "five-5"],
+      },
+      {
+        id: `${diceId}-side-six`,
+        class: "side six",
+        dots: ["six-1", "six-2", "six-3", "six-4", "six-5", "six-6"],
+      },
+    ];
 
-  let winDiv = document.createElement("div");
-  winDiv.id = "winDiv";
-  winDiv.className = "divPop divPopQuit";
-
-  let h1 = document.createElement("h1");
-  h1.innerHTML = msg;
-  let okButt = document.createElement("button");
-  okButt.className = "buttGame";
-  okButt.innerHTML = "OK";
-  winDiv.append(h1, okButt);
-  okButt.addEventListener("click", () => {
-    console.log("quit");
-    removeElementByQuery("chat");
-    removeElementByQuery("buttQuit");
-    cleanElement(divMain);
-    greet();
-    emptyArray(arrPlayerAHandMessages);
-    emptyArray(arrPlayerBHandMessages);
-    document.body.removeChild(divOverlay);
-    document.body.removeChild(winDiv);
-  });
-  document.body.appendChild(divOverlay);
-  document.body.appendChild(winDiv);
-});
-
-io_client.on("chat-message", function (data) {
-  // new chatbox msg
-  // adds the fresh msg to the ul element
-  if (!isChatOpen) {
-    let messageDot = document.createElement("div");
-    messageDot.id = "messageDot";
-    chatMessage.play();
-    chat.appendChild(messageDot);
+    diceDiv = createDiceElement(diceId, sides);
+    gameDiv.querySelector(".container").appendChild(diceDiv);
   }
-  const { msg, senderId } = data;
-  const messagePrefix = senderId === io_client.id ? "you: " : "opponent: ";
-  let span = document.createElement("span");
-  span.innerText = messagePrefix;
-  appendMessage(span, msg);
-});
 
-function appendMessage(name, msg) {
-  // inner-use utility func that appends last message to messages body
-  const item = document.createElement("li");
-  item.style.display = "inline-block";
-  item.textContent = "~ " + msg;
-  messages.append(name, item);
-  messages.scrollTop = messages.scrollHeight;
+  // JavaScript to handle dice rolling
+  function performDiceRoll() {
+    if (digit === 1) {
+      diceDiv.classList.add("show-same");
+      setTimeout(() => {
+        diceDiv.classList.remove("show-same");
+      }, 250);
+    } else {
+      // Remove all show-* classes with a small delay to trigger CSS transition
+      for (let i = 1; i <= 6; i++) {
+        diceDiv.classList.remove("show-" + i);
+      }
+
+      setTimeout(() => {
+        diceDiv.classList.add("show-" + digit);
+      }, 50); // Adjust this delay as needed
+    }
+  }
+
+  function removeDice() {
+    if (document.body.contains(gameDiv)) {
+      cleanElement(gameDiv);
+      document.body.removeChild(gameDiv);
+    }
+  }
+
+  performDiceRoll();
+
+  setTimeout(removeDice, 5000);
 }
+
+*/

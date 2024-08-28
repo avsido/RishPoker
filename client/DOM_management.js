@@ -1,3 +1,6 @@
+app.user = null;
+window.userBoxEl = null;
+
 // initializing variables
 let divMain,
   divPIN,
@@ -58,36 +61,32 @@ function greet() {
   buttMenu = document.getElementById("buttMenu");
 
   divMain = document.getElementById("divMain"); // this is the main game div (body center)
-  divMain.style.flexDirection = "column";
-  let img = document.createElement("img");
-  img.src = "images/lemmy.png";
-  img.id = "flush";
-  divMain.appendChild(img);
-  let buttPlayVSComputer = document.createElement("button");
-  buttPlayVSComputer.className = "buttPlay";
-  buttPlayVSComputer.innerHTML = "VS Computer";
-  buttPlayVSComputer.id = "start_game_butt";
-  divMain.appendChild(buttPlayVSComputer);
+  // divMain.style.flexDirection = "column";
+  // let buttPlayVSComputer = document.createElement("button");
+  // buttPlayVSComputer.className = "buttPlay";
+  // buttPlayVSComputer.innerHTML = "VS Computer";
+  // buttPlayVSComputer.id = "start_game_butt";
+  // divMain.appendChild(buttPlayVSComputer);
 
-  buttPlayVSComputer.onclick = () => {
-    // butt to start single player game
-    sendHttpGETReq("api/start_game_vs_computer", (res) => {
-      data = JSON.parse(res);
-      if (soundOn) openingSound.play();
-      // resetting:
-      renderInfo = true;
-      winArr = [];
-      // calling init that initializes DOM vars, and render that is the game loop
-      init();
-      render();
-    });
-  };
+  // buttPlayVSComputer.onclick = () => {
+  //   // butt to start single player game
+  //   app.getRequest("api/start_game_vs_computer", (res) => {
+  //     data = JSON.parse(res);
+  //     if (soundOn) openingSound.play();
+  //     // resetting:
+  //     renderInfo = true;
+  //     winArr = [];
+  //     // calling init that initializes DOM vars, and render that is the game loop
+  //     init();
+  //     render();
+  //   });
+  // };
 
   // what it means to start a multiplyer game:
   // PIN management for both game game solicitor and taker
   let buttJoinMultiplayerGame = document.createElement("button");
   buttJoinMultiplayerGame.className = "buttPlay";
-  buttJoinMultiplayerGame.innerHTML = "join friend";
+  buttJoinMultiplayerGame.innerHTML = "JOIN";
   buttJoinMultiplayerGame.onclick = () => {
     if (divMain.querySelector(".divPIN")) {
       divMain.removeChild(divPIN);
@@ -111,8 +110,15 @@ function greet() {
     buttAccept.src = "images/accept.png";
     buttAccept.onclick = () => {
       let pin = inputPIN.value;
-      io_client.emit("join-online-game", pin);
-      iAmFlipReady = false;
+
+      app.getRequest("/join/" + pin.toString(), (game) => {
+        iAmFlipReady = false;
+        // console.log(game);
+        // io_client.emit("game-start", game);
+      });
+
+      // io_client.emit("join-online-game", {pin:pin,uid:app.user.id});
+      // iAmFlipReady = false;
     };
 
     let buttCancel = document.createElement("img");
@@ -130,124 +136,163 @@ function greet() {
     divMain.appendChild(divPIN);
   };
 
-  let buttCreateMultiplayerGame = document.createElement("button");
-  buttCreateMultiplayerGame.className = "buttPlay";
-  buttCreateMultiplayerGame.innerHTML = "invite friend";
-  divMain.appendChild(buttCreateMultiplayerGame);
-  divMain.appendChild(buttJoinMultiplayerGame);
-  buttCreateMultiplayerGame.onclick = () => {
-    if (divMain.querySelector(".divPIN")) {
-      divMain.removeChild(divPIN);
-      return;
-    }
-    let pHeader = document.createElement("p");
-    pHeader.innerHTML = "send PIN to friend:";
-    pHeader.className = "pHeaderPIN";
-    let divPPIN = document.createElement("div");
-    divPPIN.className = "divPPIN";
-    let pPIN = document.createElement("h3");
-    pPIN.className = "pPIN";
+  /*
+  let buttCreateMultiplayerGame100 = document.createElement("button");
+  buttCreateMultiplayerGame100.dataset.amount = 100;
+  buttCreateMultiplayerGame100.className = "buttPlay multi";
+  buttCreateMultiplayerGame100.innerHTML = "invite friend 100";
+  divMain.appendChild(buttCreateMultiplayerGame100);
 
-    let buttCopy = document.createElement("img");
-    buttCopy.src = "images/copy.png";
-    buttCopy.onclick = (ev) => {
-      // copy PIN to clipboard
-      let textPIN = pPIN.innerText;
-      let dummyTextarea = document.createElement("textarea");
-      dummyTextarea.value = textPIN;
-      document.body.appendChild(dummyTextarea);
-      dummyTextarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(dummyTextarea);
-      ev.target.src = "images/copied.png";
-    };
-    let buttCancel = document.createElement("img");
-    buttCancel.src = "images/cancel.png";
-    buttCancel.onclick = () => {
-      divMain.removeChild(divPIN);
-    };
-    divPPIN.append(pPIN, buttCopy);
-    divPIN = document.createElement("div");
-    divPIN.className = "divPIN";
-    divPIN.append(pHeader, divPPIN, buttCancel);
-    divMain.appendChild(divPIN);
-    io_client.emit("game-request-from-user"); // prompts socket server to give long hard PIN
-    io_client.on("game-request-response", (pin) => {
-      // this event did not function well when placed in socket-client manager
-      iAmFlipReady = false;
-      pPIN.innerHTML = pin;
+  let buttCreateMultiplayerGame200 = document.createElement("button");
+  buttCreateMultiplayerGame200.dataset.amount = 200;
+  buttCreateMultiplayerGame200.className = "buttPlay multi";
+  buttCreateMultiplayerGame200.innerHTML = "invite friend 200";
+  divMain.appendChild(buttCreateMultiplayerGame200);
+
+  let buttCreateMultiplayerGame500 = document.createElement("button");
+  buttCreateMultiplayerGame500.dataset.amount = 500;
+  buttCreateMultiplayerGame500.className = "buttPlay multi";
+  buttCreateMultiplayerGame500.innerHTML = "invite friend 500";
+  divMain.appendChild(buttCreateMultiplayerGame500);*/
+
+  let rose = document.createElement("img");
+  rose.src = "images/rose.png";
+  rose.id = "rose";
+  divMain.appendChild(rose);
+
+  let allowedStarterBet = [200, 400, 1000];
+  let header = document.createElement("h3");
+  header.textContent = "INVITE: ";
+  divMain.appendChild(header);
+
+  for (let i = 0; i <= 2; i++) {
+    let buttCreateMultiplayerGame = document.createElement("button");
+    buttCreateMultiplayerGame.dataset.amount = allowedStarterBet[i];
+    buttCreateMultiplayerGame.className = "buttPlay multi";
+    buttCreateMultiplayerGame.innerHTML = allowedStarterBet[i] / 2 + "$";
+    divMain.appendChild(buttCreateMultiplayerGame);
+  }
+
+  let or = document.createElement("h3");
+  or.textContent = "OR: ";
+  divMain.appendChild(or);
+
+  divMain.appendChild(buttJoinMultiplayerGame);
+
+  document.querySelectorAll(".buttPlay.multi").forEach((button) => {
+    let amount = button.dataset.amount;
+    button.addEventListener("click", () => {
+      if (divMain.querySelector(".divPIN")) {
+        divMain.removeChild(divPIN);
+        return;
+      }
+      let pHeader = document.createElement("p");
+      pHeader.innerHTML = "send PIN to friend:";
+      pHeader.className = "pHeaderPIN";
+      let divPPIN = document.createElement("div");
+      divPPIN.className = "divPPIN";
+      let pPIN = document.createElement("h3");
+      pPIN.className = "pPIN";
+
+      let buttCopy = document.createElement("img");
+      buttCopy.src = "images/copy.png";
+      buttCopy.onclick = (ev) => {
+        // copy PIN to clipboard
+        let textPIN = pPIN.innerText;
+        let dummyTextarea = document.createElement("textarea");
+        dummyTextarea.value = textPIN;
+        document.body.appendChild(dummyTextarea);
+        dummyTextarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(dummyTextarea);
+        ev.target.src = "images/copied.png";
+      };
+      let buttCancel = document.createElement("img");
+      buttCancel.src = "images/cancel.png";
+      buttCancel.onclick = () => {
+        divMain.removeChild(divPIN);
+      };
+      divPPIN.append(pPIN, buttCopy);
+      divPIN = document.createElement("div");
+      divPIN.className = "divPIN";
+      divPIN.append(pHeader, divPPIN, buttCancel);
+      divMain.appendChild(divPIN);
+
+      app.getRequest("/host/" + amount.toString(), (pin) => {
+        iAmFlipReady = false;
+        pPIN.innerHTML = pin + "";
+      });
     });
-  };
+  });
 }
 
 // init func
 function init() {
-  //
   cleanElement(divMain);
-  removeElementByQuery("buttQuit");
-  let buttQuit = document.createElement("button");
-  buttQuit.innerHTML = "quit";
-  buttQuit.id = "buttQuit";
-  buttQuit.className = "buttGame";
-  document.body.appendChild(buttQuit);
+  // removeElementByQuery("buttQuit");
+  // let buttQuit = document.createElement("button");
+  // buttQuit.innerHTML = "quit";
+  // buttQuit.id = "buttQuit";
+  // buttQuit.className = "buttGame";
+  // document.body.appendChild(buttQuit);
 
-  // this provides a 'quit' functionality for single/double mode:
-  buttQuit.onclick = (ev) => {
-    // if clicked & accepted, sends you back to main menu
-    let divOverlay = document.createElement("div");
-    divOverlay.className = "divOverlay";
-    document.body.appendChild(divOverlay);
-    let quitDiv = document.createElement("div");
-    quitDiv.className = "divPop divPopQuit";
-    let h1 = document.createElement("h1");
-    h1.innerHTML = "Quit game?";
-    let buttY = document.createElement("button");
-    buttY.id = "buttY";
-    let buttN = document.createElement("button");
-    buttY.className = "buttGame";
-    buttN.className = "buttGame";
-    buttY.innerHTML = "Yes";
-    /////////////////////////////////////////////////////
-    buttY.onclick = () => {
-      // asks what to do ("how" to quit) in case of single/double mode.
-      // if needed, will reset vars for the mode
-      switch (gameMode) {
-        case "single":
-          renderInfo = false;
-          sendHttpGETReq("api/quit", (res) => {
-            if (res == "ok") {
-              arrPlayerBHandMessages = [];
-              arrPlayerAHandMessages = [];
-              cleanElement(divMain);
-              greet();
-            }
-          });
-          break;
+  // // this provides a 'quit' functionality for single/double mode:
+  // buttQuit.onclick = (ev) => {
+  //   // if clicked & accepted, sends you back to main menu
+  //   let divOverlay = document.createElement("div");
+  //   divOverlay.className = "divOverlay";
+  //   document.body.appendChild(divOverlay);
+  //   let quitDiv = document.createElement("div");
+  //   quitDiv.className = "divPop divPopQuit";
+  //   let h1 = document.createElement("h1");
+  //   h1.innerHTML = "Quit game?";
+  //   let buttY = document.createElement("button");
+  //   buttY.id = "buttY";
+  //   let buttN = document.createElement("button");
+  //   buttY.className = "buttGame";
+  //   buttN.className = "buttGame";
+  //   buttY.innerHTML = "Yes";
+  //   /////////////////////////////////////////////////////
+  //   buttY.onclick = () => {
+  //     // asks what to do ("how" to quit) in case of single/double mode.
+  //     // if needed, will reset vars for the mode
+  //     switch (gameMode) {
+  //       case "single":
+  //         renderInfo = false;
+  //         app.getRequest("api/quit", (res) => {
+  //           if (res == "ok") {
+  //             arrPlayerBHandMessages = [];
+  //             arrPlayerAHandMessages = [];
+  //             cleanElement(divMain);
+  //             greet();
+  //           }
+  //         });
+  //         break;
 
-        case "double":
-          removeElementByQuery("chat");
-          io_client.emit("quit");
-          greet();
-          break;
-      }
+  //       case "double":
+  //         removeElementByQuery("chat");
+  //         io_client.emit("quit");
+  //         greet();
+  //         break;
+  //     }
 
-      document.body.removeChild(divOverlay);
-      document.body.removeChild(quitDiv);
-      document.body.removeChild(ev.target);
-      cleanElement(divMain);
-      // calling main menu:
-      greet();
-    };
-    buttN.innerHTML = "No";
-    buttN.onclick = () => {
-      document.body.removeChild(divOverlay);
-      document.body.removeChild(quitDiv);
-    };
-    let pButts = document.createElement("p");
-    pButts.append(buttY, buttN);
-    quitDiv.append(h1, pButts);
-    document.body.appendChild(quitDiv);
-  };
+  //     document.body.removeChild(divOverlay);
+  //     document.body.removeChild(quitDiv);
+  //     document.body.removeChild(ev.target);
+  //     cleanElement(divMain);
+  //     // calling main menu:
+  //     greet();
+  //   };
+  //   buttN.innerHTML = "No";
+  //   buttN.onclick = () => {
+  //     document.body.removeChild(divOverlay);
+  //     document.body.removeChild(quitDiv);
+  //   };
+  //   let pButts = document.createElement("p");
+  //   pButts.append(buttY, buttN);
+  //   quitDiv.append(h1, pButts);
+  //   document.body.appendChild(quitDiv);
+  // };
   // further initializing of vars
   divDeck = document.createElement("div");
   divDeck.id = "divDeck";
@@ -339,8 +384,8 @@ function renderInfoScore() {
     data.results.winner == 1
       ? "hand lost."
       : data.results.winner == -1
-      ? "hand won."
-      : "a tie.";
+        ? "hand won."
+        : "a tie.";
   if (winArr.length >= 5) {
     // countOnesAndMinusOnes() refrenced from file
     // countOnesAndMinusOnes() determines who is overall winner after counting 1's and -1's, or declares tie
@@ -385,7 +430,7 @@ function openSideMenu() {
   document.body.appendChild(divMenu);
 
   // the button prompts the server to give menu items
-  sendHttpGETReq("api/get_menu_items", (res) => {
+  app.getRequest("api/get_menu_items", (res) => {
     menuItems = JSON.parse(res);
     for (let i = 0; i < menuItems.length; i++) {
       let pMenu = document.createElement("p");
@@ -410,7 +455,7 @@ function openSideMenu() {
           };
         } else {
           // each paragraph when clicked, prompts server for that paragraph-related info, to display to client
-          sendHttpGETReq("/api" + menuItems[i].HttpRequest, (res) => {
+          app.getRequest("/api" + menuItems[i].HttpRequest, (res) => {
             let content = JSON.parse(res);
             content = content.replace(/\n/g, "<br>");
             let h3 = document.createElement("h3");
@@ -490,14 +535,4 @@ function chatWindow() {
   chatBox.appendChild(form);
 
   document.body.appendChild(chatBox);
-}
-
-function openLogInMenu() {
-  // if (isLogInMenuOpen) {
-  //   isLogInMenuOpen = false;
-  //   removeElementByQuery("loginBox");
-  //   return;
-  // }
-  // let loginBox = document.createElement("div");
-  // loginBox.className = "menu";
 }
