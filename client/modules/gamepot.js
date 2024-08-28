@@ -57,7 +57,9 @@ class gamepot {
     });
   }
   updateButton(){
-    let buttonType = this.input.value==0 ? 'check':this.input.value>this.input.min ? 'raise':'call';
+    let val = parseFloat(this.input.value),
+        min = parseFloat(this.input.min),
+        buttonType = val==0 ? 'check':val>min ? 'raise':'call';
     this.betButton.classList.remove('raise');
     this.betButton.classList.remove('call');
     this.betButton.classList.remove('check');
@@ -82,8 +84,8 @@ class gamepot {
         bets.checked != "opponent",
         minValue = betMargin > 0 ? betMargin : 0;
     this.betsDisabled = bets.player > bets.opponent || bets.checked == "player" || firstGameBet;
-    this.input.setAttribute("min", minValue);
-    this.input.setAttribute("max", currentGame.pot);
+    this.input.min = minValue;
+    this.input.max = currentGame.pot;
     this.input.value = minValue;
     this.betAmount.innerHTML = this.input.value;
     this.maxAmount.innerHTML = maxBet;

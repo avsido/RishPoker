@@ -40,8 +40,8 @@ class Matches extends MODEL_DB {
 			pin: null,
 			cards: new Cards(),
 			bets: { host: 0, guest: 0, checked: true },
-			turn: dice.host < dice.guest ? "host" : "guest",
-			first: dice.host < dice.guest ? "host" : "guest",
+			turn: dice.host > dice.guest ? "host" : "guest",
+			first: dice.host > dice.guest ? "host" : "guest",
 			move:0,
 			dice:dice
 		});
@@ -127,10 +127,12 @@ class Matches extends MODEL_DB {
 			if (valid){
 				match.pot+=amount;
 				match.bets[role]+=amount;
+				betMargin = match.bets[opponentRole] - match.bets[role];
 				current_user = Users.updateBalance(current_user.id, 0 - amount);
 				req.session.current_user = current_user;
 				req.session.save();
-				match.bets.checked = false;
+				match.bets.checked = betMargin==0;
+
 			}
 		}
 		if (match.bets.checked===true){

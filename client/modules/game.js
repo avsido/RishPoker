@@ -186,7 +186,6 @@ class game {
     this.clearCards();
     this.addCards(this.playerCards, this.playerColumns);
     this.addCards(this.opponentCards, this.opponentColumns, "opponent");
-    //console.log(this.opponentCards);
     this.addDraw();
     this.count.innerHTML = "deck count:" + this.currentGame.cardsLeft;
     let statusMsg = "&middot; ";
@@ -201,7 +200,6 @@ class game {
         : this.divPlayers.classList.remove("playerTurn");
       this.status.innerHTML = statusMsg;
       this.gamepot.update();
-      //console.log(window.userBoxEl);
       window.userBoxEl.update();
     } else {
       this.finish();
@@ -248,12 +246,12 @@ class game {
       interval;
     interval = setInterval(() => {
       let handResult = this.currentGame.results[handIndex],
-        playerTitle = playerTitles[handIndex],
-        opponentTitle = opponentTitles[handIndex],
-        playerColumn = this.playerColumns[handIndex],
-        opponentColumn = this.opponentColumns[handIndex],
-        bottomMsg = "a tie",
-        hiddenCard = opponentColumn.querySelector("img[data-hidden]");
+          playerTitle = playerTitles[handIndex],
+          opponentTitle = opponentTitles[handIndex],
+          playerColumn = this.playerColumns[handIndex],
+          opponentColumn = this.opponentColumns[handIndex],
+          bottomMsg = "a tie",
+          hiddenCard = opponentColumn.querySelector("img[data-hidden]");
       hiddenCard.src = hiddenCard.dataset.hidden;
       playerTitle.innerHTML = handResult.hands.player;
       opponentTitle.innerHTML = handResult.hands.opponent;
