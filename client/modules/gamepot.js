@@ -83,7 +83,7 @@ class gamepot {
         bets.opponent == 0 &&
         bets.checked != "opponent",
         minValue = betMargin > 0 ? betMargin : 0;
-    this.betsDisabled = bets.player > bets.opponent || bets.checked == "player" || firstGameBet;
+    this.betsDisabled = bets.player > bets.opponent || bets.checked == "player" || firstGameBet || bets.checked==true;
     this.input.min = minValue;
     this.input.max = currentGame.pot;
     this.input.value = minValue;

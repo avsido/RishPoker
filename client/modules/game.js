@@ -238,6 +238,7 @@ class game {
   finish() {
     this.divInfo.innerHTML = this.handInfoHtml;
     this.divMain.classList.remove("betting");
+    this.gamepot.update();
     let handIndex = 0,
       playerTitles = this.divInfo.querySelectorAll(".player h2"),
       opponentTitles = this.divInfo.querySelectorAll(".opponent h2"),
