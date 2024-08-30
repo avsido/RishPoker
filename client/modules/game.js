@@ -110,34 +110,34 @@ class game {
   }
   addCard(data, columns, col, row) {
     let imgCard = document.createElement("img"),
-        hidden = columns[col].parentElement.id == "divOpponent" && row == 4,
-        imgSrc = "images/" + data.name.toLowerCase() + ".png",
-        moveMargin = data.move-this.lastMove;
-    if (moveMargin>0 || this.currentGame.move==0){
-      imgCard.classList.add('hide');
-      imgCard.classList.add('animate');
-    }     
+      hidden = columns[col].parentElement.id == "divOpponent" && row == 4,
+      imgSrc = "images/" + data.name.toLowerCase() + ".png",
+      moveMargin = data.move - this.lastMove;
+    if (moveMargin > 0 || this.currentGame.move == 0) {
+      imgCard.classList.add("hide");
+      imgCard.classList.add("animate");
+    }
     if (hidden) {
       imgCard.dataset.hidden = imgSrc;
       imgSrc = "images/anon_card.png";
     }
     imgCard.src = imgSrc;
     columns[col].appendChild(imgCard);
-    if (moveMargin>0 || this.currentGame.move==0){
-        imgCard.classList.add('delay-animation-'+moveMargin.toString());
-        window.setTimeout(()=>{
-          imgCard.classList.remove('hide');
-        },50);
+    if (moveMargin > 0 || this.currentGame.move == 0) {
+      imgCard.classList.add("delay-animation-" + moveMargin.toString());
+      window.setTimeout(() => {
+        imgCard.classList.remove("hide");
+      }, 25);
     }
   }
   addDraw() {
     let draw = this.currentGame.cards.drawn,
-        drawImage = document.querySelector("#drawnCard");
-    if (draw){
+      drawImage = document.querySelector("#drawnCard");
+    if (draw) {
       let anon = !draw.rankValue,
-          imageSrc = "images/" + draw.name.toLowerCase() + ".png";
-      if (drawImage){
-        if (anon){
+        imageSrc = "images/" + draw.name.toLowerCase() + ".png";
+      if (drawImage) {
+        if (anon) {
           drawImage.remove();
           this.createDraw(imageSrc);
         } else {
@@ -147,15 +147,15 @@ class game {
         this.createDraw(imageSrc);
       }
     } else {
-      if (drawImage){
+      if (drawImage) {
         drawImage.remove();
       }
     }
   }
-  createDraw(imageSrc){
+  createDraw(imageSrc) {
     let drawImage = document.createElement("img");
-        drawImage.id = "drawnCard";
-        drawImage.src = imageSrc;
+    drawImage.id = "drawnCard";
+    drawImage.src = imageSrc;
     this.divDeck.appendChild(drawImage);
   }
   clearCards() {
@@ -169,8 +169,10 @@ class game {
     app.user = currentGame.player;
     let bets = this.currentGame.bets;
     this.currentRow = 4 - Math.floor((this.currentGame.cardsLeft - 2) / 10);
-    this.rowComplete = (this.currentGame.cardsLeft - 2) % 10 == 0 && !this.currentGame.cards.drawn;
-    this.betting = bets.checked!==true;
+    this.rowComplete =
+      (this.currentGame.cardsLeft - 2) % 10 == 0 &&
+      !this.currentGame.cards.drawn;
+    this.betting = bets.checked !== true;
     this.playerTurn = this.currentGame.turn == "player";
     this.playerCards = this.currentGame.cards.player;
     this.opponentCards = this.currentGame.cards.opponent;
@@ -247,12 +249,12 @@ class game {
       interval;
     interval = setInterval(() => {
       let handResult = this.currentGame.results[handIndex],
-          playerTitle = playerTitles[handIndex],
-          opponentTitle = opponentTitles[handIndex],
-          playerColumn = this.playerColumns[handIndex],
-          opponentColumn = this.opponentColumns[handIndex],
-          bottomMsg = "a tie",
-          hiddenCard = opponentColumn.querySelector("img[data-hidden]");
+        playerTitle = playerTitles[handIndex],
+        opponentTitle = opponentTitles[handIndex],
+        playerColumn = this.playerColumns[handIndex],
+        opponentColumn = this.opponentColumns[handIndex],
+        bottomMsg = "a tie",
+        hiddenCard = opponentColumn.querySelector("img[data-hidden]");
       hiddenCard.src = hiddenCard.dataset.hidden;
       playerTitle.innerHTML = handResult.hands.player;
       opponentTitle.innerHTML = handResult.hands.opponent;
