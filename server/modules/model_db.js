@@ -1,5 +1,5 @@
 const 
-    DB = require('./DB'),
+    DB = require('./db'),
     crypto = require('crypto');
 
 class MODEL_DB {

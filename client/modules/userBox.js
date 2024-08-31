@@ -12,9 +12,9 @@ class userBox {
   }
   update() {
     this.el.innerHTML =
-      "hello " +
+      "<span class=\"material-icons md-48\">face</span> " +
       app.user.username +
-      ", your current credit: " +
+      "<br>" +
       app.user.credit +
       "$";
   }

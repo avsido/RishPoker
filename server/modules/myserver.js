@@ -26,18 +26,22 @@ class myserver {
     });
 
     app.get("/login", (req, res) => {
-      const loggedUser = Users.login(req.query),
-            response = loggedUser ? loggedUser : "failed";
+      const loggedUser = Users.login(req.query);
+
+      if (!loggedUser) {
+        return res.status(401).json({ message: "Login failed" });
+      }
+
       req.session.current_user = loggedUser;
       req.session.save((err) => {
         if (err) {
           return res.status(500).send({ message: "Session save error" });
         }
-        res.json(response);
+        res.json(loggedUser);
       });
     });
 
-    app.get("/register", (req, res) => {
+   app.get("/register", (req, res) => {
       const loggedUser = Users.register(req.query),
             response = loggedUser ? loggedUser : "failed";
       req.session.current_user = loggedUser;

@@ -11,6 +11,9 @@ class App {
 	      if (this.status == 200) {
 	        callback(this.responseText);
 	      }
+          if (this.status == 401) {
+            alert("Wrong user/password, please try again");
+        }
 	    }
 	  };
 	  httpRequest.open("GET", url, true);
