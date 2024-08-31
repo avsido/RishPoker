@@ -3,22 +3,32 @@ const MODEL_DB = require("./model_db.js"),
 
 class Users extends MODEL_DB {
   static db_name = 'users';
-  static login(params) {
-    let { username, password } = params,
-      hashedPassword = crypto
+
+    static login(params) {
+      let { username, password } = params;
+
+      if (!username || !password) {
+        return false;
+      }
+
+      let hashedPassword = crypto
         .createHash("sha256")
         .update(password)
-        .digest("hex"),
-      user = this.find(
+        .digest("hex");
+
+      let user = this.find(
         (user) => user.username === username && user.password === hashedPassword
       );
-    if (!user) {
-      return false;
+
+      if (!user) {
+        return false;
+      }
+
+      delete user.password;
+      return user;
     }
 
-    delete user.password;
-    return user;
-  }
+
   static register(params) {
     let { username, password } = params,
       exists = this.find((user) => user.username === username),
