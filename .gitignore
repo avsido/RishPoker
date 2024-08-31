@@ -3,3 +3,5 @@ client/Dockerfile
 server/Dockerfile
 
 sketch.txt
+server/DB/users.json
+server/DB/matches.json
