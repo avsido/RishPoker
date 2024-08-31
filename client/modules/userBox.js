@@ -16,7 +16,7 @@ class userBox {
           <span class="material-icons md-48" style="margin-right: 30px;">account_circle</span>
           <div>
             <div style="font-weight: bold;">${app.user.username}</div>
-            <div>${app.user.credit}$</div>
+            <div>$${app.user.credit}</div>
           </div>
         </div>
       `;

@@ -5,7 +5,7 @@ class game {
     '<div id="imgDeck">' +
     '<img src="images/deck.png"></div>' +
     "</div>" +
-    '<h1 class="count">· deck count: <span></span></h1>' +
+    '<h1 class="count"> Deck count: <span></span></h1>' +
     '<h1 class="status"></h1>' +
     "</div>" +
     "</div>" +
@@ -73,8 +73,8 @@ class game {
     this.opponentColumns = this.divOpponent.querySelectorAll(".cardDiv");
 
     this.gamepot = new gamepot(this);
-    this.divPlayerTitle.innerHTML = "~ " + this.currentGame.player.username;
-    this.divOpponentTitle.innerHTML = "~ " + this.currentGame.opponent.username;
+    this.divPlayerTitle.innerHTML =  this.currentGame.player.username;
+    this.divOpponentTitle.innerHTML = this.currentGame.opponent.username;
 
     // this.quitButton.classList.add("show");
     // this.quitButton.addEventListener("click", () => {
@@ -189,13 +189,13 @@ class game {
     this.addCards(this.playerCards, this.playerColumns);
     this.addCards(this.opponentCards, this.opponentColumns, "opponent");
     this.addDraw();
-    this.count.innerHTML = "deck count:" + this.currentGame.cardsLeft;
-    let statusMsg = "&middot; ";
+    this.count.innerHTML = this.currentGame.cardsLeft + "Cards left";
+    let statusMsg = "";
     if (!currentGame.results) {
       if (this.betting) {
-        statusMsg += "place bet";
+        statusMsg += "Place bet";
       } else {
-        statusMsg += this.playerTurn ? "place card" : "opponent's turn";
+        statusMsg += this.playerTurn ? "✅ Place card" : "🕰️ Opponent's turn";
       }
       this.playerTurn
         ? this.divPlayers.classList.add("playerTurn")
@@ -220,7 +220,7 @@ class game {
     }
     this.remove();
     let popupMsg =
-      "opponent left <br/> current game pot is: " +
+      "Opponent left <br/> Current game pot is: " +
       this.currentGame.pot.toString();
     new popup(popupMsg, () => {
       this.remove();

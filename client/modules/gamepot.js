@@ -6,7 +6,7 @@ class gamepot {
     '<div class="credit"></div>' +
     '<div class="bet"></div>' +
     "</div>" +
-    '<div class="pot pot-divs"></div>' +
+    '<div class="pot-amount-container"><img class="chest-image" src="images/chest.png"/><br><div class="pot-amount"</div></div></div>' +
     '<div class="player pot-divs">' +
     '<div class="name"></div>' +
     '<div class="credit"></div>' +
@@ -35,7 +35,7 @@ class gamepot {
     this.opponentBet = this.el.querySelector(".opponent .bet");
     this.playerCredit = this.el.querySelector(".player .credit");
     this.playerName = this.el.querySelector(".player .name");
-    this.potamount = this.el.querySelector(".pot");
+    this.potamount = this.el.querySelector(".pot-amount-container .pot-amount");
     this.betButton = this.el.querySelector(".buttons .bet");
     this.quitButton = this.el.querySelector(".buttons .quit");
     this.betAmount = this.el.querySelector(".player>.bet .amount");
@@ -65,7 +65,7 @@ class gamepot {
     this.betButton.classList.remove('check');
 
     this.betButton.classList.add(buttonType);
-    this.betButton.innerHTML = buttonType;
+    this.betButton.innerHTML = buttonType.toUpperCase();
   }
   update() {
     let currentGame = this.parent.currentGame,
@@ -90,11 +90,11 @@ class gamepot {
     this.betAmount.innerHTML = this.input.value;
     this.maxAmount.innerHTML = maxBet;
     this.opponentBet.innerHTML = "+" + (currentGame.bets.opponent - currentGame.bets.player).toString();
-    this.opponentCredit.innerHTML = "credit: " + currentGame.opponent.credit;
-    this.opponentName.innerHTML = "player: " + currentGame.opponent.username;
-    this.playerCredit.innerHTML = "credit: " + currentGame.player.credit;
-    this.playerName.innerHTML = "player: " + currentGame.player.username;
-    this.potamount.innerHTML = "shared pot: " + currentGame.pot;
+    this.opponentCredit.innerHTML = "💰 $" + currentGame.opponent.credit;
+    this.opponentName.innerHTML = "Player: " + currentGame.opponent.username;
+    this.playerCredit.innerHTML = "💰 $" + currentGame.player.credit;
+    this.playerName.innerHTML = "Player: " + currentGame.player.username;
+    this.potamount.innerHTML = "Shared pot: " + currentGame.pot;
     this.container.classList[this.parent.betting ? "add" : "remove"]("betting");
     this.container.classList[this.betsDisabled ? "add" : "remove"](
       "bets-disabled"
