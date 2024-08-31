@@ -189,7 +189,7 @@ class game {
     this.addCards(this.playerCards, this.playerColumns);
     this.addCards(this.opponentCards, this.opponentColumns, "opponent");
     this.addDraw();
-    this.count.innerHTML = this.currentGame.cardsLeft + "Cards left";
+    this.count.innerHTML = this.currentGame.cardsLeft + " cards left";
     let statusMsg = "";
     if (!currentGame.results) {
       if (this.betting) {
