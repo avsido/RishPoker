@@ -10,14 +10,18 @@ class userBox {
     this.update();
     return this;
   }
-  update() {
-    this.el.innerHTML =
-      "<span class=\"material-icons md-48\">face</span> " +
-      app.user.username +
-      "<br>" +
-      app.user.credit +
-      "$";
-  }
+    update() {
+      this.el.innerHTML = `
+        <div style="display: flex; align-items: center;">
+          <span class="material-icons md-48" style="margin-right: 30px;">account_circle</span>
+          <div>
+            <div style="font-weight: bold;">${app.user.username}</div>
+            <div>${app.user.credit}$</div>
+          </div>
+        </div>
+      `;
+    }
+
   remove() {
     this.el.remove();
   }
