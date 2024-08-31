@@ -27,25 +27,16 @@ class loginform {
   }
 
     login(loginType){
-      console.log("Starting login process");    
       let data = this.getData();    
-      console.log("Data retrieved:", data);    
       let getString = new URLSearchParams(data);    
-      console.log("Query string:", getString.toString());    
       let url = "/" + loginType + "?" + getString.toString();    
-      console.log("Request URL:", url);    
-      console.log("Waiting...");    
 
       app.getRequest(url, (res) => {    
-        console.log("Response received");    
-        console.log("Response:", res);    
         if (res != "failed") {    
-          console.log("Login successful");    
           app.user = JSON.parse(res);    
           window.userBoxEl = new userBox();    
           this.el.remove();
         } else {    
-          console.log("Login failed:", res);    
           alert("Login error!");    
         }    
         greet();    
