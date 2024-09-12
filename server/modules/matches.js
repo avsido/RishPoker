@@ -47,6 +47,10 @@ class Matches extends MODEL_DB {
 		});
 		let host = Users.updateBalance(match.host, 0 - potShare);
 		current_user = Users.updateBalance(match.guest, 0 - potShare);
+        // This is an issue where we haven't updated the host's current_user session with the *updated balance*
+        // after the initial pot share (when the game starts), this will be reduced from the host's balance
+        // after his first card is played and will be saved to his session
+        this.initialShareToReduceFromHost = potShare;
 		req.session.current_user = current_user;
 		req.session.save();
 		this.upsert(match);
@@ -101,7 +105,20 @@ class Matches extends MODEL_DB {
 			this.upsert(match);
 			match.cardsLeft = match.cards.deck.length;
 			delete match.cards.deck;
-			match.host = role == "host" ? current_user : Users.getOne(match.host);
+
+            // Somewhat of a hacky fix to host not reducing initial pot share to their session object
+            if (role == "host") {
+                if (this.initialShareToReduceFromHost != null) {
+                    console.log("Reducing initial share from host session...");
+                    current_user.credit -= this.initialShareToReduceFromHost;
+                    req.session.save();
+                    this.initialShareToReduceFromHost = null;
+                }
+                match.host = current_user;
+            }
+            else {
+                match.host = Users.getOne(match.host);
+            }
 			match.guest = role == "guest" ? current_user : Users.getOne(match.guest);
 			return match;
 		} else {
