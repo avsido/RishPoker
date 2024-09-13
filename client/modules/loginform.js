@@ -5,8 +5,8 @@ class loginform {
     "<input name='username' placeholder='username' />" +
     "<input type='password' name='password' placeholder='password'/>" +
     "<div class='buttons'>" +
-    "<button class='register'>REGISTER</button>" +
-    "<button class='login'>LOGIN</button>" +
+    "<button class='login'>🚪 LOGIN</button>" +
+    "<button class='register'>📝 REGISTER</button>" +
     "</div>" +
     "</div>";
   el = null;

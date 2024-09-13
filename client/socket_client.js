@@ -12,7 +12,7 @@ io_client.on("disconnect", function () {
 });
 io_client.on("game-start", (currentGame) => {
   console.log(currentGame);
-  let message = currentGame.turn == "player" ? "You start" : "Opponent starts";
+  let message = currentGame.turn == "player" ? "YOU START" : "OPPONENT STARTS";
   cleanElement(divMain);
   Dice.roll(currentGame.dice.player, "dice1");
   Dice.roll(currentGame.dice.opponent, "dice2",message,()=>{

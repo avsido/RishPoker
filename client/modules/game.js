@@ -269,17 +269,17 @@ class game {
           handResult.winner == "opponent" ? "won" : "lost"
         );
         bottomMsg =
-          "hand " + (handResult.winner == "player" ? " won" : " lost");
+          "Hand " + (handResult.winner == "player" ? " won" : " lost");
         wins[handResult.winner]++;
       }
       if (handIndex == 4) {
         if (wins.player == wins.opponent) {
-          bottomMsg = "Game tied!";
+          bottomMsg = "⚖️ <br>Game tied!";
         } else {
-          bottomMsg = "You " + (wins.player > wins.opponent ? "won" : "lost");
+          bottomMsg = (wins.player > wins.opponent ? "🍾<br>You won" : "👎<br>You lost");
         }
         let popupMsg =
-          bottomMsg + ".<br/>Your share: " + this.currentGame.share.toString();
+          bottomMsg + ".<br/>Your share: $" + this.currentGame.share.toString();
         new popup(popupMsg, () => {
           this.remove();
         });

@@ -67,6 +67,17 @@ class gamepot {
     this.betButton.classList.add(buttonType);
     this.betButton.innerHTML = buttonType.toUpperCase();
   }
+
+  getOpponentBet(currentBalance) {
+        if (currentBalance == 0) {
+            return "";
+        }
+        if (currentBalance < 0) {
+            return "-$" + Math.abs(currentBalance).toString();
+        }
+        return "+$" + currentBalance;
+  }
+
   update() {
     let currentGame = this.parent.currentGame,
       bets = currentGame.bets,
@@ -89,12 +100,12 @@ class gamepot {
     this.input.value = minValue;
     this.betAmount.innerHTML = this.input.value;
     this.maxAmount.innerHTML = maxBet;
-    this.opponentBet.innerHTML = "+" + (currentGame.bets.opponent - currentGame.bets.player).toString();
+    this.opponentBet.innerHTML = this.getOpponentBet(currentGame.bets.opponent - currentGame.bets.player);
     this.opponentCredit.innerHTML = "💰 $" + currentGame.opponent.credit;
     this.opponentName.innerHTML = "Player: " + currentGame.opponent.username;
     this.playerCredit.innerHTML = "💰 $" + currentGame.player.credit;
     this.playerName.innerHTML = "Player: " + currentGame.player.username;
-    this.potamount.innerHTML = "Shared pot: " + currentGame.pot;
+    this.potamount.innerHTML = "Shared pot: $" + currentGame.pot;
     this.container.classList[this.parent.betting ? "add" : "remove"]("betting");
     this.container.classList[this.betsDisabled ? "add" : "remove"](
       "bets-disabled"

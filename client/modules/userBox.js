@@ -11,6 +11,7 @@ class userBox {
     return this;
   }
     update() {
+      console.log("Updating userBox to " + app.user.credit);
       this.el.innerHTML = `
         <div style="display: flex; align-items: center;">
           <span class="material-icons md-48" style="margin-right: 30px;">account_circle</span>

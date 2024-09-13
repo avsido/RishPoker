@@ -17,12 +17,15 @@ body{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    border: 10px solid rgba(153, 0, 0, 0.48);
+    border-radius: 20px;
+    background-color: rgba(5, 183, 53, 0.11);
 }
 
 #pot-container {
     display: flex;
     flex-direction: column;
-    
+    justify-content: space-around;
 }
 
 .amountMaxNumbers{
@@ -91,7 +94,7 @@ body{
  }
 
 .pot-divs{
-    background-color: #7ff09124;
+    background-color: #7ff09157;
     font-family: "Squada One", sans-serif;
     font-size: 20px;
     color: white;
@@ -111,6 +114,8 @@ body{
 }
 
 .pot-amount-container {
+    background-color: #862525c7;
+    border-radius: 4px;
     margin: 10px;
     padding: 15px;
     display: flex;
@@ -329,11 +334,8 @@ body{
   align-items: center;
   justify-content: center;
   text-align: center;
-  border: 10px solid rgba(153, 0, 0, 0.48);
-  border-radius: 20px;
   width: 800px; /* Fixed width */
   height: 560px; /* Fixed height */
-  background-color: rgba(5, 183, 53, 0.11);
   margin: 5px;
   padding: 5px;
   overflow: hidden; /* Prevent scrollbars */
@@ -485,7 +487,7 @@ h1, h2, h3, h4{
     text-align:center;
     margin: 2px;
     width: 35%;
-    height: 500px;
+    height: 550px;
     display: flex;
     flex-direction: column;
     font-size: 12px;
@@ -557,6 +559,7 @@ h1, h2, h3, h4{
     font-weight: 400;
     align-items: center;
     flex: 0 0 auto;
+    border-right: 4px solid rgb(153 0 0 / 39%)
 }
 #divMain.betting #divInfo,
 #divMain.betting #divPlayers{
@@ -677,7 +680,7 @@ h1, h2, h3, h4{
     min-height: 150px;
     display: flex;
     left: 50px;
-    top: 60px;
+    top: 250px;
     flex-direction: column;
     text-align: center;
     align-items: center;
@@ -1217,11 +1220,8 @@ body{
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 10px solid rgba(153, 0, 0, 0.48);
-  border-radius: 20px;
   width: 800px; /* Fixed width */
   height: 560px; /* Fixed height */
-  background-color: rgba(5, 183, 53, 0.11);
   margin: 5px;
   padding: 5px;
   overflow: hidden; /* Prevent scrollbars */
@@ -1378,7 +1378,9 @@ h1, h2, h3, h4{
     flex-direction: column;
     font-size: 12px;
     flex: 0 0 auto;
+    justify-content: space-around;
 }
+
 #divDeck{
     background-color: #0c1f15a1;
     border: 4px solid rgb(153 0 0 / 57%);
@@ -1909,7 +1911,7 @@ h1, h2, h3, h4{
 }
 
 .chest-image {
-    width: 70px;
-    height: 70px;
+    width: 30px;
+    height: 30px;
 }
 
