@@ -220,7 +220,7 @@ class game {
     }
     this.remove();
     let popupMsg =
-      "Opponent left <br/> Current game pot is: " +
+      "Opponent left <br/> Current game pot is: $" +
       this.currentGame.pot.toString();
     new popup(popupMsg, () => {
       this.remove();
