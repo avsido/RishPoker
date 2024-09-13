@@ -187,7 +187,7 @@ function greet() {
         return;
       }
       let pHeader = document.createElement("p");
-      pHeader.innerHTML = "send PIN to friend:";
+      pHeader.innerHTML = "Send PIN to friend:";
       pHeader.className = "pHeaderPIN";
       let divPPIN = document.createElement("div");
       divPPIN.className = "divPPIN";

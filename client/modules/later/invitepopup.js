@@ -1,6 +1,6 @@
 class invitepopup {
     html = '<div class="invite popup">'+
-				'<p class="header">send PIN to friend:</p>'+
+				'<p class="header">Send PIN to friend:</p>'+
 				'<a href="javascript:void(0);" class="copy">'+
 					'<h3 class="num"></h3>'+
 					'<img src="images/copy.png">'+
