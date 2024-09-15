@@ -73,7 +73,7 @@ class game {
     this.opponentColumns = this.divOpponent.querySelectorAll(".cardDiv");
 
     this.gamepot = new gamepot(this);
-    this.divPlayerTitle.innerHTML =  this.currentGame.player.username;
+    this.divPlayerTitle.innerHTML = this.currentGame.player.username;
     this.divOpponentTitle.innerHTML = this.currentGame.opponent.username;
 
     // this.quitButton.classList.add("show");
@@ -81,7 +81,7 @@ class game {
     //   this.quit();
     // });
     this.update(this.currentGame);
-
+    this.setPageEvents(); ///////////////////////////////////////AVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVI
     this.playerColumns.forEach((column, colIndex) => {
       column.addEventListener("click", () => {
         if (
@@ -93,7 +93,39 @@ class game {
       });
     });
   }
+  ///////////////////////////////////////AVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVI
+  // setPageEvents() {
+  //   window.addEventListener("unload", (event) => {
+  //     this.leaveGamePage();
+  //     // event.preventDefault();
+  //     // event.returnValue = "";
+  //   });
+  //   window.addEventListener("beforeunload", (event) => {
+  //     this.leaveGamePage();
+  //     // event.preventDefault();
+  //     // event.returnValue = "";
+  //   });
+  // }
 
+  setPageEvents() {
+    window.removeEventListener("unload", this.handleUnload);
+    window.removeEventListener("Beforeunload", this.handleBeforeUnload);
+    this.handleUnload = (ev) => {
+      this.leaveGamePage();
+    };
+    this.handleBeforeUnload = (ev) => {
+      this.leaveGamePage();
+    };
+    window.addEventListener("unload", this.handleUnload);
+    window.addEventListener("beforeunload", this.handleBeforeUnload);
+  }
+  leaveGamePage() {
+    let url = "/leave_game_page/" + this.currentGame.id;
+    app.getRequest(url, (res) => {
+      this.remove();
+    });
+  }
+  ///////////////////////////////////////AVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVI
   placeCard(colIndex) {
     let url = "/place_card/" + this.currentGame.id + "/" + colIndex;
     app.getRequest(url, (res) => {
@@ -220,7 +252,7 @@ class game {
     }
     this.remove();
     let popupMsg =
-      "Opponent left <br/> Current game pot is: $" +
+      "Opponent left. <br/> Current game pot is: $" +
       this.currentGame.pot.toString();
     new popup(popupMsg, () => {
       this.remove();
@@ -276,7 +308,8 @@ class game {
         if (wins.player == wins.opponent) {
           bottomMsg = "⚖️ <br>Game tied!";
         } else {
-          bottomMsg = (wins.player > wins.opponent ? "🍾<br>You won" : "👎<br>You lost");
+          bottomMsg =
+            wins.player > wins.opponent ? "🍾<br>You won" : "👎<br>You lost";
         }
         let popupMsg =
           bottomMsg + ".<br/>Your share: $" + this.currentGame.share.toString();

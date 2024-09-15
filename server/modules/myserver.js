@@ -1,7 +1,7 @@
 const fs = require("fs"),
-      path = require("path"),
-      Users = require("../modules/users"),
-      Matches = require("../modules/matches");
+  path = require("path"),
+  Users = require("../modules/users"),
+  Matches = require("../modules/matches");
 
 class myserver {
   app = null;
@@ -41,9 +41,9 @@ class myserver {
       });
     });
 
-   app.get("/register", (req, res) => {
+    app.get("/register", (req, res) => {
       const loggedUser = Users.register(req.query),
-            response = loggedUser ? loggedUser : "failed";
+        response = loggedUser ? loggedUser : "failed";
       req.session.current_user = loggedUser;
       req.session.save((err) => {
         if (err) {
@@ -60,9 +60,9 @@ class myserver {
 
     app.get("/host/:pot", (req, res) => {
       let current_user = req.session.current_user,
-          match = Matches.create(current_user.id, req.params.pot),
-          hostRoom = "match-" + match.id + "-user-" + current_user.id,
-          socket = this.sockets[req.session.id];
+        match = Matches.create(current_user.id, req.params.pot),
+        hostRoom = "match-" + match.id + "-user-" + current_user.id,
+        socket = this.sockets[req.session.id];
       res.send(match.pin);
       // console.log(current_user.username + " - host listening to channel:" + hostRoom);
       socket.join(hostRoom);
@@ -70,9 +70,9 @@ class myserver {
 
     app.get("/join/:pin", (req, res) => {
       let current_user = req.session.current_user,
-          match = Matches.start(req),
-          guestRoom = "match-" + match.id + "-user-" + match.guest.id,
-          socket = this.sockets[req.session.id];
+        match = Matches.start(req),
+        guestRoom = "match-" + match.id + "-user-" + match.guest.id,
+        socket = this.sockets[req.session.id];
       socket.join(guestRoom);
       // console.log(current_user.username + " - guest listening to channel:" + guestRoom);
       this.emitMatch(match, req, res, "game-start");
@@ -102,6 +102,24 @@ class myserver {
 
       res.send(true);
     });
+    ///////////////////////////////////////AVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVI
+    app.get("/leave_game_page/:match_id", (req, res) => {
+      let match = Matches.userLeftGamePage(req);
+      let current_user = req.session.current_user;
+      // req.session.current_user = false;
+      let opponentRole = current_user.id == match.host ? "guest" : "host";
+      let opponentId = match[opponentRole];
+      let opponentRoom = "match-" + match.id + "-user-" + opponentId;
+      let opponent = Users.getOne(opponentId);
+
+      this.io.to(opponentRoom).emit("player-left-page", {
+        matchId: match.id,
+        current_user: opponent,
+      });
+
+      res.send(true);
+    });
+    ///////////////////////////////////////AVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVI
   }
   emitMatch(match, req, res, event) {
     let response = false;
@@ -109,11 +127,10 @@ class myserver {
       delete match.guest.password;
       delete match.host.password;
       event = typeof event == "string" ? event : "player-played";
-      let 
-        guestRoom = "match-" + match.id + "-user-" + match.guest.id,
-        guestMatch = Matches.formatForRole(match,'guest'),
+      let guestRoom = "match-" + match.id + "-user-" + match.guest.id,
+        guestMatch = Matches.formatForRole(match, "guest"),
         hostRoom = "match-" + match.id + "-user-" + match.host.id,
-        hostMatch = Matches.formatForRole(match,'host');
+        hostMatch = Matches.formatForRole(match, "host");
       this.io.to(guestRoom).emit(event, guestMatch);
       this.io.to(hostRoom).emit(event, hostMatch);
       response = true;
@@ -124,7 +141,7 @@ class myserver {
     this.io.on("connection", (socket) => {
       let session_id = socket.handshake.session.id;
       this.sockets[session_id] = socket;
-      console.log('socket connection ' + socket.id);
+      console.log("socket connection " + socket.id);
     });
     this.server.listen(8080, () => {
       console.log("RainManPoker Server running on port 8080...");

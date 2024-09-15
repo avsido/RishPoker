@@ -1,33 +1,32 @@
 const MODEL_DB = require("./model_db.js"),
-      crypto = require("crypto");
+  crypto = require("crypto");
 
 class Users extends MODEL_DB {
-  static db_name = 'users';
+  static db_name = "users";
 
-    static login(params) {
-      let { username, password } = params;
+  static login(params) {
+    let { username, password } = params;
 
-      if (!username || !password) {
-        return false;
-      }
-
-      let hashedPassword = crypto
-        .createHash("sha256")
-        .update(password)
-        .digest("hex");
-
-      let user = this.find(
-        (user) => user.username === username && user.password === hashedPassword
-      );
-
-      if (!user) {
-        return false;
-      }
-
-      delete user.password;
-      return user;
+    if (!username || !password) {
+      return false;
     }
 
+    let hashedPassword = crypto
+      .createHash("sha256")
+      .update(password)
+      .digest("hex");
+
+    let user = this.find(
+      (user) => user.username === username && user.password === hashedPassword
+    );
+
+    if (!user) {
+      return false;
+    }
+
+    delete user.password;
+    return user;
+  }
 
   static register(params) {
     let { username, password } = params,
@@ -52,12 +51,15 @@ class Users extends MODEL_DB {
 
     return user;
   }
+
   static updateBalance(userId, offset) {
     let user = this.getOne(userId);
+    console.log("Function 'updateBalance()' called from:", new Error().stack);
     user.credit += offset;
     this.upsert(user);
     return user;
   }
+
   static quit() {}
 }
 
