@@ -190,8 +190,9 @@ class game {
     this.addCards(this.opponentCards, this.opponentColumns, "opponent");
     this.addDraw();
     this.count.innerHTML = "deck count:" + this.currentGame.cardsLeft;
-    let statusMsg = "&middot; ";
+    
     if (!currentGame.results) {
+      let statusMsg = "&middot; ";
       if (this.betting) {
         statusMsg += "place bet";
       } else {
@@ -202,10 +203,11 @@ class game {
         : this.divPlayers.classList.remove("playerTurn");
       this.status.innerHTML = statusMsg;
       this.gamepot.update();
-      window.userBoxEl.update();
     } else {
       this.finish();
     }
+    app.userBox.update();
+    this.gamepot.update();
   }
   quit() {
     let url = "/leave/" + this.currentGame.id;
@@ -226,7 +228,7 @@ class game {
       this.remove();
     });
     //debugger;
-    window.userBoxEl.update();
+    app.userBox.update();
   }
 
   remove() {
@@ -240,7 +242,6 @@ class game {
   finish() {
     this.divInfo.innerHTML = this.handInfoHtml;
     this.divMain.classList.remove("betting");
-    this.gamepot.update();
     let handIndex = 0,
       playerTitles = this.divInfo.querySelectorAll(".player h2"),
       opponentTitles = this.divInfo.querySelectorAll(".opponent h2"),

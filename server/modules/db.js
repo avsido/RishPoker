@@ -18,15 +18,30 @@ class DB {
     write(data) {
         return fs.writeFileSync(this.file_path, JSON.stringify(data, null, 2));
     }
-    upsert(json_data) {
-        const 
-            db = this.read(),
-            index = db.findIndex(item => item.id === json_data.id);
-        if (index >= 0) {
-            db[index] = json_data;
-        } else {
-            db.push(json_data);
-        }
+    upsert(updatedItem) {
+        return this.upsertItems([updatedItem]);
+    }
+    update(updatedItem) {
+        return this.updateItems([updatedItem]);
+    }
+    updateItems(updatedItems){
+        return this.upsertItems(updatedItems,false);
+    }
+    upsertItems(updatedItems,deleteOriginal){
+        const db = this.read();
+        deleteOriginal = deleteOriginal ? true:false;
+        updatedItems.forEach((updatedItem) => {
+            let index = db.findIndex(item => item.id === updatedItem.id);
+            if (index >= 0) {
+                if (deleteOriginal){
+                    db[index] = updatedItem;
+                } else {
+                    db[index] = Object.assign(db[index],updatedItem);    
+                }
+            } else {
+                db.push(updatedItem);
+            }
+        })
         return this.write(db);
     }
 }

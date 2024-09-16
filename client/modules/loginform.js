@@ -30,14 +30,15 @@ class loginform {
         getString = new URLSearchParams(data),
         url = "/" + loginType + "?" + getString.toString();
         app.getRequest(url, (res) => {
-          if (res != "failed") {
-            app.user = JSON.parse(res);
-            window.userBoxEl = new userBox();
-            this.el.remove();
+          res = JSON.parse(res);
+          if (res.error) {
+            alert(res.error);
           } else {
-            alert("login error!");
+            app.user = res;
+            app.userBox = new userBox();
+            this.el.remove();
+            greet();
           }
-          greet();
         });
   }
   getData() {

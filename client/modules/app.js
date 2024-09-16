@@ -1,5 +1,6 @@
 class App {
 	user = null;
+	userBox = null;
 	game = null;
 	constructor(){
 
@@ -15,5 +16,10 @@ class App {
 	  };
 	  httpRequest.open("GET", url, true);
 	  httpRequest.send();
+	}
+	refreshUser(){
+		this.getRequest('refresh_user',(refreshedUser)=>{
+			this.user = refreshedUser;
+		});
 	}
 }

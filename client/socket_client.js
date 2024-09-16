@@ -12,6 +12,7 @@ io_client.on("disconnect", function () {
 });
 io_client.on("game-start", (currentGame) => {
   console.log(currentGame);
+  app.refreshUser();
   let message = currentGame.turn == "player" ? "You start" : "Opponent starts";
   cleanElement(divMain);
   Dice.roll(currentGame.dice.player, "dice1");
@@ -25,6 +26,7 @@ io_client.on("game-start", (currentGame) => {
 
 io_client.on("player-played", (currentGame) => {
   console.log(currentGame);
+  app.refreshUser();
   app.game.update(currentGame);
 });
 
@@ -32,7 +34,7 @@ io_client.on("player-left", (data) => {
   //console.log(window.userBox);
   ({ matchId, current_user } = data);
   //console.log(data);
-  app.user = current_user;
+  app.refreshUser();
 
   app.game.resolveAfterOpponentQuit(matchId);
 });

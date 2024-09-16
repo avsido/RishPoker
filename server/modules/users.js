@@ -15,8 +15,6 @@ class Users extends MODEL_DB {
     if (!user) {
       return false;
     }
-
-    delete user.password;
     return user;
   }
   static register(params) {
@@ -37,14 +35,6 @@ class Users extends MODEL_DB {
     if (exists) {
       return false;
     }
-    this.upsert(user);
-    delete user.password;
-
-    return user;
-  }
-  static updateBalance(userId, offset) {
-    let user = this.getOne(userId);
-    user.credit += offset;
     this.upsert(user);
     return user;
   }

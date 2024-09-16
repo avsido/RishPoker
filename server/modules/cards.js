@@ -22,7 +22,7 @@ class Cards {
   constructor() {
     this.populate();
     this.shuffle();
-    this.deal();
+    this.dealAlmostFull();
     return {
       deck: this.deck,
       guest: this.guest,

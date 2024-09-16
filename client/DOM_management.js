@@ -1,6 +1,3 @@
-app.user = null;
-window.userBoxEl = null;
-
 // initializing variables
 let divMain,
   divPIN,

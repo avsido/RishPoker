@@ -7,13 +7,13 @@ class Matches extends MODEL_DB {
 	static db_name = 'matches';
 	static startingPot = 100;
 	static winMarginToPercent = [50, 70, 77.5, 92.5, 100];
-	static create(hostId, amount) {
+	static create(host_id, amount) {
 		let match = {
 			id: this.randID(),
 			pin: Math.floor(Math.random() * 10000).toString().padStart(4, "0"),
 			pot: amount ? parseFloat(amount) : this.startingPot,
-			host: hostId,
-			guest: null
+			host_id: host_id,
+			guest_id: null
 		};
 		this.upsert(match);
 		return match;
@@ -36,7 +36,7 @@ class Matches extends MODEL_DB {
 	      dice.guest = Math.floor(Math.random() * 6) + 1;
 	    };
 		Object.assign(match, {
-			guest: current_user.id,
+			guest_id: current_user.id,
 			pin: null,
 			cards: new Cards(),
 			bets: { host: 0, guest: 0, checked: true },
@@ -45,8 +45,10 @@ class Matches extends MODEL_DB {
 			move:0,
 			dice:dice
 		});
-		let host = Users.updateBalance(match.host, 0 - potShare);
-		current_user = Users.updateBalance(match.guest, 0 - potShare);
+		let host = Users.getOne(match.host_id);
+		host.credit-= potShare;
+		current_user.credit-= potShare;
+		Users.updateItems([host,current_user]);
 		req.session.current_user = current_user;
 		req.session.save();
 		this.upsert(match);
@@ -54,15 +56,13 @@ class Matches extends MODEL_DB {
 		delete match.cards.deck;
 		match.host = host;
 		match.guest = current_user;
-		delete match.guest.password;
-		delete match.host.password;
 		return match;
 	}
 	static placeCard(req) {
 		let current_user = req.session.current_user,
 			{ cardcol, match_id } = req.params,
 			match = this.getOne(match_id),
-			role = current_user.id == match.host ? "host" : "guest",
+			role = current_user.id == match.host_id ? "host" : "guest",
 			opponentRole = role == "guest" ? "host" : "guest",
 			currentRow = 4 - Math.floor((match.cards.deck.length - 2) / 10),
 			valid = !match.cards[role][cardcol][currentRow];
@@ -71,7 +71,6 @@ class Matches extends MODEL_DB {
 			match.cards.drawn.move = match.move;
 			match.cards[role][cardcol].push(match.cards.drawn);
 			let last2cardsInRow = ((match.cards.deck.length-4)%10==0);
-
 			if (last2cardsInRow) {
 				match.cards.drawn = null;
 				match.cards[opponentRole].forEach((col, colIndex) => {
@@ -97,12 +96,11 @@ class Matches extends MODEL_DB {
 				match.cards.drawn = nextCard;
 			}
 			match.turn = match.turn=='host' ? 'guest':'host';
-
 			this.upsert(match);
 			match.cardsLeft = match.cards.deck.length;
 			delete match.cards.deck;
-			match.host = role == "host" ? current_user : Users.getOne(match.host);
-			match.guest = role == "guest" ? current_user : Users.getOne(match.guest);
+			match.host = role == "host" ? current_user : Users.getOne(match.host_id);
+			match.guest = role == "guest" ? current_user : Users.getOne(match.guest_id);
 			return match;
 		} else {
 			return false;
@@ -110,11 +108,11 @@ class Matches extends MODEL_DB {
 	}
 	static placeBet(req) {
 		let current_user = req.session.current_user,
-				{ amount, match_id } = req.params,
-				match = this.getOne(match_id),
-				role = current_user.id == match.host ? "host" : "guest",
-				opponentRole = role == "guest" ? "host" : "guest",
-				betMargin = match.bets[opponentRole] - match.bets[role];
+			{ amount, match_id } = req.params,
+			match = this.getOne(match_id),
+			role = current_user.id == match.host_id ? "host" : "guest",
+			opponentRole = role == "guest" ? "host" : "guest",
+			betMargin = match.bets[opponentRole] - match.bets[role];
 		amount = parseFloat(amount);
 		if (amount==0){
 			if (betMargin==0){
@@ -128,17 +126,17 @@ class Matches extends MODEL_DB {
 				match.pot+=amount;
 				match.bets[role]+=amount;
 				betMargin = match.bets[opponentRole] - match.bets[role];
-				current_user = Users.updateBalance(current_user.id, 0 - amount);
+				current_user.credit-= amount;
 				req.session.current_user = current_user;
 				req.session.save();
 				match.bets.checked = betMargin==0;
-
 			}
 		}
 		if (match.bets.checked===true){
 			if (match.cards.deck.length == 2){
-				match = this.conclude(match); //call to finish game
+				return this.conclude(match); //call to finish game
 			} else {
+				Users.update(current_user);
 				match.cards.drawn = match.cards.deck.pop();
 				match.bets[role] = match.bets[opponentRole] = 0;
 			}
@@ -146,8 +144,57 @@ class Matches extends MODEL_DB {
 		this.upsert(match);
 		match.cardsLeft = match.cards.deck.length;
 		delete match.cards.deck;
-		match.host = role == "host" ? current_user : Users.getOne(match.host);
-		match.guest = role == "guest" ? current_user : Users.getOne(match.guest);
+		match[role] = current_user;
+		match[opponentRole] = Users.getOne(match[opponentRole+'_id']);
+		return match;
+	}
+	
+	static conclude(match) {
+		// console.log('concluding match');
+		let wins = { host: 0, guest: 0 };
+		match.results = [];
+		match.cards.host.forEach((hostHand, colIndex) => {
+			let guestHand = match.cards.guest[colIndex],
+				comparisonResult = Cards.compareHands(hostHand, guestHand),
+				handWinner = comparisonResult.winner == 0 ? false	: comparisonResult.winner > 0? "host": "guest";
+			match.results[colIndex] = {
+				winner: handWinner ? handWinner : "tie",
+				hands: {
+					host: comparisonResult.handPlayerBName,
+					guest: comparisonResult.handPlayerAName,
+				},
+			};
+			if (handWinner) {
+				wins[handWinner]++;
+			}
+		});
+		let winMargin = wins.host - wins.guest,
+			winnerPercent = this.winMarginToPercent[Math.abs(winMargin)],
+			winnerShare = Math.ceil((match.pot * winnerPercent) / 100),
+			loserShare = match.pot - winnerShare,
+			winnerRole =
+				wins.host == wins.guest
+					? "host"
+					: wins.host > wins.guest
+						? "host"
+						: "guest",
+			loserRole = winnerRole == "guest" ? "host" : "guest",
+			winner_id = match[winnerRole+'_id'],
+			loser_id = match[loserRole+'_id'],
+			winner = Users.getOne(winner_id),
+			loser = Users.getOne(loser_id);
+		match.winner = winnerRole;
+		match.share = {};
+		match.share[winnerRole] = winnerShare;
+		match.share[loserRole] = loserShare;
+		winner.credit+=winnerShare;
+		loser.credit+=loserShare;
+		this.upsert(match);
+		match.cardsLeft = match.cards.deck.length;
+		delete match.cards.deck;
+		match[winnerRole]=winner;
+		match[loserRole]=loser;
+		Users.updateItems([winner,loser]);
 		return match;
 	}
 	static formatForRole(match, role){
@@ -189,7 +236,6 @@ class Matches extends MODEL_DB {
 	        opponent: match.dice[opponentRole],
 	      };
 	    }
-
 	    if (match.results) {
 	      playerMatch.results = [];
 	      playerMatch.cards.drawn = null;
@@ -211,73 +257,18 @@ class Matches extends MODEL_DB {
 	      });
 	    }
 	    return playerMatch;
-	 
-	}
-	static conclude(match) {
-		// console.log('concluding match');
-		let wins = { host: 0, guest: 0 };
-		match.results = [];
-		match.cards.host.forEach((hostHand, colIndex) => {
-			let guestHand = match.cards.guest[colIndex],
-				comparisonResult = Cards.compareHands(hostHand, guestHand),
-				handWinner =comparisonResult.winner == 0 ? false	: comparisonResult.winner > 0? "host": "guest";
-			match.results[colIndex] = {
-				winner: handWinner ? handWinner : "tie",
-				hands: {
-					host: comparisonResult.handPlayerBName,
-					guest: comparisonResult.handPlayerAName,
-				},
-			};
-			if (handWinner) {
-				wins[handWinner]++;
-			}
-		});
-		let winMargin = wins.host - wins.guest,
-			winnerPercent = this.winMarginToPercent[Math.abs(winMargin)],
-			winnerShare = Math.ceil((match.pot * winnerPercent) / 100),
-			loserShare = match.pot - winnerShare,
-			winner =
-				wins.host == wins.guest
-					? "host"
-					: wins.host > wins.guest
-						? "host"
-						: "guest",
-			loser = winner == "guest" ? "host" : "guest",
-			winnerId = match[winner],
-			loserId = match[loser];
-		match.winner = winner;
-
-		match.share = {};
-		match.share[winner] = winnerShare;
-		match.share[loser] = loserShare;
-		Users.updateBalance(winnerId, winnerShare);
-		Users.updateBalance(loserId, loserShare);
-		return match;
 	}
 	static leave(req) {
 		//console.log('concluding game early');
 		let current_user = req.session.current_user,
 			match_id = req.params.match_id,
 			match = this.getOne(match_id),
-			opponentRole = current_user.id == match.host ? "guest" : "host";
-		Users.updateBalance(match[opponentRole], match.pot);
+			opponentRole = current_user.id == match.host ? "guest" : "host",
+			opponent = Users.getOne(match[opponentRole]);
+		opponent.credit-=match.pot;
+		Users.upsert(opponent);
+		match[opponentRole] = opponent;
 		return match;
-	}
-	static leaveAll(req) {
-		let current_user = req.session.current_user,
-			userMatches = this.filter(
-				(match) =>
-					match.host === current_user.id || match.guest === current_user.id
-			);
-		userMatches.forEach((match) => {
-			opponentRole = current_user.id == match.host ? "guest" : "host";
-			Users.updateBalance(match[opponentRole], match.pot);
-		});
-	}
-	static updateBalance(match_id, offset) {
-		let match = this.getOne(match_id);
-		match.pot += offset;
-		this.upsert(match);
 	}
 }
 

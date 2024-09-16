@@ -26,6 +26,15 @@ class MODEL_DB {
     static upsert(data){
         return this.db().upsert(data);
     }
+    static upsertItems(data){
+        return this.db().upsertItems(data);
+    }
+    static update(data){
+        return this.db().update(data);
+    }
+    static updateItems(data){
+        return this.db().updateItems(data);
+    }
     static randID() {
         return crypto.randomBytes(16).toString('hex');
     }

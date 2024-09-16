@@ -25,13 +25,26 @@ class myserver {
       }
     });
 
+    app.get("/refresh_user", (req, res) => {
+      if (req.session.current_user) {
+        let current_user = Users.getOne(req.session.current_user.id);
+        if (current_user){
+          req.session.current_user = current_user;
+          req.session.save();
+          res.send(current_user);
+        }
+      } else {
+        res.send(false);
+      }
+    });
     app.get("/login", (req, res) => {
       const loggedUser = Users.login(req.query),
-            response = loggedUser ? loggedUser : "failed";
+            response = loggedUser ? loggedUser : {error:'Login error'};
+      delete loggedUser.password;
       req.session.current_user = loggedUser;
       req.session.save((err) => {
         if (err) {
-          return res.status(500).send({ message: "Session save error" });
+          response = { error: "Session save error" };
         }
         res.json(response);
       });
@@ -39,11 +52,12 @@ class myserver {
 
     app.get("/register", (req, res) => {
       const loggedUser = Users.register(req.query),
-            response = loggedUser ? loggedUser : "failed";
+            response = loggedUser ? loggedUser : {error:'Register error'};    
+      delete loggedUser.password;
       req.session.current_user = loggedUser;
       req.session.save((err) => {
         if (err) {
-          return res.status(500).send({ message: "Session save error" });
+          response = { error: "Session save error" };
         }
         res.json(response);
       });
