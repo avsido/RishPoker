@@ -126,7 +126,7 @@ class game {
       imgCard.classList.add("delay-animation-" + moveMargin.toString());
       window.setTimeout(() => {
         imgCard.classList.remove("hide");
-      }, 75);
+      }, 25);
     }
   }
   addDraw() {
@@ -194,7 +194,7 @@ class game {
       if (this.betting) {
         statusMsg += "Place bet";
       } else {
-        statusMsg += this.playerTurn ? "✅ Place card" : "🕰️ Opponent's turn";
+        statusMsg += this.playerTurn ? "🟢 Place card" : "🔴 Opponent's turn";
       }
       this.playerTurn
         ? this.divPlayers.classList.add("playerTurn")

@@ -45,7 +45,6 @@ class gamepot {
     this.input.addEventListener("input", () => {
       this.betAmount.innerHTML = this.input.value;
       this.updateButton();
-
     });
     this.betButton.addEventListener("click", () => {
       if (!this.betsDisabled) {
@@ -56,26 +55,26 @@ class gamepot {
       this.parent.quit();
     });
   }
-  updateButton(){
+  updateButton() {
     let val = parseFloat(this.input.value),
-        min = parseFloat(this.input.min),
-        buttonType = val==0 ? 'check':val>min ? 'raise':'call';
-    this.betButton.classList.remove('raise');
-    this.betButton.classList.remove('call');
-    this.betButton.classList.remove('check');
+      min = parseFloat(this.input.min),
+      buttonType = val == 0 ? "check" : val > min ? "raise" : "call";
+    this.betButton.classList.remove("raise");
+    this.betButton.classList.remove("call");
+    this.betButton.classList.remove("check");
 
     this.betButton.classList.add(buttonType);
     this.betButton.innerHTML = buttonType.toUpperCase();
   }
 
   getOpponentBet(currentBalance) {
-        if (currentBalance == 0) {
-            return "";
-        }
-        if (currentBalance < 0) {
-            return "-$" + Math.abs(currentBalance).toString();
-        }
-        return "+$" + currentBalance;
+    if (currentBalance == 0) {
+      return "";
+    }
+    if (currentBalance < 0) {
+      return "-$" + Math.abs(currentBalance).toString();
+    }
+    return "+$" + currentBalance;
   }
 
   update() {
@@ -93,19 +92,25 @@ class gamepot {
         this.parent.betting &&
         bets.opponent == 0 &&
         bets.checked != "opponent",
-        minValue = betMargin > 0 ? betMargin : 0;
-    this.betsDisabled = bets.player > bets.opponent || bets.checked == "player" || firstGameBet || bets.checked==true;
+      minValue = betMargin > 0 ? betMargin : 0;
+    this.betsDisabled =
+      bets.player > bets.opponent ||
+      bets.checked == "player" ||
+      firstGameBet ||
+      bets.checked == true;
     this.input.min = minValue;
     this.input.max = currentGame.pot;
     this.input.value = minValue;
     this.betAmount.innerHTML = this.input.value;
     this.maxAmount.innerHTML = maxBet;
-    this.opponentBet.innerHTML = this.getOpponentBet(currentGame.bets.opponent - currentGame.bets.player);
+    this.opponentBet.innerHTML = this.getOpponentBet(
+      currentGame.bets.opponent - currentGame.bets.player
+    );
     this.opponentCredit.innerHTML = "💰 $" + currentGame.opponent.credit;
     this.opponentName.innerHTML = "Player: " + currentGame.opponent.username;
     this.playerCredit.innerHTML = "💰 $" + currentGame.player.credit;
     this.playerName.innerHTML = "Player: " + currentGame.player.username;
-    this.potamount.innerHTML = "Shared pot: $" + currentGame.pot;
+    this.potamount.innerHTML = "SHARED POT: $" + currentGame.pot;
     this.container.classList[this.parent.betting ? "add" : "remove"]("betting");
     this.container.classList[this.betsDisabled ? "add" : "remove"](
       "bets-disabled"

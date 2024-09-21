@@ -282,12 +282,11 @@ class Matches extends MODEL_DB {
       loser = winner == "guest" ? "host" : "guest",
       winnerId = match[winner],
       loserId = match[loser];
-    match.winner = winner;
 
+    match.winner = winner;
     match.share = {};
     match.share[winner] = winnerShare;
     match.share[loser] = loserShare;
-    // match.isDone = true;
     Users.updateBalance(winnerId, winnerShare);
     Users.updateBalance(loserId, loserShare);
     return match;

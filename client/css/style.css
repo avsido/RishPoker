@@ -103,6 +103,7 @@ body{
     font-size: 20px;
     color: #ffd700fa;
     background-color: #ffd70042;
+    text-shadow: -1px 1px 1px black;
 }
 
 .pot-amount-container img{
@@ -343,6 +344,7 @@ h1, h2, h3, h4{
     flex-direction: column;
     font-size: 12px;
     flex: 0 0 auto;
+    text-shadow: -2px 2px 2px black;
 }
 
 #divDeck{

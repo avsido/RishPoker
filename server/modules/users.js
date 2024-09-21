@@ -54,6 +54,7 @@ class Users extends MODEL_DB {
 
   static updateBalance(userId, offset) {
     let user = this.getOne(userId);
+    console.log("user from updateBalance:", user);
     user.credit += offset;
     this.upsert(user);
     return user;

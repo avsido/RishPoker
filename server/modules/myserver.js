@@ -117,6 +117,7 @@ class myserver {
         guestMatch = Matches.formatForRole(match, "guest"),
         hostRoom = "match-" + match.id + "-user-" + match.host.id,
         hostMatch = Matches.formatForRole(match, "host");
+      console.log("match.pot from emitMatch:", match.pot);
       this.io.to(guestRoom).emit(event, guestMatch);
       this.io.to(hostRoom).emit(event, hostMatch);
       response = true;
@@ -158,7 +159,8 @@ class myserver {
           );
           this.handleAggressiveLogout(current_user, matchId);
           //console.log("current_user: ", current_user);
-          delete socket.handshake.session.currentMatchId;
+          delete session.currentMatchId;
+          delete session.current_user;
         } else {
           console.log("socket " + socket.id + " disconnected");
         }
