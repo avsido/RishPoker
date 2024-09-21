@@ -63,6 +63,8 @@ class myserver {
         match = Matches.create(current_user.id, req.params.pot),
         hostRoom = "match-" + match.id + "-user-" + current_user.id,
         socket = this.sockets[req.session.id];
+      socket.handshake.session.currentMatchId = match.id;
+      socket.handshake.session.current_user = current_user;
       res.send(match.pin);
       // console.log(current_user.username + " - host listening to channel:" + hostRoom);
       socket.join(hostRoom);
@@ -73,6 +75,8 @@ class myserver {
         match = Matches.start(req),
         guestRoom = "match-" + match.id + "-user-" + match.guest.id,
         socket = this.sockets[req.session.id];
+      socket.handshake.session.currentMatchId = match.id;
+      socket.handshake.session.current_user = current_user;
       socket.join(guestRoom);
       // console.log(current_user.username + " - guest listening to channel:" + guestRoom);
       this.emitMatch(match, req, res, "game-start");
@@ -102,24 +106,6 @@ class myserver {
 
       res.send(true);
     });
-    ///////////////////////////////////////AVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVI
-    app.get("/leave_game_page/:match_id", (req, res) => {
-      let match = Matches.userLeftGamePage(req);
-      let current_user = req.session.current_user;
-      // req.session.current_user = false;
-      let opponentRole = current_user.id == match.host ? "guest" : "host";
-      let opponentId = match[opponentRole];
-      let opponentRoom = "match-" + match.id + "-user-" + opponentId;
-      let opponent = Users.getOne(opponentId);
-
-      this.io.to(opponentRoom).emit("player-left-page", {
-        matchId: match.id,
-        current_user: opponent,
-      });
-
-      res.send(true);
-    });
-    ///////////////////////////////////////AVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVI
   }
   emitMatch(match, req, res, event) {
     let response = false;
@@ -137,14 +123,51 @@ class myserver {
     }
     res.send(response);
   }
+
+  handleAggressiveLogout(quitter, matchId) {
+    let data = {
+      session: { current_user: quitter },
+      params: { matchId: matchId },
+    };
+    let match = Matches.leave(data);
+
+    let opponentRole = quitter.id == match.host ? "guest" : "host";
+    let opponentId = match[opponentRole];
+    let opponentRoom = "match-" + matchId + "-user-" + opponentId;
+    let opponent = Users.getOne(opponentId);
+    this.io
+      .to(opponentRoom)
+      .emit("player-left", { matchId: match.id, current_user: opponent });
+  }
+
   start() {
     this.io.on("connection", (socket) => {
+      let session = socket.handshake.session;
       let session_id = socket.handshake.session.id;
       this.sockets[session_id] = socket;
       console.log("socket connection " + socket.id);
+      socket.on("disconnect", () => {
+        let matchId = session.currentMatchId;
+        let current_user = session.current_user;
+        if (matchId) {
+          console.log(
+            "user " +
+              current_user.username +
+              " disconnected from game " +
+              matchId
+          );
+          this.handleAggressiveLogout(current_user, matchId);
+          //console.log("current_user: ", current_user);
+          delete socket.handshake.session.currentMatchId;
+        } else {
+          console.log("socket " + socket.id + " disconnected");
+        }
+        delete this.sockets[session_id];
+      });
     });
-    this.server.listen(8080, () => {
-      console.log("RainManPoker Server running on port 8080...");
+    const PORT = process.env.PORT || 8080;
+    this.server.listen(PORT, () => {
+      console.log(`RainManPoker running on ${PORT}`);
     });
   }
 }

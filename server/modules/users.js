@@ -54,13 +54,10 @@ class Users extends MODEL_DB {
 
   static updateBalance(userId, offset) {
     let user = this.getOne(userId);
-    console.log("Function 'updateBalance()' called from:", new Error().stack);
     user.credit += offset;
     this.upsert(user);
     return user;
   }
-
-  static quit() {}
 }
 
 module.exports = Users;

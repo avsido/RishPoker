@@ -46,6 +46,7 @@ class Matches extends MODEL_DB {
       move: 0,
       dice: dice,
     });
+    //console.log("potShare: ", potShare);
     let host = Users.updateBalance(match.host, 0 - potShare);
     current_user = Users.updateBalance(match.guest, 0 - potShare);
     // This is an issue where we haven't updated the host's current_user session with the *updated balance*
@@ -110,7 +111,10 @@ class Matches extends MODEL_DB {
       // Somewhat of a hacky fix to host not reducing initial pot share to their session object
       if (role == "host") {
         if (this.initialShareToReduceFromHost != null) {
-          console.log("Reducing initial share from host session...");
+          console.log(
+            "Reducing initial share from host session...",
+            this.initialShareToReduceFromHost
+          );
           current_user.credit -= this.initialShareToReduceFromHost;
           req.session.save();
           this.initialShareToReduceFromHost = null;
@@ -283,40 +287,20 @@ class Matches extends MODEL_DB {
     match.share = {};
     match.share[winner] = winnerShare;
     match.share[loser] = loserShare;
+    // match.isDone = true;
     Users.updateBalance(winnerId, winnerShare);
     Users.updateBalance(loserId, loserShare);
     return match;
   }
   static leave(req) {
     let current_user = req.session.current_user,
-      match_id = req.params.match_id,
+      match_id = req.params.matchId,
       match = this.getOne(match_id),
       opponentRole = current_user.id == match.host ? "guest" : "host";
     Users.updateBalance(match[opponentRole], match.pot);
     return match;
   }
-  ///////////////////////////////////////AVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVI
-  static userLeftGamePage(req) {
-    let current_user = req.session.current_user;
-    let match_id = req.params.match_id;
-    let match = this.getOne(match_id);
-    let opponentRole = current_user.id == match.host ? "guest" : "host";
-    console.log("****", match);
-    Users.updateBalance(match[opponentRole], match.pot);
-    return match;
-  }
-  ///////////////////////////////////////AVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVI
-  static leaveAll(req) {
-    let current_user = req.session.current_user,
-      userMatches = this.filter(
-        (match) =>
-          match.host === current_user.id || match.guest === current_user.id
-      );
-    userMatches.forEach((match) => {
-      opponentRole = current_user.id == match.host ? "guest" : "host";
-      Users.updateBalance(match[opponentRole], match.pot);
-    });
-  }
+
   static updateBalance(match_id, offset) {
     let match = this.getOne(match_id);
     match.pot += offset;

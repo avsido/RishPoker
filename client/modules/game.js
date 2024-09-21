@@ -81,7 +81,6 @@ class game {
     //   this.quit();
     // });
     this.update(this.currentGame);
-    this.setPageEvents(); ///////////////////////////////////////AVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVI
     this.playerColumns.forEach((column, colIndex) => {
       column.addEventListener("click", () => {
         if (
@@ -93,39 +92,7 @@ class game {
       });
     });
   }
-  ///////////////////////////////////////AVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVI
-  // setPageEvents() {
-  //   window.addEventListener("unload", (event) => {
-  //     this.leaveGamePage();
-  //     // event.preventDefault();
-  //     // event.returnValue = "";
-  //   });
-  //   window.addEventListener("beforeunload", (event) => {
-  //     this.leaveGamePage();
-  //     // event.preventDefault();
-  //     // event.returnValue = "";
-  //   });
-  // }
 
-  setPageEvents() {
-    window.removeEventListener("unload", this.handleUnload);
-    window.removeEventListener("Beforeunload", this.handleBeforeUnload);
-    this.handleUnload = (ev) => {
-      this.leaveGamePage();
-    };
-    this.handleBeforeUnload = (ev) => {
-      this.leaveGamePage();
-    };
-    window.addEventListener("unload", this.handleUnload);
-    window.addEventListener("beforeunload", this.handleBeforeUnload);
-  }
-  leaveGamePage() {
-    let url = "/leave_game_page/" + this.currentGame.id;
-    app.getRequest(url, (res) => {
-      this.remove();
-    });
-  }
-  ///////////////////////////////////////AVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVIAVI
   placeCard(colIndex) {
     let url = "/place_card/" + this.currentGame.id + "/" + colIndex;
     app.getRequest(url, (res) => {
@@ -159,7 +126,7 @@ class game {
       imgCard.classList.add("delay-animation-" + moveMargin.toString());
       window.setTimeout(() => {
         imgCard.classList.remove("hide");
-      }, 25);
+      }, 75);
     }
   }
   addDraw() {

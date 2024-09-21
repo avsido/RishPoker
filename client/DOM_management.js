@@ -61,26 +61,6 @@ function greet() {
   buttMenu = document.getElementById("buttMenu");
 
   divMain = document.getElementById("divMain"); // this is the main game div (body center)
-  // divMain.style.flexDirection = "column";
-  // let buttPlayVSComputer = document.createElement("button");
-  // buttPlayVSComputer.className = "buttPlay";
-  // buttPlayVSComputer.innerHTML = "VS Computer";
-  // buttPlayVSComputer.id = "start_game_butt";
-  // divMain.appendChild(buttPlayVSComputer);
-
-  // buttPlayVSComputer.onclick = () => {
-  //   // butt to start single player game
-  //   app.getRequest("api/start_game_vs_computer", (res) => {
-  //     data = JSON.parse(res);
-  //     if (soundOn) openingSound.play();
-  //     // resetting:
-  //     renderInfo = true;
-  //     winArr = [];
-  //     // calling init that initializes DOM vars, and render that is the game loop
-  //     init();
-  //     render();
-  //   });
-  // };
 
   // what it means to start a multiplyer game:
   // PIN management for both game game solicitor and taker
@@ -113,12 +93,7 @@ function greet() {
 
       app.getRequest("/join/" + pin.toString(), (game) => {
         iAmFlipReady = false;
-        // console.log(game);
-        // io_client.emit("game-start", game);
       });
-
-      // io_client.emit("join-online-game", {pin:pin,uid:app.user.id});
-      // iAmFlipReady = false;
     };
 
     let buttCancel = document.createElement("img");
@@ -135,25 +110,6 @@ function greet() {
     divPIN.append(pHeader, inputPIN, pButtons);
     divMain.appendChild(divPIN);
   };
-
-  /*
-  let buttCreateMultiplayerGame100 = document.createElement("button");
-  buttCreateMultiplayerGame100.dataset.amount = 100;
-  buttCreateMultiplayerGame100.className = "buttPlay multi";
-  buttCreateMultiplayerGame100.innerHTML = "invite friend 100";
-  divMain.appendChild(buttCreateMultiplayerGame100);
-
-  let buttCreateMultiplayerGame200 = document.createElement("button");
-  buttCreateMultiplayerGame200.dataset.amount = 200;
-  buttCreateMultiplayerGame200.className = "buttPlay multi";
-  buttCreateMultiplayerGame200.innerHTML = "invite friend 200";
-  divMain.appendChild(buttCreateMultiplayerGame200);
-
-  let buttCreateMultiplayerGame500 = document.createElement("button");
-  buttCreateMultiplayerGame500.dataset.amount = 500;
-  buttCreateMultiplayerGame500.className = "buttPlay multi";
-  buttCreateMultiplayerGame500.innerHTML = "invite friend 500";
-  divMain.appendChild(buttCreateMultiplayerGame500);*/
 
   let rose = document.createElement("img");
   rose.src = "images/rose.png";
@@ -229,71 +185,7 @@ function greet() {
 // init func
 function init() {
   cleanElement(divMain);
-  // removeElementByQuery("buttQuit");
-  // let buttQuit = document.createElement("button");
-  // buttQuit.innerHTML = "quit";
-  // buttQuit.id = "buttQuit";
-  // buttQuit.className = "buttGame";
-  // document.body.appendChild(buttQuit);
 
-  // // this provides a 'quit' functionality for single/double mode:
-  // buttQuit.onclick = (ev) => {
-  //   // if clicked & accepted, sends you back to main menu
-  //   let divOverlay = document.createElement("div");
-  //   divOverlay.className = "divOverlay";
-  //   document.body.appendChild(divOverlay);
-  //   let quitDiv = document.createElement("div");
-  //   quitDiv.className = "divPop divPopQuit";
-  //   let h1 = document.createElement("h1");
-  //   h1.innerHTML = "Quit game?";
-  //   let buttY = document.createElement("button");
-  //   buttY.id = "buttY";
-  //   let buttN = document.createElement("button");
-  //   buttY.className = "buttGame";
-  //   buttN.className = "buttGame";
-  //   buttY.innerHTML = "Yes";
-  //   /////////////////////////////////////////////////////
-  //   buttY.onclick = () => {
-  //     // asks what to do ("how" to quit) in case of single/double mode.
-  //     // if needed, will reset vars for the mode
-  //     switch (gameMode) {
-  //       case "single":
-  //         renderInfo = false;
-  //         app.getRequest("api/quit", (res) => {
-  //           if (res == "ok") {
-  //             arrPlayerBHandMessages = [];
-  //             arrPlayerAHandMessages = [];
-  //             cleanElement(divMain);
-  //             greet();
-  //           }
-  //         });
-  //         break;
-
-  //       case "double":
-  //         removeElementByQuery("chat");
-  //         io_client.emit("quit");
-  //         greet();
-  //         break;
-  //     }
-
-  //     document.body.removeChild(divOverlay);
-  //     document.body.removeChild(quitDiv);
-  //     document.body.removeChild(ev.target);
-  //     cleanElement(divMain);
-  //     // calling main menu:
-  //     greet();
-  //   };
-  //   buttN.innerHTML = "No";
-  //   buttN.onclick = () => {
-  //     document.body.removeChild(divOverlay);
-  //     document.body.removeChild(quitDiv);
-  //   };
-  //   let pButts = document.createElement("p");
-  //   pButts.append(buttY, buttN);
-  //   quitDiv.append(h1, pButts);
-  //   document.body.appendChild(quitDiv);
-  // };
-  // further initializing of vars
   divDeck = document.createElement("div");
   divDeck.id = "divDeck";
   divPlayers = document.createElement("div"); // div for players
