@@ -79,7 +79,6 @@ class myserver {
             socket.handshake.session.currentMatchId = match.id;
             socket.handshake.session.current_user = current_user;
             res.send(match.pin);
-            // console.log(current_user.username + " - host listening to channel:" + hostRoom);
             socket.join(hostRoom);
         });
 
@@ -91,7 +90,6 @@ class myserver {
             socket.handshake.session.currentMatchId = match.id;
             socket.handshake.session.current_user = current_user;
             socket.join(guestRoom);
-            // console.log(current_user.username + " - guest listening to channel:" + guestRoom);
             this.emitMatch(match, req, res, "game-start");
         });
 
@@ -107,7 +105,6 @@ class myserver {
 
         app.get("/leave/:matchId", (req, res) => {
             let match = Matches.leave(req);
-            console.log("match in server 'leave':", match);
             let current_user = req.session.current_user,
                 opponentRole = current_user.id == match.host ? "guest" : "host",
                 opponentId = match[opponentRole],
@@ -134,7 +131,6 @@ class myserver {
                 guestMatch = Matches.formatForRole(match, "guest"),
                 hostRoom = "match-" + match.id + "-user-" + match.host.id,
                 hostMatch = Matches.formatForRole(match, "host");
-            //console.log("match.pot from emitMatch:", match.pot);
             this.io.to(guestRoom).emit(event, guestMatch);
             this.io.to(hostRoom).emit(event, hostMatch);
             response = true;
@@ -182,7 +178,6 @@ class myserver {
                         matchId
                     );
                     this.handleAggressiveLogout(current_user, matchId);
-                    //console.log("current_user: ", current_user);
                     delete session.currentMatchId;
                     delete session.current_user;
                 } else {

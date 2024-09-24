@@ -1,6 +1,8 @@
+
 const MODEL_DB = require("../modules/model_db"),
     Users = require("../modules/users"),
     Cards = require("../modules/cards");
+
 
 class Matches extends MODEL_DB {
     static db_name = "matches";
@@ -16,7 +18,6 @@ class Matches extends MODEL_DB {
             host: hostId,
             guest: null,
         };
-        //console.log("amount:", amount);
         this.upsert(match);
         return match;
     }
@@ -54,7 +55,6 @@ class Matches extends MODEL_DB {
             move: 0,
             dice: dice,
         });
-        //console.log("potShare: ", potShare);
         let host = Users.updateBalance(match.host, 0 - potShare);
         current_user = Users.updateBalance(match.guest, 0 - potShare);
         // This is an issue where we haven't updated the host's current_user session with the *updated balance*
@@ -262,7 +262,6 @@ class Matches extends MODEL_DB {
         return playerMatch;
     }
     static conclude(match) {
-        // console.log('concluding match');
         let wins = {
             host: 0,
             guest: 0
@@ -315,12 +314,7 @@ class Matches extends MODEL_DB {
             match_id = req.params.matchId,
             match = this.getOne(match_id),
             opponentRole = current_user.id == match.host ? "guest" : "host";
-        //console.log("current_user in 'leave':", current_user);
-        //console.log("match in 'leave':", match);
-        //console.log("match_id in 'leave':", match_id);
         Users.updateBalance(match[opponentRole], match.pot);
-        // delete req.session.currentMatchId;
-        // delete req.session.current_user;
         return match;
     }
 

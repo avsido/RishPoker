@@ -1,3 +1,4 @@
+
 class CURRENT_USER {
     id = null;
     users = null;
@@ -14,4 +15,5 @@ class CURRENT_USER {
         this.users.updateBalance(this.id, offset);
     }
 }
+
 module.exports = CURRENT_USER;
