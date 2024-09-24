@@ -1,4 +1,4 @@
-const 
+const
     fs = require('fs'),
     path = require('path');
 
@@ -19,7 +19,7 @@ class DB {
         return fs.writeFileSync(this.file_path, JSON.stringify(data, null, 2));
     }
     upsert(json_data) {
-        const 
+        const
             db = this.read(),
             index = db.findIndex(item => item.id === json_data.id);
         if (index >= 0) {
