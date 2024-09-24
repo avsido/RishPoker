@@ -207,7 +207,10 @@ class game {
     }
   }
   quit() {
-    let url = "/leave/" + this.currentGame.id;
+    let matchId = this.currentGame.id;
+    let url = "/leave/" + matchId;
+    console.log("match in client 'quit':", this.currentGame);
+    console.log("matchId in client 'quit':", matchId);
     app.getRequest(url, (res) => {
       this.remove();
     });
@@ -219,7 +222,7 @@ class game {
     }
     this.remove();
     let popupMsg =
-      "Opponent left. <br/> Current game pot is: $" +
+      "Opponent left 🍾 <br/> You win game pot. <br/> + $" +
       this.currentGame.pot.toString();
     new popup(popupMsg, () => {
       this.remove();
@@ -282,6 +285,7 @@ class game {
           bottomMsg + ".<br/>Your share: $" + this.currentGame.share.toString();
         new popup(popupMsg, () => {
           this.remove();
+          window.userBoxEl.update();
         });
         clearInterval(interval);
       }

@@ -92,8 +92,9 @@ class myserver {
       this.emitMatch(match, req, res);
     });
 
-    app.get("/leave/:match_id", (req, res) => {
+    app.get("/leave/:matchId", (req, res) => {
       let match = Matches.leave(req);
+      console.log("match in server 'leave':", match);
       let current_user = req.session.current_user,
         opponentRole = current_user.id == match.host ? "guest" : "host",
         opponentId = match[opponentRole],
@@ -117,7 +118,7 @@ class myserver {
         guestMatch = Matches.formatForRole(match, "guest"),
         hostRoom = "match-" + match.id + "-user-" + match.host.id,
         hostMatch = Matches.formatForRole(match, "host");
-      console.log("match.pot from emitMatch:", match.pot);
+      //console.log("match.pot from emitMatch:", match.pot);
       this.io.to(guestRoom).emit(event, guestMatch);
       this.io.to(hostRoom).emit(event, hostMatch);
       response = true;

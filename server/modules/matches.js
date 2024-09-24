@@ -16,6 +16,7 @@ class Matches extends MODEL_DB {
       host: hostId,
       guest: null,
     };
+    //console.log("amount:", amount);
     this.upsert(match);
     return match;
   }
@@ -296,7 +297,12 @@ class Matches extends MODEL_DB {
       match_id = req.params.matchId,
       match = this.getOne(match_id),
       opponentRole = current_user.id == match.host ? "guest" : "host";
+    //console.log("current_user in 'leave':", current_user);
+    //console.log("match in 'leave':", match);
+    //console.log("match_id in 'leave':", match_id);
     Users.updateBalance(match[opponentRole], match.pot);
+    // delete req.session.currentMatchId;
+    // delete req.session.current_user;
     return match;
   }
 
