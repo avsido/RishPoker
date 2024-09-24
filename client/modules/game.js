@@ -1,4 +1,6 @@
+
 class game {
+
     html =
         '<div id="divInfo">' +
         '<div id="divDeck">' +
@@ -27,6 +29,7 @@ class game {
         '<div class="cardDiv cardDivPlayerA"></div>' +
         "</div>" +
         "</div>";
+
     handInfoHtml =
         '<div class="divInfoPlayers opponent">' +
         "<h1>Opponent got:</h1>" +
@@ -54,12 +57,13 @@ class game {
     currentGame = null;
     playerTurn = true;
     revealspeed = 2000;
+
     constructor(currentGame) {
+
         this.currentGame = currentGame;
         this.divMain = document.querySelector("#divMain");
         this.divMain.classList.add("contains-game");
         this.divMain.innerHTML = this.html;
-        //this.quitButton = document.querySelector("#buttQuit");
         this.divInfo = this.divMain.querySelector("#divInfo");
         this.status = this.divInfo.querySelector(".status");
         this.count = this.divInfo.querySelector(".count");
@@ -76,11 +80,8 @@ class game {
         this.divPlayerTitle.innerHTML = this.currentGame.player.username;
         this.divOpponentTitle.innerHTML = this.currentGame.opponent.username;
 
-        // this.quitButton.classList.add("show");
-        // this.quitButton.addEventListener("click", () => {
-        //   this.quit();
-        // });
         this.update(this.currentGame);
+
         this.playerColumns.forEach((column, colIndex) => {
             column.addEventListener("click", () => {
                 if (
@@ -99,6 +100,7 @@ class game {
             if (res != "failed") {}
         });
     }
+
     addCards(cards, cardColumns) {
         cards.forEach((colCards, colIndex) => {
             colCards.forEach((card, rowIndex) => {
@@ -106,6 +108,7 @@ class game {
             });
         });
     }
+
     addCard(data, columns, col, row) {
         let imgCard = document.createElement("img"),
             hidden = columns[col].parentElement.id == "divOpponent" && row == 4,
@@ -128,6 +131,7 @@ class game {
             }, 25);
         }
     }
+
     addDraw() {
         let draw = this.currentGame.cards.drawn,
             drawImage = document.querySelector("#drawnCard");
@@ -150,17 +154,20 @@ class game {
             }
         }
     }
+
     createDraw(imageSrc) {
         let drawImage = document.createElement("img");
         drawImage.id = "drawnCard";
         drawImage.src = imageSrc;
         this.divDeck.appendChild(drawImage);
     }
+
     clearCards() {
         this.divPlayers.querySelectorAll(".cardDiv img").forEach((card) => {
             card.remove();
         });
     }
+
     update(currentGame) {
         this.lastMove = this.currentGame.move;
         this.currentGame = currentGame;
@@ -205,6 +212,7 @@ class game {
             this.finish();
         }
     }
+
     quit() {
         let matchId = this.currentGame.id;
         let url = "/leave/" + matchId;
@@ -226,18 +234,17 @@ class game {
         new popup(popupMsg, () => {
             this.remove();
         });
-        //debugger;
         window.userBoxEl.update();
     }
 
     remove() {
         this.divMain.innerHTML = "";
-        // this.quitButton.classList.remove("show");
         this.divMain.classList.remove("contains-game");
         this.divMain.classList.remove("player-turn");
         this.gamepot.remove();
         greet();
     }
+
     finish() {
         this.divInfo.innerHTML = this.handInfoHtml;
         this.divMain.classList.remove("betting");

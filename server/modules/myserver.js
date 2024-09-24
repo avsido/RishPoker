@@ -17,34 +17,6 @@ class myserver {
             res.sendFile(indexPath);
         });
 
-        app.get("/current_user", (req, res) => {
-            if (req.session.current_user) {
-                res.json(req.session.current_user);
-            } else {
-                res.send(false);
-            }
-        });
-
-        app.get("/login", (req, res) => {
-            const loggedUser = Users.login(req.query);
-
-            if (!loggedUser) {
-                return res.status(401).json({
-                    message: "Login failed"
-                });
-            }
-
-            req.session.current_user = loggedUser;
-            req.session.save((err) => {
-                if (err) {
-                    return res.status(500).send({
-                        message: "Session save error"
-                    });
-                }
-                res.json(loggedUser);
-            });
-        });
-
         app.get("/register", (req, res) => {
             const loggedUser = Users.register(req.query),
                 response = loggedUser ? loggedUser : "failed";
@@ -64,6 +36,35 @@ class myserver {
                 }
                 res.json(response);
             });
+        });
+
+        app.get("/login", (req, res) => {
+
+            const loggedUser = Users.login(req.query);
+
+            if (!loggedUser) {
+                return res.status(401).json({
+                    message: "Login failed"
+                });
+            }
+
+            req.session.current_user = loggedUser;
+            req.session.save((err) => {
+                if (err) {
+                    return res.status(500).send({
+                        message: "Session save error"
+                    });
+                }
+                res.json(loggedUser);
+            });
+        });
+
+        app.get("/current_user", (req, res) => {
+            if (req.session.current_user) {
+                res.json(req.session.current_user);
+            } else {
+                res.send(false);
+            }
         });
 
         app.get("/logout", (req, res) => {
@@ -121,6 +122,7 @@ class myserver {
             res.send(true);
         });
     }
+
     emitMatch(match, req, res, event) {
         let response = false;
         if (match) {
@@ -148,7 +150,6 @@ class myserver {
             },
         };
         let match = Matches.leave(data);
-
         let opponentRole = quitter.id == match.host ? "guest" : "host";
         let opponentId = match[opponentRole];
         let opponentRoom = "match-" + matchId + "-user-" + opponentId;

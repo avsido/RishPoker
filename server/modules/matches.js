@@ -5,9 +5,11 @@ const MODEL_DB = require("../modules/model_db"),
 
 
 class Matches extends MODEL_DB {
+
     static db_name = "matches";
     static startingPot = 100;
     static winMarginToPercent = [50, 70, 77.5, 92.5, 100];
+
     static create(hostId, amount) {
         let match = {
             id: this.randID(),
@@ -21,10 +23,12 @@ class Matches extends MODEL_DB {
         this.upsert(match);
         return match;
     }
+
     static getByPin(pin) {
         let match = this.find((match) => match.pin === pin);
         return match ? match : false;
     }
+
     static start(req) {
         let pin = req.params.pin,
             current_user = req.session.current_user,
@@ -72,6 +76,7 @@ class Matches extends MODEL_DB {
         delete match.host.password;
         return match;
     }
+
     static placeCard(req) {
         let current_user = req.session.current_user,
             {
@@ -140,6 +145,7 @@ class Matches extends MODEL_DB {
             return false;
         }
     }
+
     static placeBet(req) {
         let current_user = req.session.current_user,
             {
@@ -187,6 +193,7 @@ class Matches extends MODEL_DB {
         match.guest = role == "guest" ? current_user : Users.getOne(match.guest);
         return match;
     }
+
     static formatForRole(match, role) {
         let playerId = match[role].id,
             opponentRole = role == "guest" ? "host" : "guest",
@@ -261,6 +268,7 @@ class Matches extends MODEL_DB {
         }
         return playerMatch;
     }
+
     static conclude(match) {
         let wins = {
             host: 0,
@@ -309,6 +317,7 @@ class Matches extends MODEL_DB {
         Users.updateBalance(loserId, loserShare);
         return match;
     }
+
     static leave(req) {
         let current_user = req.session.current_user,
             match_id = req.params.matchId,
