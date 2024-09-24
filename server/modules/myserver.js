@@ -44,6 +44,11 @@ class myserver {
     app.get("/register", (req, res) => {
       const loggedUser = Users.register(req.query),
         response = loggedUser ? loggedUser : "failed";
+
+      if (!loggedUser) {
+        return res.status(409).send({ message: "User already exists!" });
+      }
+ 
       req.session.current_user = loggedUser;
       req.session.save((err) => {
         if (err) {

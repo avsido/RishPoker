@@ -14,6 +14,9 @@ class App {
           if (this.status == 401) {
             alert("Wrong user/password, please try again");
         }
+            if (this.status == 409) {
+             alert("User already exists");
+            }
 	    }
 	  };
 	  httpRequest.open("GET", url, true);

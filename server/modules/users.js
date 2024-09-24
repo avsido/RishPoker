@@ -44,6 +44,7 @@ class Users extends MODEL_DB {
         credit: initialCredit,
       };
     if (exists) {
+      console.log("user already exists!: " + username); 
       return false;
     }
     this.upsert(user);

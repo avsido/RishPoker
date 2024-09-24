@@ -38,7 +38,7 @@ class loginform {
           this.el.remove();
         } else {    
           alert("Login error!");    
-        }    
+        }
         greet();    
       });    
     }  
